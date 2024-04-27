@@ -1,0 +1,142 @@
+html {
+    background-color: white;
+}
+
+body {
+    font-family: Times Roman, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin: 0;
+}
+
+#top-nav-icon-image-logo {
+    background-color: transparent;
+}
+
+.top-nav-btn {
+    color:darkred;
+    text-decoration: none;
+}
+
+#top-desktop-nav {
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+    position: relative;
+    justify-content: space-between;
+    height: 3vh;
+    margin: 4px 4px;
+    padding-left: 1px;
+    padding-right: 1.5px;
+    border-radius: 7px;
+    font-size: 10px;
+    text-decoration: none;
+}
+
+
+#top-nav-icon-bar-item-hover {
+    image-rendering: auto;
+    width: auto;
+    background-color: transparent;
+    float: left;
+    padding: 4px 4px;
+    border: none;
+}
+
+#top-nav-search-input {
+    width: 7.5em;
+    margin: 0 16px;
+    height: 16px;
+    border: black;
+    border-radius: 25px;
+}
+
+#top-nav-profile-circle {
+
+border: black;
+
+border-radius: 50px;
+
+width: 24px;
+
+height: 24px;
+}
+
+#left-side-panel {
+    display: none;
+}
+
+#top-center-full-banner {
+    height: 100lvw;
+}
+
+#top-nav-btn-container {
+    gap: 5;
+}
+
+#top-nav-btn {
+
+}
+
+#top-nav-icon-link-logo {
+    left: 0;
+}
+
+
+#left-side-menu-inner {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+#top-center-full-banner {
+    /* background-image: url("C:/Users/okino/OneDrive/Pictures/BP_Letter.jpg"); */
+    margin: 0;
+    padding-top: 10px;
+    width: 100vw;
+    height: 46vh;
+    color: #ffffff;
+}
+
+#top-center-full-banner-container {
+    width: auto;
+}
+
+#top-center-full-banner-left_blur {
+    width: auto;
+    background-image: linear-gradient(to right, black, transparent);
+}
+
+#top-center-full-banner-image {
+    width: 100vw;
+    height: auto;
+}
+
+#title_button-container {
+    top: 48px;
+    left: 8px;
+    position: absolute;
+    width: auto;
+    line-height: 8px;
+    font-size: 14px;
+}
+
+#banner-button-p, #banner-button-tl {
+    border:gray 300px;
+    color: black;
+    font-size: 8px;
+}
+ 
+
+#banner-button-wl {
+    border: gray 300px;
+    color: transparent;
+    font-size: 8px;
+} 
+
+#banner-bottom-shadow-blur {
+    height: 20px;
+    margin: 0;
+    background-image: linear-gradient(to bottom, black, white);
+}
+

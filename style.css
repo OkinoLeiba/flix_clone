@@ -86,7 +86,7 @@ height: 24px;
     justify-content: center;
     align-items: center;
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
 }
 
 #top-center-full-banner {
@@ -139,4 +139,28 @@ height: 24px;
     margin: 0;
     background-image: linear-gradient(to bottom, black, white);
 }
+
+#movie-thumbnail-hscroll-wrapper {
+    background-color: #0E1318;
+    width: auto;
+    height: 300px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    grid-gap: 0 50px;
+
+    padding: 30px 60px;
+    padding-right: 0; 
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    border-radius: 10px;
+  }
+  
+#movie-thumbnail-hscroll-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 

@@ -1,3 +1,5 @@
+const { request } = require('http');
+
 function createMovieThumbnails(requestarrayimg) {
     const img = document.createElement('img');
 
@@ -37,22 +39,29 @@ const tmdbReadKey  = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2M
 
 const movieRequestData = {
     movieRequestUpcoming:  `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestNowPlaying:  `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestPopular:  `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestTopRated:  `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestTrendingMonth:  `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
-    movieRequestTrendingDay:  `https://api.themoviedb.org/3/trending/all/day?api_key=${tmdbKey}&language=en-US`
+    // movieRequestNowPlaying:  `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
+    // movieRequestPopular:  `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
+    // movieRequestTopRated:  `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
+    // movieRequestTrendingMonth:  `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
+    // movieRequestTrendingDay:  `https://api.themoviedb.org/3/trending/all/day?api_key=${tmdbKey}&language=en-US`
 };
 
 
 function httpClientRequest(hURL) { 
     this.get = function(hURL, hCallBack) {
+
+        
+        // hURL = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
         var XMLHttpRequest = require('xhr2');
         var xmlHttpRequest = new XMLHttpRequest();
+    
         
         xmlHttpRequest.onreadystatechange = function () {
             if (xmlHttpRequest.readyState = 4 && xmlHttpRequest.status == 200) {
                 hCallBack(xmlHttpRequest.responseText)
+            }
+            else {
+                xmlHttpRequest.readyState = 1;
             }
         }
 
@@ -62,7 +71,8 @@ function httpClientRequest(hURL) {
         
         xmlHttpRequest.open("GET", hURL, true);
         // xmlHttpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        // xmlHttpRequest.setRequestHeader('Authorization', 'Bearer ' + tmdbReadKey)
+        xmlHttpRequest.setRequestHeader('Authorization', 'Basic ' + tmdbReadKey);
+        xmlHttpRequest.setRequestHeader('api-key', tmdbKey);
         // xmlHttpRequest.setRequestHeader('Content-length', this.formData.length);
         // xmlHttpRequest.setRequestHeader('Connection', 'close');
         
@@ -73,25 +83,32 @@ function httpClientRequest(hURL) {
         }
 }
 
-function httpClientRequestFetch(hURL) {
+async function httpClientRequestFetch(hURL) {
+    // hURL = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+    
+    const json = new Object;
     const options = {
         method: 'GET',
         header: {
             accept: 'application/json',
-            Authorization: 'Bearer ' + tmdbReadKey
+            // Authorization: 'Basic ' + tmdbReadKey,
+            // keepalive: 'timeout=5, max=1000'
             }
     };
 
-    fetch(hURL, options)
-    .then(async request =>  await request.json())
-    .then(async json => await setData(json))
+    fetch(hURL)
+    .then(request => request.json()
+    .then(async json => json))
     .catch(error => console.error(error))
-    .finally( () => console.log('Successful Request'))
+    .finally(() => {return json})
+
+    return json;
+    
 }
 
 function requestMovieData() {
     const movieResponseData = new Object;
-    for (request in movieRequestData) {   
+    for (let request in movieRequestData) {   
         var clientRequest = new httpClientRequest();
         clientRequest.get(movieRequestData[request], function(response) {
             movieResponseData[request] = response;
@@ -99,5 +116,16 @@ function requestMovieData() {
     }
 }
 
+function requestMovieFetchData() {
+    var movieResponseFetchData = new Object;
+    for (var requestFetch in movieRequestData) {   
+        // var clientRequest = new httpClientRequestFetch();
 
-requestMovieData()
+        movieResponseFetchData[request] =  httpClientRequestFetch(movieRequestData[requestFetch]);
+        
+    }
+    return movieResponseFetchData;
+}
+
+
+requestMovieFetchData();

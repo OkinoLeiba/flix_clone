@@ -1,4 +1,5 @@
 const { request } = require('http');
+let data;
 
 function createMovieThumbnails(requestarrayimg) {
     const img = document.createElement('img');
@@ -24,6 +25,11 @@ function createMovieTitle(requestarraytitle) {
 
     document.getElementById('movie-thumbnail-hscroll-wrapper').before(title);
 }
+
+function setData(dt) {
+    data = dt;
+}
+
 // delete and move to separate file later 23/04/2024
 const tmdbKey = '03ee6394a8103fd6e7633be9f543707c';
 const tmdbReadKey  = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2MzNiZTlmNTQzNzA3YyIsInN1YiI6IjY2MjgwMDc1YWY5NTkwMDE3ZDZiZWRjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIYayf0-HeagHQf_VluyUhJQOm9CA7Zo_T5lOy0uJHQ';
@@ -83,28 +89,69 @@ function httpClientRequest(hURL) {
         }
 }
 
-function httpClientRequestFetch(hURL) {
-    // hURL = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
-    
-    const json = new Object;
+async function httpClientRequestFetch(hURL) {
+
+    // const dataTransfer = new DataTransfer();
+
+    // const jsonData = new Object();
     const options = {
-        method: 'GET',
+        method: 'Get',
         header: {
             accept: 'application/json',
-            // Authorization: 'Basic ' + tmdbReadKey,
-            // keepalive: 'timeout=5, max=1000'
-            }
+            Authorization: 'Basic ' + tmdbReadKey,
+            keepalive: 'timeout=5, max=1000',
+        }
     };
 
-    fetch(hURL)
-    .then(request => request.json()
-    .then(async json => await json))
-    .catch(error => console.error(error))
-    .finally(() => {return json})
+    // let request = await fetch(hURL);
+    // let data = await request.json();
+    // dt = dataTransfer.setData(data=data);
+    // jsonData.data = data;
+    // this.movieData = jsonData;
+    // setData(data);
+    // return data;
 
-    return json;
+    // fetch(hURL).then(function(response) {
+    //     return response.json();
+    //   }).then(function(data) {
+    //     console.log(data);
+    //   })
     
+    // fetch(hURL)
+    // .then(async request => await request.json()).then(async json => await json)
+    // .then(data => setData(data))
+    // .catch(error => console.error(error))
+    // .finally(() => console.log('Success'))
+
+    // return jsonData.data;
+
 }
+
+// function httpClientRequestFetch() {
+    // hURL = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+    
+    // const json = new Object;
+    // const options = {
+    //     method: 'GET',
+    //     header: {
+    //         accept: 'application/json',
+    //         // Authorization: 'Basic ' + tmdbReadKey,
+    //         // keepalive: 'timeout=5, max=1000'
+    //         }
+    // };
+
+    // fetch('https://api.themoviedb.org/3/movie/upcoming?api_key=03ee6394a8103fd6e7633be9f543707c&language=en-US&page=1').then(async request => await request.json());
+
+
+
+    // fetch('https://api.themoviedb.org/3/movie/upcoming?api_key=03ee6394a8103fd6e7633be9f543707c&language=en-US&page=1').
+    // then(async request => await request.json().then(async json => await setData(json)))
+    // .catch(error => console.error(error))
+    // .finally(() => {console.log('Success: ', data)})
+
+    // return json;
+    
+// }
 
 function requestMovieData() {
     const movieResponseData = new Object;
@@ -116,16 +163,21 @@ function requestMovieData() {
     }
 }
 
+
 function requestMovieFetchData() {
     var movieResponseFetchData = new Object;
     for (var requestFetch in movieRequestData) {   
         // var clientRequest = new httpClientRequestFetch();
 
-        this.movieResponseFetchData[request] =  httpClientRequestFetch(movieRequestData[requestFetch]);
+        httpClientRequestFetch(movieRequestData[requestFetch]);
+        movieResponseFetchData[requestFetch] =  data;
         
-    }
-    return movieResponseFetchData;
+        
+    };
+    // this.movieData = movieResponseFetchData;
+    // return movieResponseFetchData;
 }
+
 
 
 requestMovieFetchData();

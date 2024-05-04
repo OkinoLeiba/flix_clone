@@ -83,7 +83,7 @@ function httpClientRequest(hURL) {
         }
 }
 
-async function httpClientRequestFetch(hURL) {
+function httpClientRequestFetch(hURL) {
     // hURL = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
     
     const json = new Object;
@@ -98,7 +98,7 @@ async function httpClientRequestFetch(hURL) {
 
     fetch(hURL)
     .then(request => request.json()
-    .then(async json => json))
+    .then(async json => await json))
     .catch(error => console.error(error))
     .finally(() => {return json})
 
@@ -121,7 +121,7 @@ function requestMovieFetchData() {
     for (var requestFetch in movieRequestData) {   
         // var clientRequest = new httpClientRequestFetch();
 
-        movieResponseFetchData[request] =  httpClientRequestFetch(movieRequestData[requestFetch]);
+        this.movieResponseFetchData[request] =  httpClientRequestFetch(movieRequestData[requestFetch]);
         
     }
     return movieResponseFetchData;

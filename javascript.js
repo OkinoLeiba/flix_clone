@@ -15,10 +15,10 @@ const movieData = {
 };
 
 const movieRequestData = {
-    movieRequestUpcoming:  `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestNowPlaying:  `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestPopular:  `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
-    movieRequestTopRated:  `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
+    movieRequestUpcoming:  `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=`,
+    movieRequestNowPlaying:  `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=`,
+    movieRequestPopular:  `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=`,
+    movieRequestTopRated:  `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=`,
     // movieRequestTrendingMonth:  `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
     movieRequestTrendingDay:  `https://api.themoviedb.org/3/trending/all/day?api_key=${tmdbKey}&language=en-US`,
     movieRequestGenre: `https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}&language=en-US`,
@@ -38,17 +38,21 @@ class CreateElements {
             movieRequestTrendingDay: {},
             movieRequestGenre: {},
         }
+        this.posterURL = 'https://image.tmdb.org/t/p/original';
     }
 
+    
+
+    gridRepeat = () => document.documentElement.style.setProperty('--grid-repeat', 20);
 
     setData(dt) {
         this.data = dt;
     }
 
-     requestMovieData() {
+     async requestMovieData() {
         const movieResponseData = new Object;
         for (let request in movieData) {
-            var clientRequest = new httpClientRequest();
+            var clientRequest = await new httpClientRequest();
             clientRequest.get(movieRequestData[request], function (response) {
                 movieResponseData[request] = response;
             });
@@ -56,69 +60,166 @@ class CreateElements {
     }
     
     async requestMovieFetchData() {
+        var total_pages = 10;
+        var requestArray = [];
         for (var requestFetch in movieRequestData) {
             // var clientRequest = new httpClientRequestFetch();
             var URL = movieRequestData[requestFetch];
-            var requestData = await this.httpClientRequestFetch2(URL);
-            // Object.defineProperties(this.movieResponseFetchData, requestFetch, { requestData }) 
+            if (requestFetch != 'movieRequestGenre' || requestFetch != 'movieRequestTrendingDay') {
+                for (var page = 1; page <= total_pages; page++) {
+                    var requestData = await this.httpClientRequestFetch2(URL+page);
+                    // Object.assign(this.movieResponseFetchData[requestFetch], requestData);
+                    requestArray.push(requestData);
+                    this.movieResponseFetchData[requestFetch] = requestArray;
+                    // total_pages = requestData.total_pages
+                }
+            }
+            else {
+                var requestData = await this.httpClientRequestFetch2(URL);
+                // Object.defineProperties(this.movieResponseFetchData, requestFetch, { requestData }) 
             
-            this.movieResponseFetchData[requestFetch] = requestData;
-            
+                this.movieResponseFetchData[requestFetch] = requestData;
+            }
         }  
        
     }
 
+    async createBanner() {
+        await this.requestMovieFetchData()
 
+        console.log(Object.entries(this.movieResponseFetchData.movieRequestTrendingDay.results).map(v => v[1])[0])
+        console.log(Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1]))
+        
+        var bannerData = Object.entries(this.movieResponseFetchData.movieRequestTrendingDay.results).map(v => v[1])[0]
+        var movieDate = new Date(bannerData['release_date']).toDateString().split(' ');
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        var dataFormat = new Intl.DateTimeFormat('en-US', options);
 
-    createMovieThumbnails(requestarray) {
+        // console.log(document.getElementsByClassName('hscroll-wrapper')[1]);
+        
+
+        
+        
+        document.getElementById('left-banner-title').innerText = bannerData.original_title;
+        document.getElementById('banner-text-date').innerText = movieDate[1] + ' ' + movieDate[2] + ', ' + movieDate[3];
+        document.getElementById('banner-text-description').innerText = bannerData.overview;
+        document.getElementById('top-center-full-banner-image').setAttribute('src', this.posterURL + bannerData.poster_path);
+    }
+
+    createMovieThumbnails(movieTitleData, classIndex) {
         const img = document.createElement('img');
 
 
         // check and confirm attributes   
         img.setAttribute('class', 'movie-thumbnail');
-        img.setAttribute('alt', 'Cover art of movies.');
-        img.setAttribute('width', '10');
-        img.setAttribute('height', '20');
+        img.setAttribute('id', 'movie-thumbnail')
+        img.setAttribute('alt', 'Cover art of the movie '+ movieTitleData.original_title);
+        img.setAttribute('width', '35');
+        img.setAttribute('height', '40');
         img.setAttribute('role', 'img');
         img.setAttribute('loading', 'lazy');
         img.setAttribute('fetchpriority', 'low');
         img.setAttribute('decoding', 'auto');
-        img.setAttribute('src', Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1].poster_path));
+        img.setAttribute('src', this.posterURL + movieTitleData.poster_path);
 
-        document.getElementById('movie-thumbnail-hscroll-wrapper').appendChild(img);
-   
+        document.getElementsByClassName('hscroll-wrapper')[classIndex].appendChild(img);
+        console.log(document.getElementsByClassName('hscroll-wrapper').length)
     }
 
-    createMovieTitle(idArray) {
-        // console.log(Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => { if (v[1].genre_ids[1].includes(28)) {v[1].genre_ids } }));
-       
-        idArray.forEach(genre_id => {
-            const title = document.createElement('p');
-            
+    createMovieTitle(genre_id) {
 
-            title.setAttribute('color', 'black');
-            title.setAttribute('font-size', '16');
-            title.innerText = Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1].genre_ids[1]).includes(genre_id) ? Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1].original_title) : Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1].original_title);
+        var movieTitles = Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1]);
+        var indexClass = 0;
+        for (var i = 0; i < movieTitles.length; i++) {
+            if (Object.values(movieTitles[i])[2].includes(genre_id)) {
+                
+                // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
 
-            // document.getElementById('movie-thumbnail-hscroll-wrapper').appendChild(title);
-            document.getElementById('movie-thumbnail-hscroll-wrapper').after(title);
-            this.createMovieThumbnails(Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1].original_title));
-        });
-    
+                        const hscroll_wrapper = document.createElement('div');
+                        hscroll_wrapper.setAttribute('id', 'hscroll-wrapper');
+                        hscroll_wrapper.setAttribute('class', 'hscroll-wrapper');
+                
+                
+                        
+                
+                        const title = document.createElement('p');
+                    
+
+                        title.setAttribute('color', 'white');
+                        title.setAttribute('font-size', '16');
+                        title.setAttribute('id', 'movie-title');
+                        title.innerText = movieTitles[i].title;
+
+                    
+                        document.getElementById('movie-thumbnail-hscroll-container').appendChild(hscroll_wrapper);
+                        document.getElementsByClassName('hscroll-wrapper')[indexClass].appendChild(title);
+                    
+                        
+                        this.createMovieThumbnails(movieTitles[i], indexClass);
+                        indexClass++;
+            }
+        }
+           
     }
 
     async createMovieGenre() {
         await this.requestMovieFetchData()
-        console.log(Object.entries(this.movieResponseFetchData.movieRequestGenre).map(v => Object.entries(v[1]).map(o => o[1][1])))
-        const genre = document.createElement('h1');
-
-    
-        genre.innerText = Object.entries(this.movieResponseFetchData.movieRequestGenre).map(v => v[1].name)
-
-        document.getElementById('movie-thumbnail-hscroll-wrapper').before(genre);
-
-        this.createMovieTitle(Object.entries(this.movieResponseFetchData.movieRequestGenre).map(v => v[1].id));
+        // console.log(Object.entries(this.movieResponseFetchData.movieRequestTrendingDay.results).map(v => v[1])[0]);
         
+        var movieTitles = Object.entries(this.movieResponseFetchData.movieRequestPopular.results).map(v => v[1]);
+        // for (var i = 0; i < movieTitles.length; i++) {
+        //     if(Object.values(movieTitles[i])[2].includes(28))
+        //     movieTitles.forEach(e => console.log(e.title))
+            
+                
+        // }
+        
+        var movieGenreArray = Object.entries(this.movieResponseFetchData.movieRequestGenre).map(v => Object.entries(v[1]).map(o => o[1]));
+
+        
+        
+        while (movieGenreArray[0].length > 0) {
+            
+            var movieGenreItems = movieGenreArray[0];
+            var index = Math.floor(Math.random() * movieGenreItems.length);
+         
+            
+            const hscroll_container = document.createElement('div');
+            
+            hscroll_container.setAttribute('id', 'movie-thumbnail-hscroll-container');
+            
+            
+            const genre = document.createElement('h1');
+
+            genre.setAttribute('id', 'movie-genre');
+            genre.setAttribute('class', 'movie-genre');
+            genre.innerText = movieGenreItems[index]['name'];
+
+            document.getElementById('movie-thumbnail-vscroll-container').insertAdjacentElement('afterbegin', genre);
+            console.log(document.getElementById('movie-thumbnail-vscroll-container').lastElementChild)
+            document.getElementById('movie-genre').insertAdjacentElement('afterend', hscroll_container);
+
+            this.createMovieTitle(movieGenreItems[index]['id']);
+
+            movieGenreItems.splice(index, 1);
+
+
+        }
+        // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
+            
+        //     const genre = document.createElement('h1');
+
+        //     genre.setAttribute('id', 'movie-genre');
+        //     genre.innerText = o[1]['name'];
+
+        //     document.getElementById('movie-thumbnail-hscroll-wrapper').after(genre);
+
+        //     this.createMovieTitle(o[1]['id']);
+        // }));
     }
 
 
@@ -237,6 +338,7 @@ class CreateElements {
 _ = (function () {
     let createElements = new CreateElements();
     createElements.requestMovieFetchData();
+    createElements.createBanner();
     createElements.createMovieGenre();
 
 })();

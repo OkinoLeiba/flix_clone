@@ -44,19 +44,36 @@ const movieRequestData = {
 class CreateElements {
   constructor() {
     this.movieResponseFetchData = {
-      movieRequestUpcoming: {},
-      movieRequestNowPlaying: {},
-      movieRequestPopular: {},
-      movieRequestTopRated: {},
-      movieRequestTrendingMonth: {},
-      movieRequestTrendingDay: {},
-      movieRequestGenre: {},
+      movieRequestUpcoming: Object(),
+      movieRequestNowPlaying: Object(),
+      movieRequestPopular: Object(),
+      movieRequestTopRated: Object(),
+      movieRequestTrendingMonth: Object(),
+      movieRequestTrendingDay: Object(),
+      movieRequestGenre: Object(),
     };
     this.posterURL = "https://image.tmdb.org/t/p/original";
+    this.movieTitles = Array();
+    this.movieGenreIds = Array();
+    this.movieImage = Array();
+    this.titleTracker = Array();
+
+    // results object value is always capped at 20 objects in an array
+    this.movieTitleResultsLen = 20;
   }
 
-  gridRepeat = () =>
-    document.documentElement.style.setProperty("--grid-repeat", 20);
+  gridRepeat = () => {
+    var grid_repeat = document.getElementById(
+      "movie-thumbnail-hscroll-container"
+    ).childElementCount;
+
+    if (grid_repeat < 20) grid_repeat = 100;
+
+    document.documentElement.style.setProperty(
+      "--grid-repeat",
+      grid_repeat * 3
+    );
+  };
 
   setData(dt) {
     this.data = dt;
@@ -74,7 +91,7 @@ class CreateElements {
 
   async requestMovieFetchData() {
     // default number of pages and number of execution
-    var total_pages = 5;
+    var total_pages = 2;
     var requestArray = [];
     for (var requestFetch in movieRequestData) {
       // var clientRequest = new httpClientRequestFetch();
@@ -84,7 +101,7 @@ class CreateElements {
         requestFetch !== "movieRequestTrendingDay" &&
         requestFetch !== "movieRequestGenre"
       ) {
-        for (var page = 1; page <= total_pages; page++) {
+        for (var page = 1; page < total_pages; page++) {
           var requestData = await this.httpClientRequestFetch2(URL + page);
           // Object.assign(this.movieResponseFetchData[requestFetch], requestData);
           requestArray.push(requestData);
@@ -102,11 +119,29 @@ class CreateElements {
 
   async createBanner() {
     await this.requestMovieFetchData();
-    var movieTitles = Object.entries(
-      this.movieResponseFetchData.movieRequestPopular[0]
-    )[2][1];
-    console.log(movieTitles[0].);
 
+    var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
+
+    // console.log(this.movieResponseFetchData.movieRequestGenre["genres"]);
+    for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
+      for (var titleIndex = 0; titleIndex < pageTitleLen; titleIndex++) {
+        this.movieTitles.push(
+          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+            titleIndex
+          ].title
+        );
+        this.movieGenreIds.push(
+          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+            titleIndex
+          ].genre_ids
+        );
+        this.movieImage.push(
+          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+            titleIndex
+          ].poster_path
+        );
+      }
+    }
     // console.log(
     //   Object.entries(
     //     this.movieResponseFetchData.movieRequestTrendingDay.results
@@ -116,7 +151,7 @@ class CreateElements {
     var bannerData = Object.entries(
       this.movieResponseFetchData.movieRequestTrendingDay.results
     ).map((v) => v[1])[0];
-    var movieDate = new Date(bannerData["first_air_date"])
+    var movieDate = new Date(bannerData["release_date"])
       .toDateString()
       .split(" ");
     const options = {
@@ -126,10 +161,10 @@ class CreateElements {
     };
     var dataFormat = new Intl.DateTimeFormat("en-US", options);
 
-    // console.log(document.getElementsByClassName('hscroll-wrapper')[1]);
+    // console.log(document.getElementsByClassName("hscroll-wrapper")[1]);
 
     document.getElementById("left-banner-title").innerText =
-      bannerData.original_name;
+      bannerData.original_title;
     document.getElementById("banner-text-date").innerText =
       movieDate[1] + " " + movieDate[2] + ", " + movieDate[3];
     document.getElementById("banner-text-description").innerText =
@@ -138,66 +173,161 @@ class CreateElements {
       .getElementById("top-center-full-banner-image")
       .setAttribute("src", this.posterURL + bannerData.poster_path);
 
+    // title tracker will prevent the previously used movie title from being added
+    // and rendered as an HTML element
+    this.titleTracker.push(bannerData.original_name);
+
     this.createMovieGenre();
   }
 
-  createMovieThumbnails(movieTitleData, classIndex) {
+  createMovieThumbnails(imageMovie, titleMovie, classIndex) {
     const img = document.createElement("img");
 
     // check and confirm attributes
     img.setAttribute("class", "movie-thumbnail");
     img.setAttribute("id", "movie-thumbnail");
-    img.setAttribute(
-      "alt",
-      "Cover art of the movie " + movieTitleData.original_title
-    );
+    img.setAttribute("alt", "Cover art of the movie " + titleMovie);
     img.setAttribute("width", "35");
     img.setAttribute("height", "40");
     img.setAttribute("role", "img");
     img.setAttribute("loading", "lazy");
     img.setAttribute("fetchpriority", "low");
     img.setAttribute("decoding", "auto");
-    img.setAttribute("src", this.posterURL + movieTitleData.poster_path);
+    img.setAttribute("src", this.posterURL + imageMovie);
 
     document
       .getElementsByClassName("hscroll-wrapper")
       [classIndex].appendChild(img);
-    // console.log(document.getElementsByClassName('hscroll-wrapper').length)
+    //   console.log(document.getElementsByClassName("hscroll-wrapper").length);
+
+    const iconSHeart = document.createElement("i");
+
+    iconSHeart.setAttribute("class", "fa-solid fa-heart");
+    iconSHeart.setAttribute("id", "fa-sheart");
+
+    const iconRHeart = document.createElement("i");
+
+    iconRHeart.setAttribute("class", "fa-regular fa-heart");
+    iconRHeart.setAttribute("id", "fa-rheart");
+
+    const iconGoogleHeart = document.createElement("i");
+
+    iconGoogleHeart.setAttribute("class", "material-icons");
+    iconGoogleHeart.setAttribute("id", "googleiconheart");
+
+    iconGoogleHeart.textContent = "cloud";
+
+    document
+      .getElementsByClassName("hscroll-wrapper")
+      [classIndex].appendChild(iconSHeart);
+
+    document
+      .getElementsByClassName("hscroll-wrapper")
+      [classIndex].appendChild(iconRHeart);
+
+    document
+      .getElementsByClassName("hscroll-wrapper")
+      [classIndex].appendChild(iconGoogleHeart);
+
+    //eventhandler for mouseover event change style of css element
+    document
+      .getElementById("hscroll-wrapper")
+      .addEventListener(
+        "mouseover",
+        (event) => (event.target.style.display = "flex")
+      );
   }
 
   createMovieTitle(genre_id) {
     var movieTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
+    // create data structure to hold title and genrie_ids
+    // solution to empty element hscroll-wrapper creation
+    // by avoiding recursively calling and creating elements
+    for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
+      for (
+        var titleIndexObject = 0;
+        titleIndexObject < this.movieTitleResultsLen;
+        titleIndexObject++
+      ) {
+        this.movieTitles.push(
+          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+            titleIndexObject
+          ].title
+        );
+        this.movieGenreIds.push(
+          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+            titleIndexObject
+          ].genre_ids
+        );
+      }
+    }
 
-    for (var pageTitle = 0; pageTitle <= movieTitleLen; pageTitle++) {
-      var movieTitles = Object.entries(
-        this.movieResponseFetchData.movieRequestPopular[pageTitle]
-      )[2][1];
-      var indexClass = 0;
-      for (var titleIndex = 0; titleIndex <= movieTitleLen; titleIndex++)
-        if (movieTitles[titleIndex].genre_ids.includes(28)) {
-          // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
+    // used to as reference and identify to element of class hscroll-wrapper and append element
+    var indexClass = 0;
+    for (
+      var titleIndexArray = 0;
+      titleIndexArray < this.movieTitles.length;
+      titleIndexArray++
+    ) {
+      // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id));
 
-          const hscroll_wrapper = document.createElement("div");
-          hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
-          hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
+      if (
+        this.movieGenreIds[titleIndexArray].includes(genre_id) &&
+        !this.titleTracker.includes(this.movieTitles[titleIndexArray])
+      ) {
+        // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
 
-          const title = document.createElement("p");
+        const hscroll_wrapper = document.createElement("div");
+        hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
+        hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
 
-          title.setAttribute("color", "white");
-          title.setAttribute("font-size", "16");
-          title.setAttribute("id", "movie-title");
-          title.innerText = movieTitles[titleIndex].title;
+        const title = document.createElement("p");
 
-          document
-            .getElementById("movie-thumbnail-hscroll-container")
-            .appendChild(hscroll_wrapper);
-          document
-            .getElementsByClassName("hscroll-wrapper")
-            [indexClass].appendChild(title);
+        title.setAttribute("color", "white");
+        title.setAttribute("font-size", "16");
+        title.setAttribute("id", "movie-title");
+        title.innerText = this.movieTitles[titleIndexArray];
 
-          this.createMovieThumbnails(movieTitles[2][1][titleIndex], indexClass);
-          indexClass++;
+        // console.log(
+        //   Math.max(
+        //     document.getElementById("movie-thumbnail-hscroll-container")
+        //       .childElementCount
+        //   )
+        // );
+
+        document
+          .getElementById("movie-thumbnail-hscroll-container")
+          .appendChild(hscroll_wrapper);
+        document
+          .getElementsByClassName("hscroll-wrapper")
+          [indexClass].appendChild(title);
+
+        this.createMovieThumbnails(
+          this.movieImage[titleIndexArray],
+          this.movieTitles[titleIndexArray],
+          indexClass
+        );
+        indexClass++;
+      }
+
+      // title tracker will prevent the previously used movie title from being added
+      // and rendered as an HTML element
+      // this.titleTracker.push(this.movieTitles[titleIndex]);
+
+      // an assumption is made about the data structure of by the movieTitle and movieGenreIds
+      // as determined by the length we assume a corresponding title to genre ids and
+      // the data structure is complete based on our expectations
+      if (titleIndexArray == this.movieTitles.length) {
+        if (this.movieTitles.length == this.movieGenreIds.length) {
+          console.log(
+            `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\nMovie Genre Ids: ${this.movieGenreIds.length}`
+          );
+        } else {
+          console.error(
+            `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\n Movie Genre Ids: ${this.movieGenreIds.length}`
+          );
         }
+      }
     }
   }
 
@@ -210,41 +340,48 @@ class CreateElements {
 
     // }
 
-    var movieGenreArray = Object.entries(
-      this.movieResponseFetchData.movieRequestGenre
-    ).map((v) => Object.entries(v[1]).map((o) => o[1]));
+    var movieGenreArray =
+      this.movieResponseFetchData.movieRequestGenre["genres"];
 
-    while (movieGenreArray[0].length > 0) {
-      var movieGenreItems = movieGenreArray[0];
-      var index = Math.floor(Math.random() * movieGenreItems.length);
+    while (movieGenreArray.length > 0) {
+      var index = Math.floor(Math.random() * movieGenreArray.length);
 
-      // console.log(movieGenreItems[index]['name'], movieGenreItems[index]['id'])
+      // console.log(
+      //   movieGenreArray[index]["name"],
+      //   movieGenreArray[index]["id"],
+      //   movieGenreArray.length
+      // );
 
       const hscroll_container = document.createElement("div");
 
       hscroll_container.setAttribute("id", "movie-thumbnail-hscroll-container");
+      hscroll_container.setAttribute(
+        "class",
+        "movie-thumbnail-hscroll-container"
+      );
 
       const genre = document.createElement("h1");
 
       genre.setAttribute("id", "movie-genre");
       genre.setAttribute("class", "movie-genre");
-      genre.innerText = movieGenreItems[index]["name"];
+      genre.innerText = movieGenreArray[index]["name"];
 
       document
         .getElementById("movie-thumbnail-vscroll-container")
         .insertAdjacentElement("afterbegin", genre);
-      console.log(
-        document.getElementById("movie-thumbnail-vscroll-container")
-          .lastElementChild
-      );
+      // console.log(
+      //   document.getElementById("movie-thumbnail-vscroll-container")
+      //     .lastElementChild
+      // );
       document
         .getElementById("movie-genre")
         .insertAdjacentElement("afterend", hscroll_container);
 
-      this.createMovieTitle(movieGenreItems[index]["id"]);
+      this.createMovieTitle(movieGenreArray[index]["id"]);
 
-      movieGenreItems.splice(index, 1);
+      movieGenreArray.splice(index, 1);
     }
+    this.gridRepeat();
   }
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
 
@@ -357,4 +494,5 @@ _ = (function () {
   let createElements = new CreateElements();
   createElements.createBanner();
   // createElements.createMovieGenre();
+  // createElements.gridRepeat();
 })();

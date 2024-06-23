@@ -3,7 +3,7 @@
 }
 
 html {
-    background-color: black;
+    background-color: black !important;
 }
 
 body {
@@ -105,9 +105,8 @@ body {
 }
 
 #top-center-full-banner-container {
-    width: auto;
+    width: 100vw;
     height: auto;
-    
 }
 
 #top-center-full-banner-left_blur {
@@ -128,39 +127,57 @@ body {
     top: 40%;
     left: 8px;
     position: absolute;
-    width: auto;
-    max-width: 200px;
+    width: inherit;
+    max-width: 32rem;
     line-height: 8px;
     font-size: 14px;
 }
 
-#banner-text-description {
-    line-height: 16px;
+h1#left-banner-title {
+    font-size: 1.875rem;
+    line-height: 1.25rem;
 }
 
-#banner-button-p, 
-#banner-button-tl, 
-#banner-button-wl {
-    margin: 2px;
+#banner-text-date {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 400;
+    line-height: 1.25rem; /* 20px */
+}
+
+#banner-text-description {
+    width: 100vw;
+    max-width: 90%;
+    line-height: 16px;
+    font-weight: 300;
+}
+
+button#banner-button-p, 
+button#banner-button-tl, 
+button#banner-button-wl {
+    margin: 2px 0;
     padding: 8px;
-    border: 300px gray;
+    border: 0.04rem solid darkgrey;
     color: black;
     font-size: 10px;
 }
  
 
-#banner-button-wl {
+button#banner-button-wl {
     background-color: transparent;
+    color: white;
 } 
 
 #banner-bottom-shadow-blur {
     height: 20px;
     margin: 0;
-    background-image: linear-gradient(to bottom, black, white);
+    background-image: linear-gradient(to bottom, black, darkgray);
+    background-color: black;
 }
 
 #movie-genre {
-    color: white;
+    color: darkgray;
+    font-size: 2.25rem;
+    line-height: 1.25rem;
 }
 
 #movie-thumbnail-vscroll-container {
@@ -180,7 +197,7 @@ body {
     overflow-y: hidden;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(var(--grid-repeat), auto);
+    grid-template-columns: repeat(var(--grid-repeat), auto) !important;
     grid-gap: 0 16px;
     padding: 4px 4px;
     padding-right: 0;
@@ -188,6 +205,8 @@ body {
     scrollbar-width: none;  /* Firefox */
     border-radius: 10px;
   }
+
+
   
 #movie-thumbnail-hscroll-wrapper::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
@@ -198,21 +217,110 @@ body {
     flex-direction: column-reverse;
     width: 160px;
     cursor: pointer;
-    justify-content: flex-end;
-    
+    justify-content: center;
+    align-items: center;
 }
 
 .hscroll-wrapper:hover {
     opacity: 0.5;
-
+    background-color: rgb(0 0 0 / 50%)
+    
 }
 
 img[id='movie-thumbnail'] {
-    width: 160px;
+    display: block;
+    width: 100%;
     height: auto;
+    border-radius: 1.8%;
+    box-shadow: 10px -8px #55525259;
 }
 
 p[id='movie-title'] {
-    color: white;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    color: darkgray;
+    font-size: 1.25rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
 }
+
+
+
+#fa-rheart {
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    top: 0;
+}
+
+#fa-sheart {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 0;
+}
+
+#material-icons {
+    position: absolute;
+    display: inline-flex;
+    left: 0;
+    top: 0;
+}
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .hscroll-wrapper {
+        width: 160px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    #title_button-container {
+        padding: 16px 0;
+    }
+    h1#left-banner-title {
+        font-size: 3rem;
+        line-height: .075rem;
+    }
+    #banner-text-description {
+        max-width: 70%;
+    }
+    .hscroll-wrapper {
+        width: 200px;
+    }
+        
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .hscroll-wrapper {
+        width: 240px;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    #banner-text-description {
+        max-width: 50%;
+    }
+    .hscroll-wrapper {
+        width: 280px;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+   #banner-text-description {
+        max-width: 35%;
+   }
+   .hscroll-wrapper {
+       width: 360;
+   }
+}
+
+
 

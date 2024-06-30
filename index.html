@@ -30,21 +30,27 @@
     <nav id="top-desktop-nav">
         <a class="top-nav-icon-bar-item-hover" id="top-nav-icon-link-logo" title="" role="link" href="" hreflang="en-US"
             target="_self" referrerpolicy="origin">
+            <h1 id="top-nav-icon-image-text">NETFLIX</h1>
             <img id="top-nav-icon-image-logo"
                 src="https://toppng.com/uploads/preview/netflix-logo-vector-free-download-11574237114rh16slxpn2.png"
                 alt="Netflix red lettering logo." role="img" width="30" height="30" draggable="false" loading="eager"
-                fecthpriority="high" decoding="async">
+                fetchpriority="high" decoding="async">
         </a>
         <div id="top-nav-btn-container">
-            <a class="top-nav-btn-movie" id="top-nav-btn" title="Movie" role="button" href="" hreflang="ca"
+            <a class="top-nav-btn" id="top-nav-movie-btn" title="Movie" role="button" href="" hreflang="ca"
                 target="_self" referrerpolicy="">Movie</a>
-            <a class="top-nav-btn-series" id="top-nav-btn" title="Series" role="button" href="" hreflang="ga"
+            <a class="top-nav-btn" id="top-nav-seris-btn" title="Series" role="button" href="" hreflang="ga"
                 target="_self" referrerpolicy="">Series</a>
-            <a class="top-nav-btn-ebw" id="top-nav-btn" title="EyeBleeding_Binge_Watchable" role="button" href=""
+            <a class="top-nav-btn" id="top-nav-ebw-btn" title="EyeBleeding_Binge_Watchable" role="button" href=""
                 hreflang="es" target="_self" referrerpolicy="">EyeBleeding Binge-Watchable</a>
         </div>
         <input id="top-nav-search-input" type="text" placeholder="Search..." aria-placeholder="Search..." width="10"
             height="8" aria-label="Search Input Field" autocapitalize="off" autocomplete="off" inputmode="search">
+        <div id="top-nav-onboarding-group">
+            <button id="nav-login-bg-offset" type="button" name="login-btn">Log In</button>
+            <button id="nav-signup-bg-offset" type="button" name="signup-btn">Sign Up</button>
+
+        </div>
         <img id="top-nav-profile-circle" src="" alt="A profile pic for the user or default image." draggable="false"
             width="32" height="32" role="img" loading="eager" fetchpriority="high" decoding="async">
     </nav>
@@ -66,12 +72,12 @@
         <div id="top-center-full-banner-container">
             <img id="top-center-full-banner-image" src="C:/Users/okino/OneDrive/Pictures/BP_Letter.jpg"
                 alt="movie main banner" role="img" width="auto" height="auto" loading="eager" decoding="async"
-                fetchproirit="high">
+                fetchpriority="high">
             <div id="title_button-container">
                 <h1 id="left-banner-title">Black Panther</h1>
-                <button id="banner-button-p" type="button">Play</button>
-                <button id="banner-button-wl" type="button">Watch Later</button>
-                <button id="banner-button-tl" type="button">The List</button>
+                <button id="banner-button-p" type="button" name="play-btn">Play</button>
+                <button id="banner-button-wl" type="button" name="watch_later-btn">Watch Later</button>
+                <button id="banner-button-tl" type="button" name="bt-the_list-btn">The List</button>
                 <p id="banner-text-date">Feb 15, 2028</p>
                 <p id="banner-text-description">T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step
                     forward to lead his people into a new future and
@@ -81,7 +87,7 @@
             <div id="banner-bottom-shadow-blur"></div>
         </div>
     </div>
-    <div id="movie-thumbnail-vscroll-container"></div>
+    <!-- <div id="movie-title-thumbnail-vscroll-container"></div> -->
 </body>
 <div id="javascript-section">
     <!-- JavaScript Code -->

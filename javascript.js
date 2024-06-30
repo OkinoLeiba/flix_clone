@@ -48,24 +48,35 @@ class CreateElements {
       movieRequestNowPlaying: Object(),
       movieRequestPopular: Object(),
       movieRequestTopRated: Object(),
-      movieRequestTrendingMonth: Object(),
+      // movieRequestTrendingMonth: Object(),
       movieRequestTrendingDay: Object(),
       movieRequestGenre: Object(),
     };
     this.posterURL = "https://image.tmdb.org/t/p/original";
     this.movieTitles = Array();
-    this.movieGenreIds = Array();
     this.movieImage = Array();
+    this.movieTitlesAPISection = Array();
+    this.movieImageAPISection = Array();
+    this.movieGenreIds = Array();
     this.titleTracker = Array();
 
     // results object value is always capped at 20 objects in an array
     this.movieTitleResultsLen = 20;
   }
 
+  // get and set css element property gridrepeat
   gridRepeat = () => {
-    var grid_repeat = document.getElementById(
-      "movie-thumbnail-hscroll-container"
-    ).childElementCount;
+    var grid_repeat =
+      document.getElementById("movie-title-thumbnail-hscroll-container")
+        .childElementCount >
+      document.getElementById(
+        "movie-title-thumbnail-hscroll-apisection-container"
+      ).childElementCount
+        ? document.getElementById("movie-title-thumbnail-hscroll-container")
+            .childElementCount
+        : document.getElementById(
+            "movie-title-thumbnail-hscroll-apisection-container"
+          ).childElementCount;
 
     if (grid_repeat < 20) grid_repeat = 100;
 
@@ -75,6 +86,7 @@ class CreateElements {
     );
   };
 
+  // may not be needed
   setData(dt) {
     this.data = dt;
   }
@@ -89,6 +101,7 @@ class CreateElements {
     }
   }
 
+  // driver code to begin api request
   async requestMovieFetchData() {
     // default number of pages and number of execution
     var total_pages = 2;
@@ -177,13 +190,14 @@ class CreateElements {
     // and rendered as an HTML element
     this.titleTracker.push(bannerData.original_name);
 
-    this.createMovieGenre();
+    this.createMovieGenre(); // beginning of function call chain
   }
 
-  createMovieThumbnails(imageMovie, titleMovie, classIndex) {
+  createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
+    // SECTION: by genre
     const img = document.createElement("img");
 
-    // check and confirm attributes
+    // TODO: check and confirm attributes
     img.setAttribute("class", "movie-thumbnail");
     img.setAttribute("id", "movie-thumbnail");
     img.setAttribute("alt", "Cover art of the movie " + titleMovie);
@@ -236,9 +250,103 @@ class CreateElements {
         "mouseover",
         (event) => (event.target.style.display = "flex")
       );
+
+    // SECTION: by api elements
+    if (genreBool) {
+      const imgAPISection = document.createElement("img");
+
+      // TODO: check and confirm attributes
+      imgAPISection.setAttribute("class", "movie-thumbnail");
+      imgAPISection.setAttribute("id", "movie-thumbnail");
+      imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
+      imgAPISection.setAttribute("width", "35");
+      imgAPISection.setAttribute("height", "40");
+      imgAPISection.setAttribute("role", "img");
+      imgAPISection.setAttribute("loading", "lazy");
+      imgAPISection.setAttribute("fetchpriority", "low");
+      imgAPISection.setAttribute("decoding", "auto");
+      imgAPISection.setAttribute("src", this.posterURL + imageMovie);
+
+      document
+        .getElementsByClassName("hscroll-apisection-wrapper")
+        [classIndex].appendChild(imgAPISection);
+
+      // const iconSHeart = document.createElement("i");
+
+      // iconSHeart.setAttribute("class", "fa-solid fa-heart");
+      // iconSHeart.setAttribute("id", "fa-sheart");
+
+      // const iconRHeart = document.createElement("i");
+
+      // iconRHeart.setAttribute("class", "fa-regular fa-heart");
+      // iconRHeart.setAttribute("id", "fa-rheart");
+
+      // const iconGoogleHeart = document.createElement("i");
+
+      // iconGoogleHeart.setAttribute("class", "material-icons");
+      // iconGoogleHeart.setAttribute("id", "googleiconheart");
+
+      // iconGoogleHeart.textContent = "cloud";
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconSHeart);
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconRHeart);
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconGoogleHeart);
+
+      //eventhandler for mouseover event change style of css element
+      // document
+      //   .getElementById("hscroll-apisection-wrapper")
+      //   .addEventListener(
+      //     "mouseover",
+      //     (event) => (event.target.style.display = "flex")
+      //   );
+    }
   }
 
-  createMovieTitle(genre_id) {
+  createMovieTitle(genre_id, genreBool = false) {
+    // create container for two sections with title and image thumbnail as base elements
+    // one section with base elements by genre
+    // other section with base elements named by data request
+    const vscroll_sections_container = document.createElement("div");
+    vscroll_sections_container.setAttribute("id", "vscroll-sections-container");
+
+    document
+      .getElementById("top-center-full-banner")
+      .after(vscroll_sections_container);
+
+    // SECTION: by genre
+    const vscroll_div = document.createElement("div");
+    vscroll_div.setAttribute("id", "movie-title-thumbnail-vscroll-container");
+
+    vscroll_div.setAttribute("id", "movie-title-thumbnail-vscroll-container");
+    document
+      .getElementById("vscroll-sections-container")
+      .appendChild(vscroll_div);
+
+    // SECTION: by api elements
+    if (genre_id == 99999 && genreBool) {
+      const vscroll_apisection_div = document.createElement("div");
+      vscroll_apisection_div.setAttribute(
+        "id",
+        "movie-title-thumbnail-vscroll-container"
+      );
+
+      vscroll_apisection_div.setAttribute(
+        "id",
+        "movie-thumbnail-vscroll-apisection-container"
+      );
+      document
+        .getElementById("movie-title-thumbnail-vscroll-container")
+        .after(vscroll_apisection_div);
+    }
+    // SECTION: by genre
     var movieTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
     // create data structure to hold title and genrie_ids
     // solution to empty element hscroll-wrapper creation
@@ -262,7 +370,7 @@ class CreateElements {
       }
     }
 
-    // used to as reference and identify to element of class hscroll-wrapper and append element
+    // used to as reference and identify element of class hscroll-wrapper and append element
     var indexClass = 0;
     for (
       var titleIndexArray = 0;
@@ -290,13 +398,13 @@ class CreateElements {
 
         // console.log(
         //   Math.max(
-        //     document.getElementById("movie-thumbnail-hscroll-container")
+        //     document.getElementById("movie-title-thumbnail-hscroll-container")
         //       .childElementCount
         //   )
         // );
 
         document
-          .getElementById("movie-thumbnail-hscroll-container")
+          .getElementById("movie-title-thumbnail-hscroll-container")
           .appendChild(hscroll_wrapper);
         document
           .getElementsByClassName("hscroll-wrapper")
@@ -310,6 +418,68 @@ class CreateElements {
         indexClass++;
       }
 
+      // SECTION: by api elements (upcoming, now playing, trending, etc.)
+      // prevent section of code from execute with each genre_id
+      if (genre_id == 99999 && genreBool) {
+        for (let key in this.movieResponseFetchData) {
+          if (key != "movieRequestGenre") {
+            var movieTitleAPISectionLen =
+              this.movieResponseFetchData[key].length;
+          }
+
+          for (
+            var pageTitle = 0;
+            pageTitle < movieTitleAPISectionLen;
+            pageTitle++
+          ) {
+            for (
+              var titleIndexObject = 0;
+              titleIndexObject < this.movieTitleAPISectionLen;
+              titleIndexObject++
+            ) {
+              this.movieTitlesAPISection.push(
+                this.movieResponseFetchData[key][pageTitle]["results"][
+                  titleIndexObject
+                ].title
+              );
+            }
+          }
+
+          // used to as reference and identify element of class hscroll-wrapper and append element
+          var indexClass = 0;
+          for (
+            var titleIndexArray = 0;
+            titleIndexArray < this.movieTitlesAPISection.length;
+            titleIndexArray++
+          ) {
+            const hscroll_wrapper = document.createElement("div");
+            hscroll_wrapper.setAttribute("id", "hscroll-apisection-wrapper");
+            hscroll_wrapper.setAttribute("class", "hscroll-apisection-wrapper");
+
+            const title = document.createElement("p");
+
+            title.setAttribute("color", "white");
+            title.setAttribute("font-size", "16");
+            title.setAttribute("id", "movie-title");
+            title.innerText = this.movieTitlesAPISection[titleIndexArray];
+
+            document
+              .getElementById("movie-thumbnail-hscroll-apisection-container")
+              .appendChild(hscroll_wrapper);
+            document
+              .getElementsByClassName("hscroll-apisection-wrapper")
+              [indexClass].appendChild(title);
+
+            this.createMovieThumbnails(
+              this.movieImageAPISection[titleIndexArray],
+              this.movieTitlesAPISection[titleIndexArray],
+              indexClass,
+              false
+            );
+            indexClass++;
+          }
+        }
+      }
       // title tracker will prevent the previously used movie title from being added
       // and rendered as an HTML element
       // this.titleTracker.push(this.movieTitles[titleIndex]);
@@ -340,6 +510,7 @@ class CreateElements {
 
     // }
 
+    // SECTION: by genre
     var movieGenreArray =
       this.movieResponseFetchData.movieRequestGenre["genres"];
 
@@ -354,10 +525,13 @@ class CreateElements {
 
       const hscroll_container = document.createElement("div");
 
-      hscroll_container.setAttribute("id", "movie-thumbnail-hscroll-container");
+      hscroll_container.setAttribute(
+        "id",
+        "movie-title-thumbnail-hscroll-container"
+      );
       hscroll_container.setAttribute(
         "class",
-        "movie-thumbnail-hscroll-container"
+        "movie-title-thumbnail-hscroll-container"
       );
 
       const genre = document.createElement("h1");
@@ -367,20 +541,60 @@ class CreateElements {
       genre.innerText = movieGenreArray[index]["name"];
 
       document
-        .getElementById("movie-thumbnail-vscroll-container")
+        .getElementById("movie-title-thumbnail-vscroll-container")
         .insertAdjacentElement("afterbegin", genre);
       // console.log(
-      //   document.getElementById("movie-thumbnail-vscroll-container")
+      //   document.getElementById("movie-title-thumbnail-vscroll-container")
       //     .lastElementChild
       // );
       document
         .getElementById("movie-genre")
         .insertAdjacentElement("afterend", hscroll_container);
 
-      this.createMovieTitle(movieGenreArray[index]["id"]);
+      this.createMovieTitle(movieGenreArray[index]["id"], false);
 
-      movieGenreArray.splice(index, 1);
+      movieapisectionArray.splice(index, 1);
     }
+
+    // SECTION: by api elements
+    for (let key in this.movieResponseFetchData) {
+      movieLocalHeaderTitle = {
+        movieRequestUpcoming: (String = "UpComing"),
+        movieRequestNowPlaying: (String = "Now Playing"),
+        movieRequestPopular: (String = "Popular"),
+        movieRequestTopRated: (String = "Top Rated"),
+        movieRequestTrendingDay: (String = "Trending Today"),
+      };
+
+      const hscroll_apisection_container = document.createElement("div");
+
+      hscroll_apisection_container.setAttribute(
+        "id",
+        "movie-title-thumbnail-hscroll-apisection-container"
+      );
+      hscroll_apisection_container.setAttribute(
+        "class",
+        "movie-title-thumbnail-hscroll-apisection-container"
+      );
+
+      const apisectionTitle = document.createElement("h1");
+
+      apisectionTitle.setAttribute("id", "movie-apisection-title");
+      apisectionTitle.setAttribute("class", "movie-apisection-title");
+      apisectionTitle.innerText = movieLocalHeaderTitle[key];
+
+      document
+        .getElementById("movie-title-thumbnail-vscroll-apisection-container")
+        .insertAdjacentElement("afterbegin", apisectionTitle);
+
+      document
+        .getElementById("movie-apisection-title")
+        .insertAdjacentElement("afterend", hscroll_apisection_container);
+
+      this.createMovieTitle(99999, false);
+    }
+
+    // function call to css gridrepeat value
     this.gridRepeat();
   }
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {

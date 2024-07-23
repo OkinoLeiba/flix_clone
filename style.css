@@ -12,7 +12,11 @@ body {
     flex-direction: column;
     font-family: Times Roman, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     margin: 0;
-    gap: 8px;
+    /* padding: 0; */
+    /* gap: 8px; */
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
 }
 
 #top-nav-icon-image-logo {
@@ -47,7 +51,7 @@ body {
     padding-top: 1px;
     padding-bottom: 1px;
     border-radius: 7px;
-    font-size: 10px;
+    font-size: 1em;
     text-decoration: none;
 }
 
@@ -62,20 +66,57 @@ body {
 }
 
 #top-nav-search-input {
-    width: 7.5em;
-    margin: 0 16px;
-    height: 16px;
-    border: black;
+    width: 9.5em;
+    margin: 0px 0px;
+    height: 1.5em;
+    border-color: black;
     border-radius: 25px;
     padding: 0 2px;
 }
 
 #top-nav-onboarding-group {
+    display: flex;
+    flex-direction: row;
     padding: 1em;
+    gap: 8px;
+}
+
+#nav-login-bg-offset,
+#nav-signup-bg-offset,
+#nav-account-bg-offset, 
+#nav-logout-bg-offset {
+    color: darkgray;
+    cursor: pointer;
+    font-size: 1.05rem;
+    line-height: 0.75rem;
+    border-radius: 50px;
+    width: 5.25em;
+    height: 1.5em;
+}
+
+#nav-login-bg-offset,
+#nav-account-bg-offset {
+    background-color: red;
+}
+
+
+#nav-signup-bg-offset,
+#nav-logout-bg-offset {
+    background-color: transparent;
+}
+
+#nav-login-bg-offset,
+#nav-signup-bg-offset {
+    display: none;
+}
+
+#nav-account-bg-offset,
+#nav-logout-bg-offset {
+    display: block;
 }
 
 #top-nav-profile-circle {
-    border: black;
+    border-color: black;
     border-radius: 50px;
     width: 24px;
     height: 24px;
@@ -93,6 +134,7 @@ body {
 #top-nav-btn-container {
     display: flex;
     gap: 8px;
+    font-size: 1.025em;
 }
 
 #top-nav-btn {
@@ -101,9 +143,10 @@ body {
 
 #top-nav-icon-link-logo {
     position: relative;
-    left: 0;background-color: transparent;
+    left: 0;
     cursor: pointer;
-    text-decoration: none;
+    background-color: transparent;
+    text-decoration: none; 
 }
 
 
@@ -139,29 +182,32 @@ body {
 #top-center-full-banner-image {
     width: 100vw;
     height: 550px;
-    object-fit: fill;
+    object-fit: contain;
 }
 
 #title_button-container {
-    padding: 8px 0;
-    top: 40%;
+    padding: 8px 0 8px 4px;
+    top: 10em;
     left: 8px;
     position: absolute;
     width: inherit;
-    max-width: 32rem;
+    max-width: 50rem;
     line-height: 8px;
     font-size: 14px;
 }
 
 h1#left-banner-title {
     font-size: 1.875rem;
-    line-height: 1.25rem;
+    line-height: 0.75rem;
+    margin-bottom: 1.50rem;
 }
 
 #banner-text-date {
     font-size: 0.875rem; /* 14px */
     font-weight: 400;
     line-height: 1.25rem; /* 20px */
+    color: white;
+    margin-bottom: 4px;
 }
 
 #banner-text-description {
@@ -169,6 +215,7 @@ h1#left-banner-title {
     max-width: 90%;
     line-height: 16px;
     font-weight: 300;
+    margin-top: 0;
 }
 
 button#banner-button-p, 
@@ -194,27 +241,81 @@ button#banner-button-wl {
     background-color: black;
 }
 
-#movie-genre {
-    color: darkgray;
-    font-size: 2.25rem;
-    line-height: 1.25rem;
+#banner-left-shadow-blur {
+    width: 20px;
+    margin: 0;
+    background-image: linear-gradient(to right, black, darkgray);
+    background-color: black;
 }
+
+#top-section-banner-container {
+    margin: 0;
+    padding: 0;
+}
+
+#vscroll-sections-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 100vw;
+    padding-top: 5px;
+    margin: 0;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    scrollbar-width: none; /* Firefox */
+    scroll-snap-type: mandatory;
+    scroll-snap-points-x: repeat(100vw);
+    scroll-snap-type: x mandatory;
+}
+
+#vscroll-sections-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+#movie-genre,
+#movie-apisection-title {
+    color: darkgray;
+    font-size: 1.75rem;
+    line-height: 1.25;
+    margin-bottom: 0;
+}
+
+#chevron-wrapper {
+}
+
+#button-chevron-left,
+#button-chevron-right,
+#button-chevron-apisection-left,
+#button-chevron-apisection-right {
+    background-color: transparent;
+    border: none;
+}
+
+#left-chevron, 
+#right-chevron,
+#left-apisection-chevron,
+#right-apisection-chevron {font-size: 1.25em;/* line-height: 1.25em; */background-color: whitesmoke;}
+
+
+
 
 #movie-title-thumbnail-vscroll-container, 
-#movie-thumbnail-vscroll-apisection-container {
-    position: sticky;
-    /* display: flex; */
+#movie-title-thumbnail-vscroll-apisection-container {
+    padding-left: 1em;
     width: 100vw;
-    margin: 9px;
-    gap: 8px;
+    
+    /* gap: 4px; */
 }
 
+#movie-title-thumbnail-vscroll-apisection-container {
+    height: max-content;
+    }
 
 
-#movie-title-thumbnail-hscroll-container,
-#movie-thumbnail-hscroll-apisection-container {
+
+#movie-title-thumbnail-hscroll-container, 
+#movie-title-thumbnail-hscroll-apisection-container {
     width: auto;
-    height: auto;
+    height: 16em;
     overflow-x: scroll;
     overflow-y: hidden;
     margin: 0 auto;
@@ -222,7 +323,7 @@ button#banner-button-wl {
     grid-template-columns: repeat(var(--grid-repeat), auto) !important;
     grid-gap: 0 16px;
     padding: 4px 4px;
-    padding-right: 0;
+    /* padding-right: 0; */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     border-radius: 10px;
@@ -236,55 +337,59 @@ button#banner-button-wl {
   }
 
 .hscroll-wrapper,
-.hscroll-apisection-wrapper {
+.hscroll-apisection-wrapper
+ {
     display: inline-flex;
     flex-direction: column-reverse;
-    width: 160px;
+    width: 60px;
     cursor: pointer;
     justify-content: center;
     align-items: center;
 }
 
 .hscroll-wrapper:hover,
-.hscroll-apisection-wrapper:hover {
+.hscroll-apisection-wrapper:hover
+ {
     opacity: 0.5;
-    background-color: rgb(0 0 0 / 50%)
-    
+    background-color: rgb(0 0 0 / 50%);
+
 }
 
 img[id='movie-thumbnail'] {
-    display: block;
+    display: inline-block;
     width: 100%;
     height: auto;
     border-radius: 1.8%;
     box-shadow: 10px -8px #55525259;
+    transform: scaleY(0.7) scaleX(.9);
 }
 
 p[id='movie-title'] {
     display: flex;
-    position: absolute;
+    position: relative;
+    top: -55%;
+    /* left: 50%; */
     align-items: center;
     justify-content: center;
     color: darkgray;
-    font-size: 1.25rem; /* 14px */
-    line-height: 1.25rem; /* 20px */
+    font-size: 1em; /* 14px */
+    /* line-height: 0.75em; */ /* 20px */
 }
 
 
 
 #fa-rheart {
-    position: absolute;
-    display: inline-block;
+    position: relative;
     z-index: auto;
-    left: 0;
-    top: 0;
+    right: 86px;
+    top: 26px;
 }
 
 #fa-sheart {
-    position: absolute;
+    position: relative;
     display: none;
-    left: 0;
-    top: 0;
+    left: 21px;
+    top: 50px;
 }
 
 #material-icons {
@@ -298,27 +403,34 @@ p[id='movie-title'] {
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
+    h1#left-banner-title {
+        font-size: 2rem;
+        line-height: .075rem;
+        margin-bottom: 1rem;
+    }
+
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 160px;
+        width: 60px;
     }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     #title_button-container {
-        padding: 16px 0;
+        padding: 16px 0 16px 8px;
     }
     h1#left-banner-title {
         font-size: 3rem;
         line-height: .075rem;
+        margin-bottom: 1.50rem;
     }
     #banner-text-description {
         max-width: 70%;
     }
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 200px;
+        width: 100px;
     }
         
 }
@@ -327,7 +439,7 @@ p[id='movie-title'] {
 @media only screen and (min-width: 768px) {
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 240px;
+        width: 140px;
     }
 }
 
@@ -338,7 +450,7 @@ p[id='movie-title'] {
     }
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 280px;
+        width: 180px;
     }
 }
 
@@ -349,9 +461,11 @@ p[id='movie-title'] {
    }
    .hscroll-wrapper,
    .hscroll-apisection-wrapper {
-       width: 360;
+       width: 260px;
    }
 }
+
+
 
 
 

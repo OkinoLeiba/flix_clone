@@ -62,7 +62,12 @@ class CreateElements {
 
     // results object value is always capped at 20 objects in an array
     this.movieTitleResultsLen = 20;
+
+    // document.addEventListener("resize", this.updateSize(), false);
   }
+
+  
+  
 
   // get and set css element property gridrepeat
   gridRepeat = () => {
@@ -150,11 +155,16 @@ class CreateElements {
   async createBanner() {
     await this.requestMovieFetchData();
 
-    var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
+
+    var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
+    
 
     // console.log(this.movieResponseFetchData.movieRequestGenre["genres"]);
     for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
-      for (var titleIndex = 0; titleIndex < pageTitleLen; titleIndex++) {
+
+      var arrayTitleLen = this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"].length;
+
+      for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
         this.movieTitles.push(
           this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
             titleIndex
@@ -177,7 +187,11 @@ class CreateElements {
     //     this.movieResponseFetchData.movieRequestTrendingDay.results
     //   ).map((v) => v[1])[0]
     // );
+    
 
+    console.log(this.movieImage.push(
+          this.movieResponseFetchData.movieRequestPopular[0]
+        ))
        
 
     var bannerData = Object.entries(
@@ -188,7 +202,9 @@ class CreateElements {
       .toDateString()
       .split(" ");
     
-    this.assertType(movieDate, "string", "Movie Date");
+
+    
+    this.assertType(movieDate, "object", "Movie Date");
     
     const options = {
       year: "numeric",
@@ -214,315 +230,14 @@ class CreateElements {
     // and rendered as an HTML element
     this.titleTracker.push(bannerData.original_name);
 
+    // create menu for nav
+    // TODO: move to different function or execute on load
+    this.createMenu()
+    
     this.createMovieGenre(); // beginning of function call chain
   }
 
-  createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
-    // SECTION: by genre
-    if (!genreBool) {
-      const img = document.createElement("img");
 
-      // console.log(imageMovie)
-
-      // TODO: check and confirm attributes
-      img.setAttribute("class", "movie-thumbnail");
-      img.setAttribute("id", "movie-thumbnail");
-      img.setAttribute("alt", "Cover art of the movie " + titleMovie);
-      img.setAttribute("width", "auto");
-      img.setAttribute("height", "auto");
-      img.setAttribute("role", "img");
-      img.setAttribute("loading", "lazy");
-      img.setAttribute("fetchpriority", "low");
-      img.setAttribute("decoding", "auto");
-      img.setAttribute("src", this.posterURL + "/w500" + imageMovie);
-
-      document
-        .getElementsByClassName("hscroll-wrapper")
-        [classIndex].appendChild(img);
-      //   console.log(document.getElementsByClassName("hscroll-wrapper").length);
-
-      const iconSHeart = document.createElement("i");
-
-      iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      iconSHeart.setAttribute("id", "fa-sheart");
-
-      const iconRHeart = document.createElement("i");
-
-      iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      iconRHeart.setAttribute("id", "fa-rheart");
-
-      const iconGoogleHeart = document.createElement("i");
-
-      // iconGoogleHeart.setAttribute("class", "material-icons");
-      // iconGoogleHeart.setAttribute("id", "googleiconheart");
-
-      // iconGoogleHeart.textContent = "cloud";
-
-      document
-        .getElementsByClassName("hscroll-wrapper")
-        [classIndex].appendChild(iconSHeart);
-
-      document
-        .getElementsByClassName("hscroll-wrapper")
-        [classIndex].appendChild(iconRHeart);
-
-      document
-        .getElementsByClassName("hscroll-wrapper")
-      [classIndex].appendChild(iconGoogleHeart);
-      
-      
-
-      //eventhandler for mouseover event change style of css element
-      document
-        .getElementById("hscroll-wrapper")
-        .addEventListener(
-          "mouseover",
-          (event) => (event.target.style.display = "flex")
-        );
-    }
-
-    // SECTION: by api elements
-    if (genreBool) {
-      const imgAPISection = document.createElement("img");
-
-      // TODO: check and confirm attributes
-      imgAPISection.setAttribute("class", "movie-thumbnail");
-      imgAPISection.setAttribute("id", "movie-thumbnail");
-      imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
-      imgAPISection.setAttribute("width", "35");
-      imgAPISection.setAttribute("height", "40");
-      imgAPISection.setAttribute("role", "img");
-      imgAPISection.setAttribute("loading", "lazy");
-      imgAPISection.setAttribute("fetchpriority", "low");
-      imgAPISection.setAttribute("decoding", "auto");
-      imgAPISection.setAttribute("src", this.posterURL + imageMovie);
-
-      document
-        .getElementsByClassName("hscroll-apisection-wrapper")
-        [classIndex].appendChild(imgAPISection);
-
-      // const iconSHeart = document.createElement("i");
-
-      // iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      // iconSHeart.setAttribute("id", "fa-sheart");
-
-      // const iconRHeart = document.createElement("i");
-
-      // iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      // iconRHeart.setAttribute("id", "fa-rheart");
-
-      // const iconGoogleHeart = document.createElement("i");
-
-      // iconGoogleHeart.setAttribute("class", "material-icons");
-      // iconGoogleHeart.setAttribute("id", "googleiconheart");
-
-      // iconGoogleHeart.textContent = "cloud";
-
-      // document
-      //   .getElementsByClassName("hscroll-apisection-wrapper")
-      //   [classIndex].appendChild(iconSHeart);
-
-      // document
-      //   .getElementsByClassName("hscroll-apisection-wrapper")
-      //   [classIndex].appendChild(iconRHeart);
-
-      // document
-      //   .getElementsByClassName("hscroll-apisection-wrapper")
-      //   [classIndex].appendChild(iconGoogleHeart);
-
-      //eventhandler for mouseover event change style of css element
-      // document
-      //   .getElementById("hscroll-apisection-wrapper")
-      //   .addEventListener(
-      //     "mouseover",
-      //     (event) => (event.target.style.display = "flex")
-      //   );
-    }
-
-    // invoke function to check if thumbnails have been create
-    // if no display none title, button, title, thumbnail
-    this.movieGenreCheck();
-  }
-
-  createMovieTitle(genre_id, genreBool) {
-    // SECTION: by genre
-    if (!genreBool) {
-      var movieTitleLen =
-        this.movieResponseFetchData.movieRequestPopular.length;
-      // create data structure to hold title and genrie_ids
-      // solution to empty element hscroll-wrapper creation
-      // by avoiding recursively calling and creating elements
-      for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
-        for (
-          var titleIndexObject = 0;
-          titleIndexObject < this.movieTitleResultsLen;
-          titleIndexObject++
-        ) {
-          this.movieTitles.push(
-            this.movieResponseFetchData.movieRequestPopular[pageTitle][
-              "results"
-            ][titleIndexObject].title
-          );
-          this.movieGenreIds.push(
-            this.movieResponseFetchData.movieRequestPopular[pageTitle][
-              "results"
-            ][titleIndexObject].genre_ids
-          );
-        }
-      }
-
-      // used to as reference and identify element of class hscroll-wrapper and append element
-      var indexClass = 0;
-      for (
-        var titleIndexArray = 0;
-        titleIndexArray < this.movieTitles.length;
-        titleIndexArray++
-      ) {
-        // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id));
-
-        if (
-          this.movieGenreIds[titleIndexArray].includes(genre_id) &&
-          !this.titleTracker.includes(this.movieTitles[titleIndexArray])
-        ) {
-          // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
-
-          const hscroll_wrapper = document.createElement("div");
-          hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
-          hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
-
-          const title = document.createElement("p");
-
-          title.setAttribute("color", "white");
-          title.setAttribute("font-size", "16");
-          title.setAttribute("id", "movie-title");
-          title.innerText = this.movieTitles[titleIndexArray];
-
-          // console.log(
-          //   Math.max(
-          //     document.getElementById("movie-title-thumbnail-hscroll-container")
-          //       .childElementCount
-          //   )
-          // );
-
-          document
-            .getElementById("movie-title-thumbnail-hscroll-container")
-            .appendChild(hscroll_wrapper);
-          document
-            .getElementsByClassName("hscroll-wrapper")
-            [indexClass].appendChild(title);
-
-          this.createMovieThumbnails(
-            this.movieImage[titleIndexArray],
-            this.movieTitles[titleIndexArray],
-            indexClass,
-            false
-          );
-          indexClass++;
-        }
-      }
-    }
-
-    // SECTION: by api elements (upcoming, now playing, trending, etc.)
-    // prevent section of code from execute with each genre_id
-
-    if (genreBool == true) {
-      var key = genre_id;
-      if (key !== "movieRequestGenre") {
-        var movieTitleAPISectionLen =
-          this.movieResponseFetchData[key].length - 1;
-
-        for (
-          var pageTitle = 0;
-          pageTitle < movieTitleAPISectionLen;
-          pageTitle++
-        ) {
-          for (
-            var titleIndexObject = 0;
-            titleIndexObject < movieTitleAPISectionLen;
-            titleIndexObject++
-          ) {
-            this.movieTitlesAPISection.push(
-              this.movieResponseFetchData[key][pageTitle]["results"][
-                titleIndexObject
-              ].title
-            );
-            // console.log(
-            //   this.movieResponseFetchData[key][pageTitle]["results"][
-            //     titleIndexObject
-            //   ].title
-            // );
-          }
-        }
-        // console.log(
-        //   this.movieTitlesAPISection,
-        //   this.movieTitlesAPISection.length,
-        //   this.movieTitlesAPISection[0]
-        // );
-
-        // used to as reference and identify element of class hscroll-wrapper and append element
-        var indexClass = 0;
-        for (
-          var titleIndexArray = 0;
-          titleIndexArray < this.movieTitlesAPISection.length;
-          titleIndexArray++
-        ) {
-          const hscroll_apisection_wrapper = document.createElement("div");
-          hscroll_apisection_wrapper.setAttribute(
-            "id",
-            "hscroll-apisection-wrapper"
-          );
-          hscroll_apisection_wrapper.setAttribute(
-            "class",
-            "hscroll-apisection-wrapper"
-          );
-
-          const title_apisection = document.createElement("p");
-
-          title_apisection.setAttribute("color", "white");
-          title_apisection.setAttribute("font-size", "16");
-          title_apisection.setAttribute("id", "movie-title");
-          title_apisection.innerText =
-            this.movieTitlesAPISection[titleIndexArray];
-
-          document
-            .getElementById(
-              "movie-title-thumbnail-hscroll-apisection-container"
-            )
-            .appendChild(hscroll_apisection_wrapper);
-          document
-            .getElementsByClassName("hscroll-apisection-wrapper")
-            [indexClass].appendChild(title_apisection);
-
-          this.createMovieThumbnails(
-            this.movieImageAPISection[titleIndexArray],
-            this.movieTitlesAPISection[titleIndexArray],
-            indexClass,
-            true
-          );
-          indexClass++;
-        }
-      }
-    }
-
-    // title tracker will prevent the previously used movie title from being added
-    // and rendered as an HTML element
-    // this.titleTracker.push(this.movieTitles[titleIndex]);
-
-    // an assumption is made about the data structure of by the movieTitle and movieGenreIds
-    // as determined by the length we assume a corresponding title to genre ids and
-    // the data structure is complete based on our expectations
-    if (titleIndexArray == this.movieTitles.length) {
-      if (this.movieTitles.length == this.movieGenreIds.length) {
-        console.log(
-          `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\nMovie Genre Ids: ${this.movieGenreIds.length}`
-        );
-      } else {
-        console.error(
-          `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\n Movie Genre Ids: ${this.movieGenreIds.length}`
-        );
-      }
-    }
-  }
 
   createMovieGenre() {
     // await this.requestMovieFetchData()
@@ -741,10 +456,13 @@ class CreateElements {
         document.getElementsByClassName("button-chevron-apisection-right")[genreIndex].appendChild(apiIconRightChevron);
         
         genreIndex++;
-          
+        
+        
         this.createMovieTitle(key, true);
       }
+     
     }
+
 
     // function call to css gridrepeat value
     this.gridRepeat();
@@ -760,6 +478,333 @@ class CreateElements {
 
   //     this.createMovieTitle(o[1]['id']);
   // }));
+
+  createMovieTitle(genre_id, genreBool) {
+    // SECTION: by genre
+    if (!genreBool) {
+      var movieTitleLen =
+        this.movieResponseFetchData.movieRequestPopular.length;
+      // create data structure to hold title and genre_ids
+      // solution to empty element hscroll-wrapper creation
+      // by avoiding recursively calling and creating elements
+      for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
+        for (
+          var titleIndexObject = 0;
+          titleIndexObject < this.movieTitleResultsLen;
+          titleIndexObject++
+        ) {
+          this.movieTitles.push(
+            this.movieResponseFetchData.movieRequestPopular[pageTitle][
+              "results"
+            ][titleIndexObject].title
+          );
+          this.movieGenreIds.push(
+            this.movieResponseFetchData.movieRequestPopular[pageTitle][
+              "results"
+            ][titleIndexObject].genre_ids
+          );
+        }
+      }
+
+      // used to as reference and identify element of class hscroll-wrapper and append element
+      var indexClass = 0;
+      for (
+        var titleIndexArray = 0;
+        titleIndexArray < this.movieTitles.length ;
+        titleIndexArray++
+      ) {
+        // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id));
+
+        if (
+          this.movieGenreIds[titleIndexArray].includes(genre_id) &&
+          !this.titleTracker.includes(this.movieTitles[titleIndexArray] &&
+            typeof this.movieTitles[titleIndexArray] == "string"
+          )
+        ) {
+          // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
+
+          const hscroll_wrapper = document.createElement("div");
+          hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
+          hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
+
+          const title = document.createElement("p");
+
+          title.setAttribute("color", "white");
+          title.setAttribute("font-size", "16");
+          title.setAttribute("id", "movie-title");
+          title.innerText = this.movieTitles[titleIndexArray];
+
+          // console.log(
+          //   Math.max(
+          //     document.getElementById("movie-title-thumbnail-hscroll-container")
+          //       .childElementCount
+          //   )
+          // );
+
+          document
+            .getElementById("movie-title-thumbnail-hscroll-container")
+            .appendChild(hscroll_wrapper);
+          document
+            .getElementsByClassName("hscroll-wrapper")
+            [indexClass].appendChild(title);
+
+          this.createMovieThumbnails(
+            this.movieImage[titleIndexArray],
+            this.movieTitles[titleIndexArray],
+            indexClass,
+            false
+          );
+          indexClass++;
+        }
+      }
+    }
+
+    // SECTION: by api elements (upcoming, now playing, trending, etc.)
+    // prevent section of code from execute with each genre_id
+
+    if (genreBool == true) {
+      var key = genre_id;
+      if (key !== "movieRequestGenre") {
+        var movieTitleAPISectionLen =
+          this.movieResponseFetchData[key].length - 1;
+
+        for (
+          var pageTitle = 0;
+          pageTitle < movieTitleAPISectionLen;
+          pageTitle++
+        ) {
+          for (
+            var titleIndexObject = 0;
+            titleIndexObject < movieTitleAPISectionLen;
+            titleIndexObject++
+          ) {
+            this.movieTitlesAPISection.push(
+              this.movieResponseFetchData[key][pageTitle]["results"][
+                titleIndexObject
+              ].title
+            );
+            // console.log(
+            //   this.movieResponseFetchData[key][pageTitle]["results"][
+            //     titleIndexObject
+            //   ].title
+            // );
+          }
+        }
+        // console.log(
+        //   this.movieTitlesAPISection,
+        //   this.movieTitlesAPISection.length,
+        //   this.movieTitlesAPISection[0]
+        // );
+
+        // used to as reference and identify element of class hscroll-wrapper and append element
+        var indexClass = 0;
+        for (
+          var titleIndexArray = 0;
+          titleIndexArray < this.movieTitlesAPISection.length;
+          titleIndexArray++
+        ) {
+          const hscroll_apisection_wrapper = document.createElement("div");
+          hscroll_apisection_wrapper.setAttribute(
+            "id",
+            "hscroll-apisection-wrapper"
+          );
+          hscroll_apisection_wrapper.setAttribute(
+            "class",
+            "hscroll-apisection-wrapper"
+          );
+
+          const title_apisection = document.createElement("p");
+
+          title_apisection.setAttribute("color", "white");
+          title_apisection.setAttribute("font-size", "16");
+          title_apisection.setAttribute("id", "movie-title");
+          title_apisection.innerText =
+            this.movieTitlesAPISection[titleIndexArray];
+
+          document
+            .getElementById(
+              "movie-title-thumbnail-hscroll-apisection-container"
+            )
+            .appendChild(hscroll_apisection_wrapper);
+          document
+            .getElementsByClassName("hscroll-apisection-wrapper")
+            [indexClass].appendChild(title_apisection);
+
+          this.createMovieThumbnails(
+            this.movieImageAPISection[titleIndexArray],
+            this.movieTitlesAPISection[titleIndexArray],
+            indexClass,
+            true
+          );
+          indexClass++;
+        }
+      }
+    }
+
+    // title tracker will prevent the previously used movie title from being added
+    // and rendered as an HTML element
+    // this.titleTracker.push(this.movieTitles[titleIndex]);
+
+    // an assumption is made about the data structure of by the movieTitle and movieGenreIds
+    // as determined by the length we assume a corresponding title to genre ids and
+    // the data structure is complete based on our expectations
+    if (titleIndexArray == this.movieTitles.length) {
+      if (this.movieTitles.length == this.movieGenreIds.length) {
+        console.log(
+          `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\nMovie Genre Ids: ${this.movieGenreIds.length}`
+        );
+      } else {
+        console.error(
+          `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\n Movie Genre Ids: ${this.movieGenreIds.length}`
+        );
+      }
+    }
+  }
+
+
+    createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
+    // SECTION: by genre
+    if (!genreBool && typeof titleMovie == "string") {
+      const img = document.createElement("img");
+
+      // console.log(imageMovie)
+
+      // TODO: check and confirm attributes
+      img.setAttribute("class", "movie-thumbnail");
+      img.setAttribute("id", "movie-thumbnail");
+      img.setAttribute("alt", "Cover art of the movie " + titleMovie);
+      img.setAttribute("width", "auto");
+      img.setAttribute("height", "auto");
+      img.setAttribute("role", "img");
+      img.setAttribute("loading", "lazy");
+      img.setAttribute("fetchpriority", "low");
+      img.setAttribute("decoding", "auto");
+      img.setAttribute("src", this.posterURL + "/w500" + imageMovie);
+
+      document
+        .getElementsByClassName("hscroll-wrapper")
+        [classIndex].appendChild(img);
+      //   console.log(document.getElementsByClassName("hscroll-wrapper").length);
+
+      const iconSHeart = document.createElement("i");
+
+      iconSHeart.setAttribute("class", "fa-solid fa-heart");
+      iconSHeart.setAttribute("id", "fa-sheart");
+
+      const iconRHeart = document.createElement("i");
+
+      iconRHeart.setAttribute("class", "fa-regular fa-heart");
+      iconRHeart.setAttribute("id", "fa-rheart");
+
+      const iconGoogleHeart = document.createElement("i");
+
+      // iconGoogleHeart.setAttribute("class", "material-icons");
+      // iconGoogleHeart.setAttribute("id", "googleiconheart");
+
+      // iconGoogleHeart.textContent = "cloud";
+
+      document
+        .getElementsByClassName("hscroll-wrapper")
+        [classIndex].appendChild(iconSHeart);
+
+      document
+        .getElementsByClassName("hscroll-wrapper")
+        [classIndex].appendChild(iconRHeart);
+
+      document
+        .getElementsByClassName("hscroll-wrapper")
+      [classIndex].appendChild(iconGoogleHeart);
+      
+      
+
+      //eventhandler for mouseover event change style of css element
+      document
+        .getElementById("hscroll-wrapper")
+        .addEventListener(
+          "mouseover",
+          (event) => (event.target.style.display = "flex")
+        );
+    }
+
+    // SECTION: by api elements
+    if (genreBool && typeof titleMovie == "string") {
+      const imgAPISection = document.createElement("img");
+
+      // TODO: check and confirm attributes
+      imgAPISection.setAttribute("class", "movie-thumbnail");
+      imgAPISection.setAttribute("id", "movie-thumbnail");
+      imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
+      imgAPISection.setAttribute("width", "35");
+      imgAPISection.setAttribute("height", "40");
+      imgAPISection.setAttribute("role", "img");
+      imgAPISection.setAttribute("loading", "lazy");
+      imgAPISection.setAttribute("fetchpriority", "low");
+      imgAPISection.setAttribute("decoding", "auto");
+      imgAPISection.setAttribute("src", this.posterURL + imageMovie);
+
+      document
+        .getElementsByClassName("hscroll-apisection-wrapper")
+        [classIndex].appendChild(imgAPISection);
+
+      // const iconSHeart = document.createElement("i");
+
+      // iconSHeart.setAttribute("class", "fa-solid fa-heart");
+      // iconSHeart.setAttribute("id", "fa-sheart");
+
+      // const iconRHeart = document.createElement("i");
+
+      // iconRHeart.setAttribute("class", "fa-regular fa-heart");
+      // iconRHeart.setAttribute("id", "fa-rheart");
+
+      // const iconGoogleHeart = document.createElement("i");
+
+      // iconGoogleHeart.setAttribute("class", "material-icons");
+      // iconGoogleHeart.setAttribute("id", "googleiconheart");
+
+      // iconGoogleHeart.textContent = "cloud";
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconSHeart);
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconRHeart);
+
+      // document
+      //   .getElementsByClassName("hscroll-apisection-wrapper")
+      //   [classIndex].appendChild(iconGoogleHeart);
+
+      //eventhandler for mouseover event change style of css element
+      // document
+      //   .getElementById("hscroll-apisection-wrapper")
+      //   .addEventListener(
+      //     "mouseover",
+      //     (event) => (event.target.style.display = "flex")
+      //   );
+    }
+
+    // invoke function to check if thumbnails have been create
+    // if no display none title, button, title, thumbnail
+    this.movieGenreCheck();
+  }
+
+  movieGenreCheck = () => {
+   
+    var movieGenreCount = document.getElementsByClassName("movie-genre").length;
+
+    for (var classIndex = 0; movieGenreCount > classIndex; classIndex++) {
+      // movie-title-thumbnail-hscroll-apisection-container
+      var containerCount = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].children.length;
+
+      if (containerCount == 0) {
+        document.getElementsByClassName("movie-genre")[classIndex].style.display = "none";
+        document.getElementsByClassName("chevron-wrapper")[classIndex].style.display = "none";
+        document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].style.display = "none";
+      }
+    }
+  }
+
 
   httpClientRequest(hURL) {
     this.get = function (hURL, hCallBack) {
@@ -857,29 +902,60 @@ class CreateElements {
 
   
 
-  movieGenreCheck = () => {
-   
-    var movieGenreCount = document.getElementsByClassName("movie-genre").length;
-
-    for (var classIndex = 0; movieGenreCount > classIndex; classIndex++) {
-      // movie-title-thumbnail-hscroll-apisection-container
-      var containerCount = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].children.length;
-
-      if (containerCount == 0) {
-        document.getElementsByClassName("movie-genre")[classIndex].style.display = "none";
-        document.getElementsByClassName("chevron-wrapper")[classIndex].style.display = "none";
-        document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].style.display = "none";
-      }
-    }
-
-  }
-
 
   assertType(value, type, paramName) {
     if (typeof value !== type) {
       throw new TypeError(`${paramName} should be of type ${type}`);
     }
   }
+
+  
+  
+  
+
+  createMenu = () => {
+
+    console.log(screen.innerWidth);
+
+    console.log("test");
+
+    const menu = document.createElement("menu");
+
+    menu.setAttribute("id", "nav-menu");
+
+    const menuButton = document.createElement("button");
+
+    menuButton.setAttribute("id", "menu-dropbtn");
+
+    document.getElementById("top-nav-btn-container").before(menu);
+
+    document.getElementById("nav-menu").append(menuButton);
+
+    menu.appendChild(document.getElementById("top-nav-btn-container"))
+
+    
+
+    
+
+// <div class="dropdown">
+//   <button class="dropbtn">Dropdown</button>
+//   <div class="dropdown-content">
+//   <a href="#">Link 1</a>
+//   <a href="#">Link 2</a>
+//   <a href="#">Link 3</a>
+//   </div>
+// </div>
+
+
+  }
+
+  
+updateSize() {
+  console.log("height", window.innerHeight);
+  console.log("width", window.innerWidth);
+}
+ 
+  
 } // end of class
 
 _ = (function () {
@@ -888,6 +964,13 @@ _ = (function () {
   // createElements.movieGenreCheck();
   // createElements.createMovieGenre();
   // createElements.gridRepeat();
+  // createElements.createMenu();
+
+  // window.addEventListener("load", () => createElements.createMenu, false);
+  // window.addEventListener("resize", createElements.updateSize, false)
 })();
 
-// document.body.onload = movieGenreCheck;
+var createElements = new CreateElements();
+// document.body.onload = createElements.createMenu;
+// window.addEventListener("load", () => createElements.createMenu, false);
+window.addEventListener("resize", createElements.updateSize(), false)

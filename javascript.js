@@ -7,19 +7,19 @@ const movieData = {
   movieUpcoming:
     Object.name === "httpClientRequestFetch"
       ? "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=1`,
+      : `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=`,
   movieNowPlaying:
     Object.name === "httpClientRequestFetch"
       ? "https://api.themoviedb.org/3/movie/now_playing?&language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
+      : `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=`,
   moviePopular:
     Object.name === "httpClientRequestFetch"
       ? "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
+      : `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=`,
   movieTopRated:
     Object.name === "httpClientRequestFetch"
       ? "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
+      : `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=`,
   // movieTrendingMonth: Object.name === 'httpClientRequestFetch' ? 'https://api.themoviedb.org/3/trending/all/month?language=en-US' : `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
   movieTrendingDay:
     Object.name === "httpClientRequestFetch"
@@ -32,10 +32,10 @@ const movieData = {
 };
 
 const movieRequestData = {
-  movieRequestUpcoming: `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=`,
-  movieRequestNowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=`,
-  movieRequestPopular: `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=`,
-  movieRequestTopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=`,
+  movieRequestUpcoming: `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=1`,
+  movieRequestNowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
+  movieRequestPopular: `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
+  movieRequestTopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
   // movieRequestTrendingMonth:  `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
   movieRequestTrendingDay: `https://api.themoviedb.org/3/trending/all/day?api_key=${tmdbKey}&language=en-US`,
   movieRequestGenre: `https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}&language=en-US`,
@@ -53,17 +53,17 @@ class CreateElements {
       movieRequestGenre: Object(),
     };
     this.posterURL = "https://image.tmdb.org/t/p";
-    this.movieTitles = Array();
-    this.movieImage = Array();
-    this.movieTitlesAPISection = Array();
-    this.movieImageAPISection = Array();
+    this.movieTitles = new Set();
+    this.movieImage = new Set();
+    this.movieTitlesAPISection = new Set();
+    this.movieImageAPISection = new Set();
     this.movieGenreIds = Array();
     this.titleTracker = Array();
 
-    // results object value is always capped at 20 objects in an array
+    // http request results object length capped at 20 objects in array
     this.movieTitleResultsLen = 20;
 
-    // document.addEventListener("resize", this.updateSize(), false);
+    
   }
 
   
@@ -104,6 +104,19 @@ class CreateElements {
     const hscrollContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex];
 
     scrollButtonLeft.addEventListener("click", () => {
+      hscrollContainer.scrollIntoView({
+        behavior: "smooth", inline: "nearest"
+      });
+    })
+
+  }
+
+   scrollRight = () => {
+
+    const scrollButtonRight = document.getElementsByClassName("button-chevron-right")[1];
+    const hscrollContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[1];
+
+    scrollButtonRight.addEventListener("click", () => {
       hscrollContainer.scrollIntoView({
         behavior: "smooth", inline: "nearest"
       });
@@ -156,32 +169,32 @@ class CreateElements {
     await this.requestMovieFetchData();
 
 
-    var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
+    // var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
     
 
-    // console.log(this.movieResponseFetchData.movieRequestGenre["genres"]);
-    for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
+    // // console.log(this.movieResponseFetchData.movieRequestGenre["genres"]);
+    // for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
 
-      var arrayTitleLen = this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"].length;
+    //   var arrayTitleLen = this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"].length;
 
-      for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
-        this.movieTitles.push(
-          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
-            titleIndex
-          ].title
-        );
-        this.movieGenreIds.push(
-          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
-            titleIndex
-          ].genre_ids
-        );
-        this.movieImage.push(
-          this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
-            titleIndex
-          ].poster_path
-        );
-      }
-    }
+    //   for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
+    //     this.movieTitles.add(
+    //       this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+    //         titleIndex
+    //       ].title
+    //     );
+    //     this.movieGenreIds.push(
+    //       this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+    //         titleIndex
+    //       ].genre_ids
+    //     );
+    //     this.movieImage.add(
+    //       this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"][
+    //         titleIndex
+    //       ].poster_path
+    //     );
+    //   }
+    // }
     // console.log(
     //   Object.entries(
     //     this.movieResponseFetchData.movieRequestTrendingDay.results
@@ -189,9 +202,9 @@ class CreateElements {
     // );
     
 
-    console.log(this.movieImage.push(
-          this.movieResponseFetchData.movieRequestPopular[0]
-        ))
+    // console.log(this.movieImage.push(
+    //       this.movieResponseFetchData.movieRequestPopular[0]
+    //     ))
        
 
     var bannerData = Object.entries(
@@ -226,15 +239,50 @@ class CreateElements {
       .getElementById("top-center-full-banner-image")
       .setAttribute("src", this.posterURL + "/original" + bannerData.poster_path);
 
-    // title tracker will prevent the previously used movie title from being added
+    // title tracker will prevent the previously 
+    // used movie title from being added
+    // along with set data type
     // and rendered as an HTML element
     this.titleTracker.push(bannerData.original_name);
 
-    // create menu for nav
+    // create menu for nav if conditions are met
     // TODO: move to different function or execute on load
-    this.createMenu()
+    this.displayMenu()
+
+    // this.createTitleImageStruct();
     
     this.createMovieGenre(); // beginning of function call chain
+  } 
+
+
+  // create data structure containing
+  // movie title and image on demand
+  // based on movieRequestData objet key
+  createTitleImageStruct = (requestKey) => {
+     var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
+
+      for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
+
+      var arrayTitleLen = this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"].length;
+
+      for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
+        this.movieTitles.add(
+          this.movieResponseFetchData[requestKey][pageTitle]["results"][
+            titleIndex
+          ].title
+        );
+        this.movieGenreIds.push(
+          this.movieResponseFetchData[requestKey][pageTitle]["results"][
+            titleIndex
+          ].genre_ids
+        );
+        this.movieImage.add(
+          this.movieResponseFetchData[requestKey][pageTitle]["results"][
+            titleIndex
+          ].poster_path
+        );
+      }
+    }
   }
 
 
@@ -248,9 +296,10 @@ class CreateElements {
 
     // }
 
-    // create container for two sections with title and image thumbnail as base elements
+    // create html container for two sections 
     // one section with base elements by genre
-    // other section with base elements named by data request
+    // other section with base elements named by data request/movieRequestData oject key
+    // with title and image thumbnail as base elements wrapped in container
     const vscroll_sections_container = document.createElement("section");
     vscroll_sections_container.setAttribute("id", "vscroll-sections-container");
 
@@ -281,6 +330,7 @@ class CreateElements {
     document
       .getElementById("movie-title-thumbnail-vscroll-container")
       .after(vscroll_apisection_div);
+    
     
     
 
@@ -378,6 +428,8 @@ class CreateElements {
       genreIndex++;
     }
 
+
+
     // SECTION: by api elements
     for (var key in this.movieResponseFetchData) {
       var genreIndex = 0;
@@ -464,9 +516,11 @@ class CreateElements {
     }
 
 
-    // function call to css gridrepeat value
+    // function call to generate css gridrepeat value
     this.gridRepeat();
   }
+
+
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
 
   //     const genre = document.createElement('h1');
@@ -479,7 +533,11 @@ class CreateElements {
   //     this.createMovieTitle(o[1]['id']);
   // }));
 
+
   createMovieTitle(genre_id, genreBool) {
+  
+    this.createTitleImageStruct("movieRequestPopular");
+    
     // SECTION: by genre
     if (!genreBool) {
       var movieTitleLen =
@@ -487,80 +545,90 @@ class CreateElements {
       // create data structure to hold title and genre_ids
       // solution to empty element hscroll-wrapper creation
       // by avoiding recursively calling and creating elements
-      for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
-        for (
-          var titleIndexObject = 0;
-          titleIndexObject < this.movieTitleResultsLen;
-          titleIndexObject++
-        ) {
-          this.movieTitles.push(
-            this.movieResponseFetchData.movieRequestPopular[pageTitle][
-              "results"
-            ][titleIndexObject].title
-          );
-          this.movieGenreIds.push(
-            this.movieResponseFetchData.movieRequestPopular[pageTitle][
-              "results"
-            ][titleIndexObject].genre_ids
-          );
-        }
-      }
+      // for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
+      //   for (
+      //     var titleIndexObject = 0;
+      //     titleIndexObject < this.movieTitleResultsLen;
+      //     titleIndexObject++
+      //   ) {
+      //     this.movieTitles.add(
+      //       this.movieResponseFetchData.movieRequestPopular[pageTitle][
+      //         "results"
+      //       ][titleIndexObject].title
+      //     );
+      //     this.movieGenreIds.push(
+      //       this.movieResponseFetchData.movieRequestPopular[pageTitle][
+      //         "results"
+      //       ][titleIndexObject].genre_ids
+      //     );
+      //     this.movieTitles.add(
+      //       this.movieResponseFetchData.movieRequestPopular[pageTitle][
+      //         "results"
+      //       ][titleIndexObject].poster_path
+      //     );
+      //   }
+      // }
 
-      // used to as reference and identify element of class hscroll-wrapper and append element
+      // used to as reference and to identify element of class hscroll-wrapper 
+      // and target & append title and image elements by offset
+      // order of elements in data structure and order of operation critical
       var indexClass = 0;
       for (
-        var titleIndexArray = 0;
-        titleIndexArray < this.movieTitles.length ;
-        titleIndexArray++
+        var genreIndexArray = 0;
+        genreIndexArray < this.movieGenreIds.length ;
+        genreIndexArray++
       ) {
         // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id));
 
         if (
-          this.movieGenreIds[titleIndexArray].includes(genre_id) &&
-          !this.titleTracker.includes(this.movieTitles[titleIndexArray] &&
-            typeof this.movieTitles[titleIndexArray] == "string"
-          )
+          this.movieGenreIds[genreIndexArray].includes(genre_id)
         ) {
-          // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
+          if (
+            !this.titleTracker.includes([...this.movieTitles][genreIndexArray] &&
+              typeof [...this.movieTitles][genreIndexArray] == "string"
+            )) {
+            // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
 
-          const hscroll_wrapper = document.createElement("div");
-          hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
-          hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
+            const hscroll_wrapper = document.createElement("div");
+            hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
+            hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
 
-          const title = document.createElement("p");
+            const title = document.createElement("p");
 
-          title.setAttribute("color", "white");
-          title.setAttribute("font-size", "16");
-          title.setAttribute("id", "movie-title");
-          title.innerText = this.movieTitles[titleIndexArray];
+            title.setAttribute("color", "white");
+            title.setAttribute("font-size", "16");
+            title.setAttribute("id", "movie-title");
+            title.innerText = [...this.movieTitles][genreIndexArray];
 
-          // console.log(
-          //   Math.max(
-          //     document.getElementById("movie-title-thumbnail-hscroll-container")
-          //       .childElementCount
-          //   )
-          // );
+            // console.log(
+            //   Math.max(
+            //     document.getElementById("movie-title-thumbnail-hscroll-container")
+            //       .childElementCount
+            //   )
+            // );
 
-          document
-            .getElementById("movie-title-thumbnail-hscroll-container")
-            .appendChild(hscroll_wrapper);
-          document
-            .getElementsByClassName("hscroll-wrapper")
+            document
+              .getElementById("movie-title-thumbnail-hscroll-container")
+              .appendChild(hscroll_wrapper);
+            document
+              .getElementsByClassName("hscroll-wrapper")
             [indexClass].appendChild(title);
 
-          this.createMovieThumbnails(
-            this.movieImage[titleIndexArray],
-            this.movieTitles[titleIndexArray],
-            indexClass,
-            false
-          );
-          indexClass++;
+            this.createMovieThumbnails(
+              [...this.movieImage][genreIndexArray],
+              [...this.movieTitles][genreIndexArray],
+              indexClass,
+              false
+            );
+            indexClass++;
+          }
         }
       }
     }
 
     // SECTION: by api elements (upcoming, now playing, trending, etc.)
-    // prevent section of code from execute with each genre_id
+    // genreBool prevent section of code from execute with each genre_id
+    // and function call
 
     if (genreBool == true) {
       var key = genre_id;
@@ -578,11 +646,16 @@ class CreateElements {
             titleIndexObject < movieTitleAPISectionLen;
             titleIndexObject++
           ) {
-            this.movieTitlesAPISection.push(
+            this.movieTitlesAPISection.add(
               this.movieResponseFetchData[key][pageTitle]["results"][
                 titleIndexObject
               ].title
             );
+             this.movieImageAPISection.add(
+              this.movieResponseFetchData[key][pageTitle]["results"][
+                titleIndexObject
+            ].poster_path
+        );
             // console.log(
             //   this.movieResponseFetchData[key][pageTitle]["results"][
             //     titleIndexObject
@@ -592,15 +665,17 @@ class CreateElements {
         }
         // console.log(
         //   this.movieTitlesAPISection,
-        //   this.movieTitlesAPISection.length,
+        //   this.movieTitlesAPISection.size,
         //   this.movieTitlesAPISection[0]
         // );
 
-        // used to as reference and identify element of class hscroll-wrapper and append element
+        // used to as reference and to identify element of class hscroll-wrapper 
+        // and target & append title and image elements by offset
+        // order of elements in data structure and order of operation critical
         var indexClass = 0;
         for (
           var titleIndexArray = 0;
-          titleIndexArray < this.movieTitlesAPISection.length;
+          titleIndexArray < this.movieTitlesAPISection.size;
           titleIndexArray++
         ) {
           const hscroll_apisection_wrapper = document.createElement("div");
@@ -619,7 +694,7 @@ class CreateElements {
           title_apisection.setAttribute("font-size", "16");
           title_apisection.setAttribute("id", "movie-title");
           title_apisection.innerText =
-            this.movieTitlesAPISection[titleIndexArray];
+            [...this.movieTitlesAPISection][titleIndexArray];
 
           document
             .getElementById(
@@ -631,8 +706,8 @@ class CreateElements {
             [indexClass].appendChild(title_apisection);
 
           this.createMovieThumbnails(
-            this.movieImageAPISection[titleIndexArray],
-            this.movieTitlesAPISection[titleIndexArray],
+            [...this.movieImageAPISection][titleIndexArray],
+            [...this.movieTitlesAPISection][titleIndexArray],
             indexClass,
             true
           );
@@ -641,28 +716,30 @@ class CreateElements {
       }
     }
 
-    // title tracker will prevent the previously used movie title from being added
+    // title tracker will prevent the previously 
+    // used movie title from being added
+    // along with set data type
     // and rendered as an HTML element
-    // this.titleTracker.push(this.movieTitles[titleIndex]);
+    // this.titleTracker.push([...this.movieTitles][titleIndex]);
 
     // an assumption is made about the data structure of by the movieTitle and movieGenreIds
     // as determined by the length we assume a corresponding title to genre ids and
     // the data structure is complete based on our expectations
-    if (titleIndexArray == this.movieTitles.length) {
-      if (this.movieTitles.length == this.movieGenreIds.length) {
+    if (titleIndexArray == this.movieTitles.size) {
+      if (this.movieTitles.size == this.movieGenreIds.length) {
         console.log(
-          `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\nMovie Genre Ids: ${this.movieGenreIds.length}`
+          `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\nMovie Genre Ids: ${this.movieGenreIds.size}`
         );
       } else {
         console.error(
-          `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.length}\n Movie Genre Ids: ${this.movieGenreIds.length}`
+          `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\n Movie Genre Ids: ${this.movieGenreIds.length}`
         );
       }
     }
   }
 
 
-    createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
+  createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
     // SECTION: by genre
     if (!genreBool && typeof titleMovie == "string") {
       const img = document.createElement("img");
@@ -718,6 +795,7 @@ class CreateElements {
       
 
       //eventhandler for mouseover event change style of css element
+      // may not be needed
       document
         .getElementById("hscroll-wrapper")
         .addEventListener(
@@ -734,13 +812,13 @@ class CreateElements {
       imgAPISection.setAttribute("class", "movie-thumbnail");
       imgAPISection.setAttribute("id", "movie-thumbnail");
       imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
-      imgAPISection.setAttribute("width", "35");
-      imgAPISection.setAttribute("height", "40");
+      imgAPISection.setAttribute("width", "auto");
+      imgAPISection.setAttribute("height", "auto");
       imgAPISection.setAttribute("role", "img");
       imgAPISection.setAttribute("loading", "lazy");
       imgAPISection.setAttribute("fetchpriority", "low");
       imgAPISection.setAttribute("decoding", "auto");
-      imgAPISection.setAttribute("src", this.posterURL + imageMovie);
+      imgAPISection.setAttribute("src", this.posterURL + "/w500" + imageMovie);
 
       document
         .getElementsByClassName("hscroll-apisection-wrapper")
@@ -784,8 +862,8 @@ class CreateElements {
       //   );
     }
 
-    // invoke function to check if thumbnails have been create
-    // if no display none title, button, title, thumbnail
+    // invoke function to check if thumbnails created
+    // if not, display none title, button, title, thumbnail
     this.movieGenreCheck();
   }
 
@@ -915,45 +993,148 @@ class CreateElements {
 
   createMenu = () => {
 
-    console.log(screen.innerWidth);
+    // console.log(window.innerWidth);
+    const menuCreate = document.createElement("menu");
 
-    console.log("test");
+    menuCreate.setAttribute("id", "nav-menu");
 
-    const menu = document.createElement("menu");
+    document.getElementById("top-nav-btn-container").before(menuCreate);
+    
+    menuCreate.appendChild(document.getElementById("top-nav-btn-container"));
 
-    menu.setAttribute("id", "nav-menu");
 
     const menuButton = document.createElement("button");
 
     menuButton.setAttribute("id", "menu-dropbtn");
 
-    document.getElementById("top-nav-btn-container").before(menu);
+    menuButton.innerText = "menu";
 
-    document.getElementById("nav-menu").append(menuButton);
-
-    menu.appendChild(document.getElementById("top-nav-btn-container"))
-
+    document.getElementById("nav-menu").insertAdjacentElement("afterbegin", menuButton);
     
+  }
 
-    
+  displayMenu = () => {
 
-// <div class="dropdown">
-//   <button class="dropbtn">Dropdown</button>
-//   <div class="dropdown-content">
-//   <a href="#">Link 1</a>
-//   <a href="#">Link 2</a>
-//   <a href="#">Link 3</a>
-//   </div>
-// </div>
+    const menuRemove = document.getElementById("nav-menu");
 
+    const menuButtonRemove = document.getElementById("menu-dropbtn");
+
+    const navContainerAppend = document.querySelector("#top-nav-btn-container");
+
+    // const navContainerElement = document.querySelector("#top-nav-btn-container");
+
+
+    if (window.innerWidth < 768 && menuRemove == null) {
+
+      this.createMenu();
+
+      navContainerAppend.style.flexDirection = "column";
+      navContainerAppend.style.display = "none";
+
+      document.getElementById("menu-dropbtn").addEventListener("mouseover", () => this.menuHover().menuHoverShow(), false);
+      document.getElementById("menu-dropbtn").addEventListener("mouseout", () => this.menuHover().menuHoverHide(), false);
+
+
+      
+      // document.getElementById("nav-menu").style.display = "flex";
+
+      // document.getElementById("menu-dropbtn").style.display = "flex";
+
+      // document.getElementById("top-nav-btn-container").style.display = "none";
+      
+    }
+    else if (window.innerWidth > 768 && menuRemove != null) {
+
+      
+      // var appendContainer = menuRemove.remove(navContainerAppend);
+
+      document.getElementById("menu-dropbtn").removeEventListener("mouseover", this.menuHover().menuHoverShow, false);
+      document.getElementById("menu-dropbtn").removeEventListener("mouseout",  this.menuHover().menuHoverHide, false);
+
+      menuRemove.remove();
+      menuButtonRemove.remove();
+
+      document.getElementById("top-nav-icon-link-logo").after(navContainerAppend);
+  
+
+      navContainerAppend.style.flexDirection = "row";
+      navContainerAppend.style.display = "flex";
+
+
+      // document.getElementById("nav-menu").style.display = "none";
+
+      // document.getElementById("menu-dropbtn").style.display = "none";
+
+      // document.getElementById("top-nav-btn-container").style.display = "flex";
+
+      // const menu = document.getElementById("nav-menu");
+
+      // const menuButton = document.getElementById("menu-dropbtn")
+
+      // menu.remove();
+
+      // menuButton.remove();
+
+      // const top_nav_container = document.createElement("div");
+
+      // top_nav_container.setAttribute(id, "top-nav-btn-container");
+
+      // document.getElementById("top-nav-icon-link-logo").after(top_nav_container);
+
+      // var menuItems = ["Movie", "Series", "EyeBleeding-Binge-Watchable"];
+
+      // for (item in menuItems) {
+      //   const link = document.createElement("a");
+
+        
+      //   // link.setAttribute(class, "");
+      //   link.setAttribute(id, "top-nav-"+`${item}`+"-btn");
+      //   link.setAttribute(title, `${item}`);
+      //   link.setAttribute(role, "button");
+      //   link.setAttribute(href, "");
+      //   link.setAttribute(hreflang, "en");
+      //   link.setAttribute(target, "_self");
+      //   link.setAttribute(referrerpolicy, "");
+
+      //   document.getElementById("top-nav-btn-container").appendChild(link);
+
+      //   document.getElementById("top-nav-" + `${item}` + "-btn").insertAdjacentElement('beforebegin', `${item}`);
+
+      // }
+          
+
+    }
 
   }
 
+   
+
+  menuHover = () => {
+
+    const menuHoverShow = () => {
+      // triggered by eventlistener mouseover dropdown of menu items
+      document.querySelector("#top-nav-btn-container").style.display = "flex";
+      document.querySelector("#nav-menu").style.top = "2.55em";
+    
+    }
+
+    const menuHoverHide = () => {
+      // triggered by eventlistener mouseout 
+      document.querySelector("#top-nav-btn-container").style.display = "none";
+      document.querySelector("#nav-menu").style.top = "0";
+    
+    }
+    return {menuHoverShow, menuHoverHide}
+  }
+
+
   
-updateSize() {
-  console.log("height", window.innerHeight);
-  console.log("width", window.innerWidth);
-}
+  updateSize() {
+    console.log("height", window.innerHeight);
+    console.log("width", window.innerWidth);
+  }
+  
+
  
   
 } // end of class
@@ -965,12 +1146,20 @@ _ = (function () {
   // createElements.createMovieGenre();
   // createElements.gridRepeat();
   // createElements.createMenu();
-
-  // window.addEventListener("load", () => createElements.createMenu, false);
-  // window.addEventListener("resize", createElements.updateSize, false)
 })();
 
 var createElements = new CreateElements();
 // document.body.onload = createElements.createMenu;
-// window.addEventListener("load", () => createElements.createMenu, false);
-window.addEventListener("resize", createElements.updateSize(), false)
+// window.addEventListener("load", () => createElements.createMenu(), false);
+window.addEventListener("resize", createElements.displayMenu, false);
+
+// const event = new Event("resize");
+
+// window.addEventListener("resize", (event) => createElements.createMenu(), false);
+
+// window.dispatchEvent(event);
+
+
+
+// const element = window.document.getElementById("menu-dropbtn")
+// createElements.addEventListener("mouseover", createElements, false);

@@ -1,3 +1,12 @@
+/* 
+    Created on : June 24, 2024, 3:21:44 PM
+    Author     : Okino Kamali Leiba
+*/
+
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
+/* TODO: consider creating default properties for global styles */
 :root {
     --grid-repeat: 100;
     --shadowColor: #a9a9a963;
@@ -6,6 +15,11 @@
 
 html {
     background-color: black !important;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
 }
 
 body {
@@ -18,6 +32,14 @@ body {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
 }
+
+/* ==========================================================================
+   Custom Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Nav Styles
+   -------------------------------------------------------------------------- */
 
 #top-nav-icon-image-logo {
     display: none;
@@ -97,6 +119,7 @@ body {
 #nav-login-bg-offset,
 #nav-account-bg-offset {
     background-color: red;
+    color: black;
 }
 
 
@@ -115,6 +138,16 @@ body {
     display: block;
 }
 
+#account-icon,
+#logout-icon {
+    width: 20px;
+    height: 20px;
+    padding: 4px 0;
+    /* background-color: transparent; */
+    /* color: black; */
+    /* color-rendering: optimizeQuality; */
+}
+
 #top-nav-profile-circle {
     border-color: black;
     border-radius: 50px;
@@ -125,6 +158,10 @@ body {
 #left-side-panel {
     display: none;
 }
+
+/* --------------------------------------------------------------------------
+   Banner Hero Styles
+   -------------------------------------------------------------------------- */
 
 #top-center-full-banner {
     height: 100lvw;
@@ -174,8 +211,6 @@ body {
 }
 
 
-
-
 #left-side-menu-inner {
     display:flex;
     justify-content: center;
@@ -196,6 +231,7 @@ body {
 #top-center-full-banner-container {
     width: 100vw;
     height: auto;
+    
 }
 
 #top-center-full-banner-left_blur {
@@ -203,6 +239,7 @@ body {
     position: absolute;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0.07), black);
     z-index: auto;
+    
 }
 
 #top-center-full-banner-image {
@@ -210,7 +247,9 @@ body {
     height: 550px;
     object-fit: cover;
     aspect-ratio: auto;
+ 
 }
+
 
 #title_button-container {
     padding: 8px 0 8px 4px;
@@ -287,6 +326,10 @@ button#banner-button-wl {
     padding: 0;
 }
 
+/* --------------------------------------------------------------------------
+   Movie: Title, {Genre, API}, Image Styles
+   -------------------------------------------------------------------------- */
+
 #vscroll-sections-container {
     display: flex;
     flex-direction: row;
@@ -305,8 +348,8 @@ button#banner-button-wl {
     display: none; /* Chrome, Safari and Opera */
 }
 
-#movie-genre,
-#movie-apisection-title {
+.movie-genre,
+.movie-apisection-title {
     color: var(--titleColor);
     font-size: 1.75rem;
     line-height: 1.25;
@@ -338,21 +381,20 @@ button#banner-button-wl {
 
 
 #movie-title-thumbnail-vscroll-container, 
-#movie-title-thumbnail-vscroll-apisection-container {
+#movie-title-thumbnail-vscroll-container-apisection {
     padding-left: 1em;
     width: 100vw;
-    
-   
 }
 
-#movie-title-thumbnail-vscroll-apisection-container {
+#movie-title-thumbnail-vscroll-container-apisection {
     height: max-content;
+    /* margin: 1em; */
     }
 
 
 
-#movie-title-thumbnail-hscroll-container, 
-#movie-title-thumbnail-hscroll-apisection-container {
+.movie-title-thumbnail-hscroll-container, 
+.movie-title-thumbnail-hscroll-apisection-container {
     width: auto;
     height: 16em;
     overflow-x: scroll;
@@ -361,52 +403,59 @@ button#banner-button-wl {
     display: grid;
     grid-template-columns: repeat(var(--grid-repeat), auto) !important;
     grid-gap: 0 16px;
-    padding: 4px 4px;
+    padding: 28px 4px;
     /* padding-right: 0; */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     border-radius: 10px;
     align-items: center;
-    justify-content: space-evenly;
-  }
+    justify-content: flex-start;
+}
 
 
   
 #movie-thumbnail-hscroll-wrapper::-webkit-scrollbar,
 #movie-thumbnail-hscroll-apisection-wrapper::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
-  }
+}
 
 .hscroll-wrapper,
 .hscroll-apisection-wrapper
  {
     display: inline-flex;
     flex-direction: column-reverse;
-    width: 3.75em;
+    width: 3.75rem;
     cursor: pointer;
     justify-content: center;
     align-items: center;
 }
 
+.hscroll-apisection-wrapper {
+    margin-top: 10px;
+}
+
 .hscroll-wrapper:hover,
 .hscroll-apisection-wrapper:hover
  {
-    opacity: 0.5;
+    opacity: 1.5;
     background-color: rgb(0 0 0 / 50%);
-        p[class="movie-title"] {
-            opacity: 1;
-            z-index: 1;
+        p[class='movie-title'] {
+            /* display: flex; */
+               opacity: 1;
+               z-index: 1; 
+               
         } 
-        & #fa-rheart {
-            display: block;
+        & i {
+              display: flex; 
         }
 
 }
 
 img[class='movie-thumbnail'] {
-    display: inline-block;
+    display: inline-flex;
     width: 142%;
     height: 15em;
+    max-width: inherit;
     border-radius: 1.8%;
     box-shadow: 10px -8px #55525259;
     transform: scaleY(0.7) scaleX(.7);
@@ -417,27 +466,28 @@ img[class='movie-thumbnail'] {
 p[class='movie-title'] {
     display: flex;
     position: relative;
-    top: -50%;
-    /* left: 50%; */
-    align-items: center;
-    justify-content: center;
-    color: #3b0303;
+    padding: 0;
+    margin: 0 auto;
+    bottom: 50%;
+    /* left: 0%; */
+    /* justify-content: center; */
+    color: wheat;
     font-size: 1.25em; /* 14px */
     /* line-height: 0.75em; */ /* 20px */
     padding: 0 12px;
-    opacity: 0;
-    z-index: 0;
+    opacity: 1; 
+    z-index: 1; 
 }
 
 
 
-
 #fa-rheart {
-    position: relative;
+    position: absolute;
     z-index: auto;
     top: 30%;
     right: 40%;
     transform: scale(1.3);
+    display: none;
 }
 
 #fa-sheart {
@@ -455,7 +505,11 @@ p[class='movie-title'] {
     top: 0;
 }
 
+/* --------------------------------------------------------------------------
+   Media Hero Styles
+   -------------------------------------------------------------------------- */
 
+/* used in combination with relative size units in media and other element */
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -467,7 +521,7 @@ p[class='movie-title'] {
 
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 11.25em;
+        width: 11.25rem;
     }
 }
 
@@ -486,7 +540,7 @@ p[class='movie-title'] {
     }
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 12.5em;
+        width: 12.5rem;
     }
 
     
@@ -497,7 +551,7 @@ p[class='movie-title'] {
 @media only screen and (min-width: 768px) {
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 15em;
+        width: 15rem;
     }
 }
 
@@ -508,7 +562,7 @@ p[class='movie-title'] {
     }
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
-        width: 17.5em;
+        width: 17.5rem;
     }
 }
 
@@ -519,7 +573,7 @@ p[class='movie-title'] {
    }
    .hscroll-wrapper,
    .hscroll-apisection-wrapper {
-       width: 22.5em;
+       width: 22.5rem;
    }
 }
 

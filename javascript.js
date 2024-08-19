@@ -1,3 +1,8 @@
+/* 
+    Created on : June 24, 2024, 3:21:44 PM
+    Author     : Okino Kamali Leiba
+*/
+
 // delete and move to separate file later 23/04/2024
 const tmdbKey = "03ee6394a8103fd6e7633be9f543707c";
 const tmdbReadKey =
@@ -6,20 +11,20 @@ const tmdbReadKey =
 const movieData = {
   movieUpcoming:
     Object.name === "httpClientRequestFetch"
-      ? "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=`,
+      ? "https://api.themoviedb.org/3/movie/upcoming?language=en-US"
+      : `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US`,
   movieNowPlaying:
     Object.name === "httpClientRequestFetch"
-      ? "https://api.themoviedb.org/3/movie/now_playing?&language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=`,
+      ? "https://api.themoviedb.org/3/movie/now_playing?&language=en-US"
+      : `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US`,
   moviePopular:
     Object.name === "httpClientRequestFetch"
-      ? "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=`,
+      ? "https://api.themoviedb.org/3/movie/popular?language=en-US"
+      : `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US`,
   movieTopRated:
     Object.name === "httpClientRequestFetch"
-      ? "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1"
-      : `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=`,
+      ? "https://api.themoviedb.org/3/movie/top_rated?language=en-US"
+      : `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US`,
   // movieTrendingMonth: Object.name === 'httpClientRequestFetch' ? 'https://api.themoviedb.org/3/trending/all/month?language=en-US' : `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
   movieTrendingDay:
     Object.name === "httpClientRequestFetch"
@@ -32,10 +37,10 @@ const movieData = {
 };
 
 const movieRequestData = {
-  movieRequestUpcoming: `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US&page=1`,
-  movieRequestNowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US&page=1`,
-  movieRequestPopular: `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US&page=1`,
-  movieRequestTopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US&page=1`,
+  movieRequestUpcoming: `https://api.themoviedb.org/3/movie/upcoming?api_key=${tmdbKey}&language=en-US`,
+  movieRequestNowPlaying: `https://api.themoviedb.org/3/movie/now_playing?api_key=${tmdbKey}&language=en-US`,
+  movieRequestPopular: `https://api.themoviedb.org/3/movie/popular?api_key=${tmdbKey}&language=en-US`,
+  movieRequestTopRated: `https://api.themoviedb.org/3/movie/top_rated?api_key=${tmdbKey}&language=en-US`,
   // movieRequestTrendingMonth:  `https://api.themoviedb.org/3/trending/all/month?api_key=${tmdbKey}&language=en-US`,
   movieRequestTrendingDay: `https://api.themoviedb.org/3/trending/all/day?api_key=${tmdbKey}&language=en-US`,
   movieRequestGenre: `https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}&language=en-US`,
@@ -71,55 +76,70 @@ class CreateElements {
 
   // get and set css element property gridrepeat
   gridRepeat = () => {
-    var grid_repeat =
-      document.getElementById("movie-title-thumbnail-hscroll-container")
-        .childElementCount >
-      document.getElementById(
-        "movie-title-thumbnail-hscroll-apisection-container"
-      ).childElementCount
-        ? document.getElementById("movie-title-thumbnail-hscroll-container")
-            .childElementCount
-        : document.getElementById(
-            "movie-title-thumbnail-hscroll-apisection-container"
-        ).childElementCount;
+    var grid_repeat = Array();
+    var grid_repeat_API =  Array();
+    // var grid_repeat =
+    //   document.getElementById("movie-title-thumbnail-hscroll-container")
+    //     .childElementCount >
+    //   document.getElementById(
+    //     "movie-title-thumbnail-hscroll-apisection-container"
+    //   ).childElementCount
+    //     ? document.getElementById("movie-title-thumbnail-hscroll-container")
+    //         .childElementCount
+    //     : document.getElementById(
+    //         "movie-title-thumbnail-hscroll-apisection-container"
+    //     ).childElementCount;
     
-    this.assertType(grid_repeat, "number", "Grid Repeat");
+    var classElementsContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
+    for (const key of classElementsContainer) {
+      
+      grid_repeat.push(key.childNodes.length);
+    }
+    
+    var classElementsContainerAPI = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
+     for (const key of classElementsContainerAPI) {
+      
+      grid_repeat_API.push(key.childNodes.length);
+    }
+    
+    
+    var grid_repeat_max = Math.max(grid_repeat_API.reduce((a, b) => Math.max(a, b), -Infinity), grid_repeat.reduce((a, b) => Math.max(a, b), -Infinity));
+    
+    this.assertType(grid_repeat_max, "number", "Grid Repeat");
 
-    if (grid_repeat < 20) grid_repeat = 100;
+    if (Math.max(grid_repeat_max) < 20) grid_repeat = 100;
 
     document.documentElement.style.setProperty(
       "--grid-repeat",
-      grid_repeat * 3
+      grid_repeat_max * 3
     );
-  };
+
+    new Comment(document.getElementById('left-banner-title'))
+  }
 
   // may not be needed
   setData(dt) {
     this.data = dt;
   }
 
-  scrollLeft = () => {
+  static scrollLeft = (getThis) => {
+      var movieGenre = getThis.attributes.id.value.split("-")[3];
 
-    const scrollButtonLeft = document.getElementsByClassName("button-chevron-left")[classIndex];
-    const hscrollContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex];
-
-    scrollButtonLeft.addEventListener("click", () => {
-      hscrollContainer.scrollIntoView({
-        behavior: "smooth", inline: "nearest"
-      });
-    })
+      const scrollButtonLeft = document.getElementById(getThis.attributes.id.value);
+      const hscrollContainer = document.getElementById(`movie-title-thumbnail-hscroll-container-${movieGenre}` || `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}`);
+      scrollButtonLeft.addEventListener("click", () => {
+      hscrollContainer.scrollLeft -= 20;
+      })
 
   }
 
-   scrollRight = () => {
+  static scrollRight = (getThis) => {
+      var movieGenre = getThis.attributes.id.value.split("-")[3];
 
-    const scrollButtonRight = document.getElementsByClassName("button-chevron-right")[1];
-    const hscrollContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[1];
-
-    scrollButtonRight.addEventListener("click", () => {
-      hscrollContainer.scrollIntoView({
-        behavior: "smooth", inline: "nearest"
-      });
+      const scrollButtonRight = document.getElementById(getThis.attributes.id.value);
+      const hscrollContainer = document.getElementById(`movie-title-thumbnail-hscroll-container-${movieGenre}` || `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}`);
+      scrollButtonRight.addEventListener("click", () => {
+      hscrollContainer.scrollLeft += 20;
     })
 
   }
@@ -139,7 +159,7 @@ class CreateElements {
   // driver code to begin api request
   async requestMovieFetchData() {
     // default number of pages and number of execution
-    var total_pages = 2;
+    // var total_pages = 2;
     var requestArray = [];
     for (var requestFetch in movieRequestData) {
       // var clientRequest = new httpClientRequestFetch();
@@ -149,15 +169,17 @@ class CreateElements {
         requestFetch !== "movieRequestTrendingDay" &&
         requestFetch !== "movieRequestGenre"
       ) {
-        for (var page = 1; page < total_pages; page++) {
-          var requestData = await this.httpClientRequestFetch2(URL + page);
+        // option to control number of requests
+        // for (var page = 1; page < total_pages; page++) {
+          var requestData = await this.httpClientRequestFetch2(URL);
           // Object.assign(this.movieResponseFetchData[requestFetch], requestData);
           requestArray.push(requestData);
           this.movieResponseFetchData[requestFetch] = requestArray;
           // total_pages = requestData.total_pages
-        }
+        // }
       } else {
         var requestData = await this.httpClientRequestFetch2(URL);
+        // define properties with Object performant?
         // Object.defineProperties(this.movieResponseFetchData, requestFetch, { requestData })
 
         this.movieResponseFetchData[requestFetch] = requestData;
@@ -168,7 +190,7 @@ class CreateElements {
   async createBanner() {
     await this.requestMovieFetchData();
 
-
+    // option request for data needed by locally scoped objects in function
     // var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
     
 
@@ -238,7 +260,7 @@ class CreateElements {
     document
       .getElementById("top-center-full-banner-image")
       .setAttribute("src", this.posterURL + "/original" + bannerData.poster_path);
-
+    // KEEP: even though set data structures accomplishes task 
     // title tracker will prevent the previously 
     // used movie title from being added
     // along with set data type
@@ -246,8 +268,15 @@ class CreateElements {
     this.titleTracker.push(bannerData.original_name);
 
     // create menu for nav if conditions are met
-    // TODO: move to different function or execute on load
-    this.displayMenu()
+    // TODO: move to different function or execute on load driver function
+    this.displayMenu();
+
+    // create icon account, logout, login, and etc. in navbar
+    this.navIcons();
+
+    // display account, logout, login, and etc. icon 
+    // based on window innnerWidth condition
+    this.navIconsDisplay();
 
     // this.createTitleImageStruct();
     
@@ -255,11 +284,12 @@ class CreateElements {
   } 
 
 
-  // create data structure containing
+  // create set data structure containing
   // movie title and image on demand
-  // based on movieRequestData objet key
+  // based on movieRequestData object key
+  // single responsibility 
   createTitleImageStruct = (requestKey) => {
-     var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
+     var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
 
       for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
 
@@ -290,15 +320,9 @@ class CreateElements {
   createMovieGenre() {
     // await this.requestMovieFetchData()
 
-    // for (var i = 0; i < movieTitles.length; i++) {
-    //     if(Object.values(movieTitles[i])[2].includes(28))
-    //     movieTitles.forEach(e => console.log(e.title))
-
-    // }
-
     // create html container for two sections 
     // one section with base elements by genre
-    // other section with base elements named by data request/movieRequestData oject key
+    // other section with base elements named by data request/movieRequestData object key
     // with title and image thumbnail as base elements wrapped in container
     const vscroll_sections_container = document.createElement("section");
     vscroll_sections_container.setAttribute("id", "vscroll-sections-container");
@@ -311,7 +335,7 @@ class CreateElements {
     const vscroll_div = document.createElement("div");
     vscroll_div.setAttribute("id", "movie-title-thumbnail-vscroll-container");
 
-    vscroll_div.setAttribute("id", "movie-title-thumbnail-vscroll-container");
+    
     document
       .getElementById("vscroll-sections-container")
       .appendChild(vscroll_div);
@@ -320,13 +344,10 @@ class CreateElements {
     const vscroll_apisection_div = document.createElement("div");
     vscroll_apisection_div.setAttribute(
       "id",
-      "movie-title-thumbnail-vscroll-container"
+      "movie-title-thumbnail-vscroll-container-apisection"
     );
 
-    vscroll_apisection_div.setAttribute(
-      "id",
-      "movie-title-thumbnail-vscroll-apisection-container"
-    );
+   
     document
       .getElementById("movie-title-thumbnail-vscroll-container")
       .after(vscroll_apisection_div);
@@ -341,6 +362,8 @@ class CreateElements {
     while (movieGenreArray.length > 0) {
       var index = Math.floor(Math.random() * movieGenreArray.length);
       var genreIndex = 0;
+      var scrollClassIndex = 0;
+      var movieGenreName = movieGenreArray[index]["name"].toLowerCase().replace(" ", "");
 
       // console.log(
       //   movieGenreArray[index]["name"],
@@ -352,7 +375,7 @@ class CreateElements {
 
       hscroll_container.setAttribute(
         "id",
-        "movie-title-thumbnail-hscroll-container"
+        `movie-title-thumbnail-hscroll-container-${movieGenreName}`
       );
       hscroll_container.setAttribute(
         "class",
@@ -361,7 +384,7 @@ class CreateElements {
 
       const genre = document.createElement("h1");
 
-      genre.setAttribute("id", "movie-genre");
+      genre.setAttribute("id", `movie-genre-${movieGenreName}`);
       genre.setAttribute("class", "movie-genre");
       genre.innerText = movieGenreArray[index]["name"];
 
@@ -373,14 +396,14 @@ class CreateElements {
       //     .lastElementChild
       // );
       document
-        .getElementById("movie-genre")
+        .getElementById(`movie-genre-${movieGenreName}`)
         .insertAdjacentElement("afterend", hscroll_container);
     
 
-      
+      // code block begins creation of button elements 
       const chevronWrapper = document.createElement("div");
       
-      chevronWrapper.setAttribute("id", "chevron-wrapper");
+      chevronWrapper.setAttribute("id", `chevron-wrapper-${movieGenreName}`);
       chevronWrapper.setAttribute("class", "chevron-wrapper");
 
       document.getElementsByClassName("movie-genre")[genreIndex].after(chevronWrapper);
@@ -388,29 +411,34 @@ class CreateElements {
 
       const buttonChevronLeft = document.createElement("button");
 
-      buttonChevronLeft.setAttribute("id", "button-chevron-left");
+      buttonChevronLeft.setAttribute("id", `button-chevron-left-${movieGenreName}`);
       buttonChevronLeft.setAttribute("class", "button-chevron-left");
+      buttonChevronLeft.setAttribute("type", "button");
+      buttonChevronLeft.setAttribute("onclick", `CreateElements.scrollLeft(this)`);
+      buttonChevronLeft.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronLeft);
 
       const buttonChevronRight = document.createElement("button");
 
-      buttonChevronRight.setAttribute("id", "button-chevron-right");
+      buttonChevronRight.setAttribute("id", `button-chevron-right-${movieGenreName}`);
       buttonChevronRight.setAttribute("class", "button-chevron-right");
+      buttonChevronRight.setAttribute("type", "button");
+      buttonChevronRight.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+      buttonChevronRight.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronRight);
-
 
       
       const iconLeftChevron = document.createElement("i");
 
       iconLeftChevron.setAttribute("class", "fas fa-chevron-circle-left");
-      iconLeftChevron.setAttribute("id", "left-chevron");
+      iconLeftChevron.setAttribute("id", `left-chevron-${movieGenreName}`);
 
       const iconRightChevron = document.createElement("i");
 
       iconRightChevron.setAttribute("class", "fas fa-chevron-circle-right");
-      iconRightChevron.setAttribute("id", "right-chevron");
+      iconRightChevron.setAttribute("id", `right-chevron-${movieGenreName}`);
 
       // document
       //   .getElementById("movie-genre")
@@ -421,11 +449,12 @@ class CreateElements {
 
       document.getElementsByClassName("button-chevron-right")[genreIndex].appendChild(iconRightChevron);
 
-
-      this.createMovieTitle(movieGenreArray[index]["id"], false);
+      // second stage in function chain: create section, movie title, and image; genre division
+      this.createMovieTitle(movieGenreArray[index]["id"], false, movieGenreName);
 
       movieGenreArray.splice(index, 1);
       genreIndex++;
+      scrollClassIndex++;
     }
 
 
@@ -441,12 +470,15 @@ class CreateElements {
         movieRequestTopRated: "Top Rated",
         movieRequestTrendingDay: "Trending Today",
       };
+
+      var movieLocalTitle = String(movieLocalHeaderTitle[key]).toLowerCase().replace(" ", "");
+      
       if (key != "movieRequestGenre") {
         const hscroll_apisection_container = document.createElement("div");
 
         hscroll_apisection_container.setAttribute(
           "id",
-          "movie-title-thumbnail-hscroll-apisection-container"
+          `movie-title-thumbnail-hscroll-apisection-container-${movieLocalTitle}`
         );
         hscroll_apisection_container.setAttribute(
           "class",
@@ -455,37 +487,44 @@ class CreateElements {
 
         const apisectionTitle = document.createElement("h1");
 
-        apisectionTitle.setAttribute("id", "movie-apisection-title");
+        apisectionTitle.setAttribute("id", `movie-apisection-title-${movieLocalTitle}`);
         apisectionTitle.setAttribute("class", "movie-apisection-title");
-        apisectionTitle.innerText = movieLocalHeaderTitle[key];
+        apisectionTitle.innerText = movieLocalHeaderTitle[key]
+
+        document.getElementById("movie-title-thumbnail-vscroll-container-apisection").insertAdjacentElement("afterbegin", apisectionTitle);
 
         document
-          .getElementById("movie-title-thumbnail-vscroll-apisection-container")
-          .insertAdjacentElement("afterbegin", apisectionTitle);
-
-        document
-          .getElementById("movie-apisection-title")
+          .getElementById(`movie-apisection-title-${movieLocalTitle}`)
           .insertAdjacentElement("afterend", hscroll_apisection_container);
         
+        
+        // code block begins creation of button elements
         const apiChevronWrapper = document.createElement("div");
 
-        apiChevronWrapper.setAttribute("id", "chevron-apisection-wrapper");
+        apiChevronWrapper.setAttribute("id", `chevron-apisection-wrapper-${movieLocalTitle}`);
         apiChevronWrapper.setAttribute("class", "chevron-apisection-wrapper");
 
         document.getElementsByClassName("movie-apisection-title")[genreIndex].after(apiChevronWrapper);
         
         const apiButtonChevronLeft = document.createElement("button");
 
-        apiButtonChevronLeft.setAttribute("id", "button-chevron-apisection-left");
+        apiButtonChevronLeft.setAttribute("id", `button-chevron-apisection-left-${movieLocalTitle}`);
         apiButtonChevronLeft.setAttribute("class", "button-chevron-apisection-left");
+        apiButtonChevronLeft.setAttribute("type", "button");
+        apiButtonChevronLeft.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+        apiButtonChevronLeft.setAttribute("hscrollIndex", genreIndex)
+
 
         document.getElementsByClassName("chevron-apisection-wrapper")[genreIndex].appendChild(apiButtonChevronLeft);
 
-
+        
         const apiButtonChevronRight = document.createElement("button");
 
-        apiButtonChevronRight.setAttribute("id", "button-chevron-apisection-right");
+        apiButtonChevronRight.setAttribute("id", `button-chevron-apisection-right-${movieLocalTitle}`);
         apiButtonChevronRight.setAttribute("class", "button-chevron-apisection-right");
+        apiButtonChevronRight.setAttribute("type", "button");
+        apiButtonChevronRight.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+        apiButtonChevronRight.setAttribute("hscrollIndex", genreIndex)
 
         document.getElementsByClassName("chevron-apisection-wrapper")[genreIndex].appendChild(apiButtonChevronRight);
 
@@ -494,12 +533,13 @@ class CreateElements {
         const apiIconLeftChevron = document.createElement("i");
 
         apiIconLeftChevron.setAttribute("class", "fas fa-chevron-circle-left");
-        apiIconLeftChevron.setAttribute("id", "left-apisection-chevron");
+        apiIconLeftChevron.setAttribute("id", `left-apisection-chevron--${movieLocalTitle}`);
+
 
         const apiIconRightChevron = document.createElement("i");
 
         apiIconRightChevron.setAttribute("class", "fas fa-chevron-circle-right");
-        apiIconRightChevron.setAttribute("id", "right-apisection-chevron");
+        apiIconRightChevron.setAttribute("id", `right-apisection-chevron-${movieLocalTitle}`);
 
 
 
@@ -509,14 +549,14 @@ class CreateElements {
         
         genreIndex++;
         
-        
-        this.createMovieTitle(key, true);
+        // second stage in function chain: create section, movie title, and image; api division
+        this.createMovieTitle(key, true, movieLocalTitle);
       }
      
     }
 
 
-    // function call to generate css gridrepeat value
+    // function call to generate css gridrepeat property value
     this.gridRepeat();
   }
 
@@ -534,7 +574,7 @@ class CreateElements {
   // }));
 
 
-  createMovieTitle(genre_id, genreBool) {
+  createMovieTitle(genre_id, genreBool, genre_name) {
   
     this.createTitleImageStruct("movieRequestPopular");
     
@@ -543,8 +583,9 @@ class CreateElements {
       var movieTitleLen =
         this.movieResponseFetchData.movieRequestPopular.length;
       // create data structure to hold title and genre_ids
-      // solution to empty element hscroll-wrapper creation
-      // by avoiding recursively calling and creating elements
+      // solution to empty elements after hscroll-wrapper creation
+      // by avoiding recursively calling function and creating elements
+      // data is added from data structure by a loop
       // for (var pageTitle = 0; pageTitle < movieTitleLen; pageTitle++) {
       //   for (
       //     var titleIndexObject = 0;
@@ -597,8 +638,11 @@ class CreateElements {
 
             title.setAttribute("color", "white");
             title.setAttribute("font-size", "16");
-            title.setAttribute("id", "movie-title");
+            title.setAttribute("id", `movie-title-${genre_name}`);
+            title.setAttribute("class", "movie-title");
             title.innerText = [...this.movieTitles][genreIndexArray];
+
+            
 
             // console.log(
             //   Math.max(
@@ -608,12 +652,19 @@ class CreateElements {
             // );
 
             document
-              .getElementById("movie-title-thumbnail-hscroll-container")
-              .appendChild(hscroll_wrapper);
+              .getElementById(`movie-title-thumbnail-hscroll-container-${genre_name}`).appendChild(hscroll_wrapper);
             document
               .getElementsByClassName("hscroll-wrapper")
             [indexClass].appendChild(title);
 
+            // solution to first element in container having in inline-styling
+            // possibly causing hover to not target element
+            // while descendants of container not having 
+            // document.getElementById(`movie-title-${genre_name}`).style.display = "none";
+            // Aug 18, 2024: cause was other element movie title content in parent container 
+            // overflowing causing recalculation of parent container sizing 
+
+            // third stage in function chain: create section, movie title, and image; genre division
             this.createMovieThumbnails(
               [...this.movieImage][genreIndexArray],
               [...this.movieTitles][genreIndexArray],
@@ -692,19 +743,21 @@ class CreateElements {
 
           title_apisection.setAttribute("color", "white");
           title_apisection.setAttribute("font-size", "16");
-          title_apisection.setAttribute("id", "movie-title");
+          title_apisection.setAttribute("id", `movie-title-${genre_name}`);
+          title_apisection.setAttribute("class", "movie-title");
           title_apisection.innerText =
             [...this.movieTitlesAPISection][titleIndexArray];
 
           document
             .getElementById(
-              "movie-title-thumbnail-hscroll-apisection-container"
+              `movie-title-thumbnail-hscroll-apisection-container-${genre_name}`
             )
             .appendChild(hscroll_apisection_wrapper);
           document
             .getElementsByClassName("hscroll-apisection-wrapper")
             [indexClass].appendChild(title_apisection);
-
+          
+          // third stage in function chain: create section, movie title, and image; api division
           this.createMovieThumbnails(
             [...this.movieImageAPISection][titleIndexArray],
             [...this.movieTitlesAPISection][titleIndexArray],
@@ -748,7 +801,7 @@ class CreateElements {
 
       // TODO: check and confirm attributes
       img.setAttribute("class", "movie-thumbnail");
-      img.setAttribute("id", "movie-thumbnail");
+      img.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}`);
       img.setAttribute("alt", "Cover art of the movie " + titleMovie);
       img.setAttribute("width", "auto");
       img.setAttribute("height", "auto");
@@ -794,14 +847,14 @@ class CreateElements {
       
       
 
-      //eventhandler for mouseover event change style of css element
+      //eventHandler for mouseover event change style of css element
       // may not be needed
-      document
-        .getElementById("hscroll-wrapper")
-        .addEventListener(
-          "mouseover",
-          (event) => (event.target.style.display = "flex")
-        );
+      // document
+      //   .getElementById("hscroll-wrapper")
+      //   .addEventListener(
+      //     "mouseover",
+      //     (event) => (event.target.style.display = "flex")
+      //   );
     }
 
     // SECTION: by api elements
@@ -853,7 +906,7 @@ class CreateElements {
       //   .getElementsByClassName("hscroll-apisection-wrapper")
       //   [classIndex].appendChild(iconGoogleHeart);
 
-      //eventhandler for mouseover event change style of css element
+      //eventHandler for mouseover event change style of css element
       // document
       //   .getElementById("hscroll-apisection-wrapper")
       //   .addEventListener(
@@ -862,8 +915,8 @@ class CreateElements {
       //   );
     }
 
-    // invoke function to check if thumbnails created
-    // if not, display none title, button, title, thumbnail
+    // invoke function to check if thumbnails created as condition to change css display none
+    // if not, display none parent container of title, button, title, thumbnail
     this.movieGenreCheck();
   }
 
@@ -883,7 +936,7 @@ class CreateElements {
     }
   }
 
-
+  // multiple options to make client request are for learning and growth purposes
   httpClientRequest(hURL) {
     this.get = function (hURL, hCallBack) {
       // hURL = 'https://api.themoviedb.org/3/movie/upcoming?api_key=03ee6394a8103fd6e7633be9f543707c&language=en-US&page=1';
@@ -959,7 +1012,9 @@ class CreateElements {
     //         // data = null;
     //     });
   }
-
+  
+  // primary option to make client request
+  // because of simplicity 
   async httpClientRequestFetch2(hURL, data = {}) {
     const response = await fetch(hURL, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -980,7 +1035,7 @@ class CreateElements {
 
   
 
-
+  // perform type checks
   assertType(value, type, paramName) {
     if (typeof value !== type) {
       throw new TypeError(`${paramName} should be of type ${type}`);
@@ -991,8 +1046,7 @@ class CreateElements {
   
   
 
-  createMenu = () => {
-
+  createMenu = () => {  
     // console.log(window.innerWidth);
     const menuCreate = document.createElement("menu");
 
@@ -1031,8 +1085,8 @@ class CreateElements {
       navContainerAppend.style.flexDirection = "column";
       navContainerAppend.style.display = "none";
 
-      document.getElementById("menu-dropbtn").addEventListener("mouseover", () => this.menuHover().menuHoverShow(), false);
-      document.getElementById("menu-dropbtn").addEventListener("mouseout", () => this.menuHover().menuHoverHide(), false);
+      document.getElementById("nav-menu").addEventListener("mouseover", () => this.menuHover().menuHoverShow(), false);
+      document.getElementById("nav-menu").addEventListener("mouseout", () => this.menuHover().menuHoverHide(), false);
 
 
       
@@ -1048,8 +1102,8 @@ class CreateElements {
       
       // var appendContainer = menuRemove.remove(navContainerAppend);
 
-      document.getElementById("menu-dropbtn").removeEventListener("mouseover", this.menuHover().menuHoverShow, false);
-      document.getElementById("menu-dropbtn").removeEventListener("mouseout",  this.menuHover().menuHoverHide, false);
+      document.getElementById("nav-menu").removeEventListener("mouseover", () => this.menuHover().menuHoverShow, false);
+      document.getElementById("nav-menu").removeEventListener("mouseout",  () => this.menuHover().menuHoverHide, false);
 
       menuRemove.remove();
       menuButtonRemove.remove();
@@ -1114,7 +1168,7 @@ class CreateElements {
     const menuHoverShow = () => {
       // triggered by eventlistener mouseover dropdown of menu items
       document.querySelector("#top-nav-btn-container").style.display = "flex";
-      document.querySelector("#nav-menu").style.top = "2.55em";
+      document.querySelector("#nav-menu").style.top = "2.15rem";
     
     }
 
@@ -1124,11 +1178,65 @@ class CreateElements {
       document.querySelector("#nav-menu").style.top = "0";
     
     }
-    return {menuHoverShow, menuHoverHide}
+    return { menuHoverShow, menuHoverHide };
   }
 
 
+  navIcons = () => {
+    const iconAccount = document.createElement("img");
+    iconAccount.setAttribute("id", "account-icon");
+    iconAccount.setAttribute("src", "img/icon/account_icon.png");
+    iconAccount.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
+    document.getElementById("top-nav-onboarding-group").appendChild(iconAccount);
+    
+
+    const iconLogOut = document.createElement("img");
+    iconLogOut.setAttribute("id", "logout-icon");
+    iconLogOut.setAttribute("src", "img/icon/logout_icon_clipart_8.png");
+    iconLogOut.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
+    document.getElementById("account-icon").insertAdjacentElement("afterend", iconLogOut);
+    let iconsLogOutDisplay = iconLogOut.width;
+  }
+
+  navIconsDisplay = () => {
+    let iconsAccountDisplay = document.getElementById("account-icon").width;
+    let iconsLogOutDisplay = document.getElementById("logout-icon").width;
+    
+    if (window.innerWidth  < 556 ) {
+    
+      document.getElementById("nav-account-bg-offset").style.display = "none";
+      document.getElementById("account-icon").style.display = "block";
+      
+      
+      document.getElementById("nav-logout-bg-offset").style.display = "none";
+      document.getElementById("logout-icon").style.display = "block";
+      
+    
+    }
+    
+    else if (window.innerWidth  > 556) {
+      
+      document.getElementById("nav-account-bg-offset").style.display = "block";
+      document.getElementById("account-icon").style.display = "none";
+      
+      
+      document.getElementById("nav-logout-bg-offset").style.display = "block";
+      document.getElementById("logout-icon").style.display = "none";
+       
+      // document.getElementById("nav-account-bg-offset").innerText = "Account";
+      // document.getElementById("account-icon").remove();
+      // document.getElementById("account-icon").style.display = "none";
+      
+      // document.getElementById("nav-logout-bg-offset").innerText = "Log Out";
+      // document.getElementById("logout-icon").remove();
+      // document.getElementById("logout-icon").style.display = "none";
   
+    }  
+    
+}
+
+
+  // KEEP: for debugging purposes and track size of window
   updateSize() {
     console.log("height", window.innerHeight);
     console.log("width", window.innerWidth);
@@ -1148,11 +1256,15 @@ _ = (function () {
   // createElements.createMenu();
 })();
 
+
+// different approaches to create event handler
+// keep for learning and growth purposes
+// may revisit code in future
 var createElements = new CreateElements();
 // document.body.onload = createElements.createMenu;
 // window.addEventListener("load", () => createElements.createMenu(), false);
 window.addEventListener("resize", createElements.displayMenu, false);
-
+window.addEventListener("resize", createElements.navIconsDisplay, false);
 // const event = new Event("resize");
 
 // window.addEventListener("resize", (event) => createElements.createMenu(), false);
@@ -1163,3 +1275,5 @@ window.addEventListener("resize", createElements.displayMenu, false);
 
 // const element = window.document.getElementById("menu-dropbtn")
 // createElements.addEventListener("mouseover", createElements, false);
+
+

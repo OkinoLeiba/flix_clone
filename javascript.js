@@ -123,10 +123,12 @@ class CreateElements {
   }
 
   static scrollLeft = (getThis) => {
-      var movieGenre = getThis.attributes.id.value.split("-")[3];
+    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length-1];
+    
+    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
 
       const scrollButtonLeft = document.getElementById(getThis.attributes.id.value);
-      const hscrollContainer = document.getElementById(`movie-title-thumbnail-hscroll-container-${movieGenre}` || `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}`);
+      const hscrollContainer = document.getElementById(scrollID);
       scrollButtonLeft.addEventListener("click", () => {
       hscrollContainer.scrollLeft -= 20;
       })
@@ -134,14 +136,62 @@ class CreateElements {
   }
 
   static scrollRight = (getThis) => {
-      var movieGenre = getThis.attributes.id.value.split("-")[3];
+    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length-1];
+    
+    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
 
       const scrollButtonRight = document.getElementById(getThis.attributes.id.value);
-      const hscrollContainer = document.getElementById(`movie-title-thumbnail-hscroll-container-${movieGenre}` || `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}`);
+      const hscrollContainer = document.getElementById(scrollID);
       scrollButtonRight.addEventListener("click", () => {
       hscrollContainer.scrollLeft += 20;
     })
 
+  }
+
+  static heartClickSolid = (heartThis) => {
+    const rheartID = document.getElementById(heartThis.id);
+    // const rheartClass = document.getElementsByClassName("fa-regular fa-heart");
+
+    // const sheartID = document.getElementById("fa-sheart");
+    // const sheartClass = document.getElementsByClassName("fa-solid fa-heart");
+
+    rheartID.addEventListener("click", (event) => {
+      heartThis.parentElement.childNodes[2].style.display = "none";
+
+      heartThis.parentElement.childNodes[3].style.display = "block";
+    })
+  }
+
+    static heartClick = (heartThis) => {
+    const rheartID = document.getElementById(heartThis.id);
+    // const rheartClass = document.getElementsByClassName("fa-regular fa-heart");
+
+    // const sheartID = document.getElementById("fa-sheart");
+    // const sheartClass = document.getElementsByClassName("fa-solid fa-heart");
+
+    rheartID.addEventListener("click", (event) => {
+      heartThis.parentElement.childNodes[3].style.display = "none";
+
+      heartThis.parentElement.childNodes[2].style.display = "block";
+    })
+  }
+
+  static scrollSectionLeft = () => {
+    const scrollButton = document.getElementById("vscroll-icons-container-left");
+    const scrollSectionID = document.getElementById("vscroll-sections-container");
+
+    scrollButton.addEventListener("click", () => {
+      scrollSectionID.scrollLeft = scrollSectionID.scrollLeftMax;
+    })
+  }
+
+   static scrollSectionRight = () => {
+    const scrollButton = document.getElementById("vscroll-icons-container-right");
+    const scrollSectionID = document.getElementById("vscroll-sections-container");
+
+    scrollButton.addEventListener("click", () => {
+      scrollSectionID.scrollLeft = -scrollSectionID.scrollLeftMax;
+    })
   }
 
 
@@ -330,6 +380,8 @@ class CreateElements {
     document
       .getElementById("top-section-banner-container")
       .after(vscroll_sections_container);
+    
+    
 
     // SECTION: by genre
     const vscroll_div = document.createElement("div");
@@ -339,7 +391,26 @@ class CreateElements {
     document
       .getElementById("vscroll-sections-container")
       .appendChild(vscroll_div);
+    
+   
+      // icon to indicate and navigate to other section
+      const vscroll_icons_container_left = document.createElement("button");
+      vscroll_icons_container_left.setAttribute("id", "vscroll-icons-container-left");
+      vscroll_icons_container_left.setAttribute("onclick", "CreateElements.scrollSectionLeft()");
+      document.getElementById("movie-title-thumbnail-vscroll-container").insertAdjacentElement("afterbegin", vscroll_icons_container_left);
 
+      for(var i = 0; i< 3; i++) {
+      const vscroll_sections_icons = document.createElement("i");
+      vscroll_sections_icons.setAttribute("class", "fas fa-greater-than")
+      vscroll_sections_icons.setAttribute("id", "vscroll-icon-left");
+
+      document.getElementById("vscroll-icons-container-left").appendChild(vscroll_sections_icons);
+    }
+    
+
+   
+      
+  
     // SECTION: by api elements
     const vscroll_apisection_div = document.createElement("div");
     vscroll_apisection_div.setAttribute(
@@ -352,7 +423,19 @@ class CreateElements {
       .getElementById("movie-title-thumbnail-vscroll-container")
       .after(vscroll_apisection_div);
     
-    
+     // icon to indicate and navigate to other section
+      const vscroll_icons_container_right = document.createElement("button");
+      vscroll_icons_container_right.setAttribute("id", "vscroll-icons-container-right");
+      vscroll_icons_container_right.setAttribute("onclick", "CreateElements.scrollSectionRight()");
+      document.getElementById("movie-title-thumbnail-vscroll-container-apisection").insertAdjacentElement("afterbegin", vscroll_icons_container_right);
+
+      for(var i = 0; i< 3; i++) {
+      const vscroll_sections_icons = document.createElement("i");
+      vscroll_sections_icons.setAttribute("class", "fas fa-less-than")
+      vscroll_sections_icons.setAttribute("id", "vscroll-icon-right");
+
+      document.getElementById("vscroll-icons-container-right").appendChild(vscroll_sections_icons);
+      }
     
 
     // SECTION: by genre
@@ -389,8 +472,8 @@ class CreateElements {
       genre.innerText = movieGenreArray[index]["name"];
 
       document
-        .getElementById("movie-title-thumbnail-vscroll-container")
-        .insertAdjacentElement("afterbegin", genre);
+        .getElementById("vscroll-icons-container-left")
+        .after(genre);
       // console.log(
       //   document.getElementById("movie-title-thumbnail-vscroll-container")
       //     .lastElementChild
@@ -483,7 +566,10 @@ class CreateElements {
         hscroll_apisection_container.setAttribute(
           "class",
           "movie-title-thumbnail-hscroll-apisection-container"
+
         );
+
+        
 
         const apisectionTitle = document.createElement("h1");
 
@@ -491,7 +577,7 @@ class CreateElements {
         apisectionTitle.setAttribute("class", "movie-apisection-title");
         apisectionTitle.innerText = movieLocalHeaderTitle[key]
 
-        document.getElementById("movie-title-thumbnail-vscroll-container-apisection").insertAdjacentElement("afterbegin", apisectionTitle);
+        document.getElementById("vscroll-icons-container-right").after(apisectionTitle);
 
         document
           .getElementById(`movie-apisection-title-${movieLocalTitle}`)
@@ -511,7 +597,7 @@ class CreateElements {
         apiButtonChevronLeft.setAttribute("id", `button-chevron-apisection-left-${movieLocalTitle}`);
         apiButtonChevronLeft.setAttribute("class", "button-chevron-apisection-left");
         apiButtonChevronLeft.setAttribute("type", "button");
-        apiButtonChevronLeft.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+        apiButtonChevronLeft.setAttribute("onclick", `CreateElements.scrollLeft(this)`);
         apiButtonChevronLeft.setAttribute("hscrollIndex", genreIndex)
 
 
@@ -631,7 +717,7 @@ class CreateElements {
             // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
 
             const hscroll_wrapper = document.createElement("div");
-            hscroll_wrapper.setAttribute("id", "hscroll-wrapper");
+            hscroll_wrapper.setAttribute("id", `hscroll-wrapper-${genre_name}`);
             hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
 
             const title = document.createElement("p");
@@ -819,14 +905,16 @@ class CreateElements {
       const iconSHeart = document.createElement("i");
 
       iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      iconSHeart.setAttribute("id", "fa-sheart");
+      iconSHeart.setAttribute("id", `fa-sheart-${titleMovie}`);
+      iconSHeart.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
 
       const iconRHeart = document.createElement("i");
 
       iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      iconRHeart.setAttribute("id", "fa-rheart");
+      iconRHeart.setAttribute("id", `fa-rheart-${titleMovie}`);
+      iconRHeart.setAttribute("onclick", "CreateElements.heartClick(this)");
 
-      const iconGoogleHeart = document.createElement("i");
+      // const iconGoogleHeart = document.createElement("i");
 
       // iconGoogleHeart.setAttribute("class", "material-icons");
       // iconGoogleHeart.setAttribute("id", "googleiconheart");
@@ -841,9 +929,9 @@ class CreateElements {
         .getElementsByClassName("hscroll-wrapper")
         [classIndex].appendChild(iconRHeart);
 
-      document
-        .getElementsByClassName("hscroll-wrapper")
-      [classIndex].appendChild(iconGoogleHeart);
+      // document
+      //   .getElementsByClassName("hscroll-wrapper")
+      // [classIndex].appendChild(iconGoogleHeart);
       
       
 
@@ -877,15 +965,17 @@ class CreateElements {
         .getElementsByClassName("hscroll-apisection-wrapper")
         [classIndex].appendChild(imgAPISection);
 
-      // const iconSHeart = document.createElement("i");
+      const iconSHeartAPISection = document.createElement("i");
 
-      // iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      // iconSHeart.setAttribute("id", "fa-sheart");
+      iconSHeartAPISection.setAttribute("class", "fa-solid fa-heart");
+      iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie}`);
+      iconSHeartAPISection.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
 
-      // const iconRHeart = document.createElement("i");
+      const iconRHeartAPISection = document.createElement("i");
 
-      // iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      // iconRHeart.setAttribute("id", "fa-rheart");
+      iconRHeartAPISection.setAttribute("class", "fa-regular fa-heart");
+      iconRHeartAPISection.setAttribute("id", `fa-rheart-apisection-${titleMovie}`);
+      iconRHeartAPISection.setAttribute("onclick", "CreateElements.heartClick(this)");
 
       // const iconGoogleHeart = document.createElement("i");
 
@@ -894,13 +984,13 @@ class CreateElements {
 
       // iconGoogleHeart.textContent = "cloud";
 
-      // document
-      //   .getElementsByClassName("hscroll-apisection-wrapper")
-      //   [classIndex].appendChild(iconSHeart);
+      document
+        .getElementsByClassName("hscroll-apisection-wrapper")
+        [classIndex].appendChild(iconSHeartAPISection);
 
-      // document
-      //   .getElementsByClassName("hscroll-apisection-wrapper")
-      //   [classIndex].appendChild(iconRHeart);
+      document
+        .getElementsByClassName("hscroll-apisection-wrapper")
+        [classIndex].appendChild(iconRHeartAPISection);
 
       // document
       //   .getElementsByClassName("hscroll-apisection-wrapper")
@@ -1233,11 +1323,29 @@ class CreateElements {
   
     }  
     
-}
+  }
+  
+  // iconFlash = setInterval(function () {
+  //   try {
+  //     var flashValue = 1;
+  //     const vic = document.getElementById("vscroll-icons-container");
+  //     while (vic != null && flashValue > 0.5 ) {
+  //       vic.style.opacity = flashValue;
+  //       flashValue -= .1;
+  //       vic.style.mixBlendMode = "difference";
+  //       vic.style.backgroundColor = "red";
+  // }
+  //   vic.style.opacity = 1;
+  //   } catch (error) {
+      
+  //   }
+ 
+    
+  // }, 1000)
 
 
   // KEEP: for debugging purposes and track size of window
-  updateSize() {
+  displaySize() {
     console.log("height", window.innerHeight);
     console.log("width", window.innerWidth);
   }
@@ -1272,8 +1380,24 @@ window.addEventListener("resize", createElements.navIconsDisplay, false);
 // window.dispatchEvent(event);
 
 
-
 // const element = window.document.getElementById("menu-dropbtn")
 // createElements.addEventListener("mouseover", createElements, false);
 
-
+setInterval(function () {
+  try {
+    
+      var flashValue = 1;
+ 
+      while (flashValue > 0.5 ) {
+        document.getElementById("vscroll-icons-container").style.opacity = flashValue;
+        flashValue -= .1;
+        document.getElementById("vscroll-icons-container").style.mixBlendMode = "difference";
+        document.getElementById("vscroll-icons-container").style.backgroundColor = "red";
+    }
+    document.getElementById("vscroll-icons-container").style.backgroundColor = "aqua";
+    
+    } catch (error) {
+      
+  }
+  console.log("interval")
+  }, 1000)

@@ -68,10 +68,14 @@ class CreateElements {
     // http request results object length capped at 20 objects in array
     this.movieTitleResultsLen = 20;
 
+    // index to identify heart icon for each class
+    // set as attribute for each icon
+    this.heartIndex = 0;
+    
     
   }
 
-  
+  // static heartIndex = 0
   
 
   // get and set css element property gridrepeat
@@ -149,31 +153,37 @@ class CreateElements {
   }
 
   static heartClickSolid = (heartThis) => {
+    var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
     const rheartID = document.getElementById(heartThis.id);
-    // const rheartClass = document.getElementsByClassName("fa-regular fa-heart");
+    const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
 
     // const sheartID = document.getElementById("fa-sheart");
-    // const sheartClass = document.getElementsByClassName("fa-solid fa-heart");
+    const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
 
     rheartID.addEventListener("click", (event) => {
-      heartThis.parentElement.childNodes[2].style.display = "none";
+      // heartThis.parentElement.childNodes[2].style.display = "none";
+      rheartClass.style.display = "block";
 
-      heartThis.parentElement.childNodes[3].style.display = "block";
+      // heartThis.parentElement.childNodes[3].style.display = "block";
+      sheartClass.style.display = "none";
     })
   }
 
-    static heartClick = (heartThis) => {
-    const rheartID = document.getElementById(heartThis.id);
-    // const rheartClass = document.getElementsByClassName("fa-regular fa-heart");
+  static heartClick = (heartThis) => {
+      var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
+      const rheartID = document.getElementById(heartThis.id);
+      const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
 
-    // const sheartID = document.getElementById("fa-sheart");
-    // const sheartClass = document.getElementsByClassName("fa-solid fa-heart");
+      // const sheartID = document.getElementById("fa-sheart");
+      const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
 
-    rheartID.addEventListener("click", (event) => {
-      heartThis.parentElement.childNodes[3].style.display = "none";
+      rheartID.addEventListener("click", (event) => {
+        // heartThis.parentElement.childNodes[3].style.display = "none";
+        rheartClass.style.display = "none";
 
-      heartThis.parentElement.childNodes[2].style.display = "block";
-    })
+        // heartThis.parentElement.childNodes[2].style.display = "block";
+        sheartClass.style.display = "block";
+      })
   }
 
   static scrollSectionLeft = () => {
@@ -498,7 +508,7 @@ class CreateElements {
       buttonChevronLeft.setAttribute("class", "button-chevron-left");
       buttonChevronLeft.setAttribute("type", "button");
       buttonChevronLeft.setAttribute("onclick", `CreateElements.scrollLeft(this)`);
-      buttonChevronLeft.setAttribute("hscrollIndex", genreIndex)
+      // buttonChevronLeft.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronLeft);
 
@@ -508,7 +518,7 @@ class CreateElements {
       buttonChevronRight.setAttribute("class", "button-chevron-right");
       buttonChevronRight.setAttribute("type", "button");
       buttonChevronRight.setAttribute("onclick", `CreateElements.scrollRight(this)`);
-      buttonChevronRight.setAttribute("hscrollIndex", genreIndex)
+      // buttonChevronRight.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronRight);
 
@@ -661,8 +671,10 @@ class CreateElements {
 
 
   createMovieTitle(genre_id, genreBool, genre_name) {
-  
+    // TODO: review and maybe incorporate
     this.createTitleImageStruct("movieRequestPopular");
+
+    
     
     // SECTION: by genre
     if (!genreBool) {
@@ -719,6 +731,8 @@ class CreateElements {
             const hscroll_wrapper = document.createElement("div");
             hscroll_wrapper.setAttribute("id", `hscroll-wrapper-${genre_name}`);
             hscroll_wrapper.setAttribute("class", "hscroll-wrapper");
+            hscroll_wrapper.setAttribute("index-class", this.heartIndex)
+            
 
             const title = document.createElement("p");
 
@@ -758,10 +772,13 @@ class CreateElements {
               false
             );
             indexClass++;
+            this.heartIndex++;
           }
         }
       }
     }
+
+    
 
     // SECTION: by api elements (upcoming, now playing, trending, etc.)
     // genreBool prevent section of code from execute with each genre_id
@@ -824,6 +841,8 @@ class CreateElements {
             "class",
             "hscroll-apisection-wrapper"
           );
+          hscroll_apisection_wrapper.setAttribute("classIndex", this.heartIndex);
+
 
           const title_apisection = document.createElement("p");
 
@@ -851,9 +870,11 @@ class CreateElements {
             true
           );
           indexClass++;
+          this.heartIndex++;
         }
       }
     }
+    
 
     // title tracker will prevent the previously 
     // used movie title from being added
@@ -879,6 +900,8 @@ class CreateElements {
 
 
   createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
+    
+    // var heartIndex = 0;
     // SECTION: by genre
     if (!genreBool && typeof titleMovie == "string") {
       const img = document.createElement("img");
@@ -907,12 +930,14 @@ class CreateElements {
       iconSHeart.setAttribute("class", "fa-solid fa-heart");
       iconSHeart.setAttribute("id", `fa-sheart-${titleMovie}`);
       iconSHeart.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
+      iconSHeart.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeart = document.createElement("i");
 
       iconRHeart.setAttribute("class", "fa-regular fa-heart");
       iconRHeart.setAttribute("id", `fa-rheart-${titleMovie}`);
       iconRHeart.setAttribute("onclick", "CreateElements.heartClick(this)");
+      iconRHeart.setAttribute("classIndex", this.heartIndex);
 
       // const iconGoogleHeart = document.createElement("i");
 
@@ -970,12 +995,14 @@ class CreateElements {
       iconSHeartAPISection.setAttribute("class", "fa-solid fa-heart");
       iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie}`);
       iconSHeartAPISection.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
+      iconSHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeartAPISection = document.createElement("i");
 
       iconRHeartAPISection.setAttribute("class", "fa-regular fa-heart");
       iconRHeartAPISection.setAttribute("id", `fa-rheart-apisection-${titleMovie}`);
       iconRHeartAPISection.setAttribute("onclick", "CreateElements.heartClick(this)");
+      iconRHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
       // const iconGoogleHeart = document.createElement("i");
 
@@ -1008,6 +1035,10 @@ class CreateElements {
     // invoke function to check if thumbnails created as condition to change css display none
     // if not, display none parent container of title, button, title, thumbnail
     this.movieGenreCheck();
+
+    // increment class index for heart icon
+    // when function executes
+    // this.heartIndex++;
   }
 
   movieGenreCheck = () => {
@@ -1286,6 +1317,8 @@ class CreateElements {
     iconLogOut.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
     document.getElementById("account-icon").insertAdjacentElement("afterend", iconLogOut);
     let iconsLogOutDisplay = iconLogOut.width;
+
+   
   }
 
   navIconsDisplay = () => {
@@ -1322,8 +1355,9 @@ class CreateElements {
       // document.getElementById("logout-icon").style.display = "none";
   
     }  
-    
   }
+
+
   
   // iconFlash = setInterval(function () {
   //   try {

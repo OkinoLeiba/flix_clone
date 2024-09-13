@@ -365,12 +365,12 @@ button#banner-button-wl {
 }
 
 #vscroll-icons-container-left { 
-    left: 97%;
+    left: 0;
    
 }
     
 #vscroll-icons-container-right {
-    left: 0;
+    left: 99%;
 }
 
 .movie-genre,
@@ -574,7 +574,7 @@ i[class="fa-solid fa-heart"] {
 
 /* used in combination with relative size units in media and other element */
 
-/* Extra small devices (phones, 600px and down) */
+/* extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     h1#left-banner-title {
         font-size: 2rem;
@@ -588,7 +588,7 @@ i[class="fa-solid fa-heart"] {
     }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
+/* small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     #title_button-container {
         padding: 16px 0 16px 8px;
@@ -610,7 +610,7 @@ i[class="fa-solid fa-heart"] {
         
 }
 
-/* Medium devices (landscape tablets, 768px and up) */
+/* medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .hscroll-wrapper,
     .hscroll-apisection-wrapper {
@@ -618,7 +618,7 @@ i[class="fa-solid fa-heart"] {
     }
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
+/* large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     #banner-text-description {
         max-width: 50%;

@@ -1,7 +1,10 @@
+import HTMLDATAREQUEST  from "./request.js";
 /* 
     Created on : June 24, 2024, 3:21:44 PM
     Author     : Okino Kamali Leiba
 */
+
+
 
 // delete and move to separate file later 23/04/2024
 const tmdbKey = "03ee6394a8103fd6e7633be9f543707c";
@@ -46,8 +49,11 @@ const movieRequestData = {
   movieRequestGenre: `https://api.themoviedb.org/3/genre/movie/list?api_key=${tmdbKey}&language=en-US`,
 };
 
+
 class CreateElements {
   constructor() {
+    this.requestFunc = new HTMLDATAREQUEST();
+
     this.movieResponseFetchData = {
       movieRequestUpcoming: Object(),
       movieRequestNowPlaying: Object(),
@@ -57,6 +63,7 @@ class CreateElements {
       movieRequestTrendingDay: Object(),
       movieRequestGenre: Object(),
     };
+
     this.posterURL = "https://image.tmdb.org/t/p";
     this.movieTitles = new Set();
     this.movieImage = new Set();
@@ -76,6 +83,7 @@ class CreateElements {
   }
 
   // static heartIndex = 0
+
   
 
   // get and set css element property gridrepeat
@@ -127,27 +135,31 @@ class CreateElements {
   }
 
   static scrollLeft = (getThis) => {
-    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length-1];
+    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
+    var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
+    var scrollWidth = document.getElementById(wrapperID).clientWidth;
     
     var scrollID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
 
       const scrollButtonLeft = document.getElementById(getThis.attributes.id.value);
       const hscrollContainer = document.getElementById(scrollID);
       scrollButtonLeft.addEventListener("click", () => {
-      hscrollContainer.scrollLeft -= 20;
+      hscrollContainer.scrollLeft -= scrollWidth;
       })
 
   }
 
   static scrollRight = (getThis) => {
-    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length-1];
+    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
+    var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
+    var scrollWidth = document.getElementById(wrapperID).clientWidth;
     
     var scrollID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
 
       const scrollButtonRight = document.getElementById(getThis.attributes.id.value);
       const hscrollContainer = document.getElementById(scrollID);
       scrollButtonRight.addEventListener("click", () => {
-      hscrollContainer.scrollLeft += 20;
+      hscrollContainer.scrollLeft += scrollWidth;
     })
 
   }
@@ -204,25 +216,28 @@ class CreateElements {
     })
   }
 
+ 
 
-
+  // simple version of code to begin api request 
   async requestMovieData() {
     const movieResponseData = new Object();
     for (var request in movieData) {
-      var clientRequest = await new httpClientRequest();
+     
+      var clientRequest = await new this.requestFunc.httpClientRequest()
+      // var clientRequest = await new httpClientSimpleRequest();
       clientRequest.get(movieRequestData[request], function (response) {
         movieResponseData[request] = response;
       });
     }
   }
 
-  // driver code to begin api request
+  // driver code to begin api request main version
   async requestMovieFetchData() {
     // default number of pages and number of execution
-    // var total_pages = 2;
+    var total_pages = 2;
     var requestArray = [];
     for (var requestFetch in movieRequestData) {
-      // var clientRequest = new httpClientRequestFetch();
+      // var clientRequest = new this.requestFunc.httpClientRequestFetch();
 
       var URL = movieRequestData[requestFetch];
       if (
@@ -230,15 +245,16 @@ class CreateElements {
         requestFetch !== "movieRequestGenre"
       ) {
         // option to control number of requests
-        // for (var page = 1; page < total_pages; page++) {
-          var requestData = await this.httpClientRequestFetch2(URL);
+        for (var page = 1; page < total_pages; page++) {
+          var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
+          // var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
           // Object.assign(this.movieResponseFetchData[requestFetch], requestData);
           requestArray.push(requestData);
           this.movieResponseFetchData[requestFetch] = requestArray;
           // total_pages = requestData.total_pages
-        // }
+        }
       } else {
-        var requestData = await this.httpClientRequestFetch2(URL);
+        var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
         // define properties with Object performant?
         // Object.defineProperties(this.movieResponseFetchData, requestFetch, { requestData })
 
@@ -349,29 +365,54 @@ class CreateElements {
   // based on movieRequestData object key
   // single responsibility 
   createTitleImageStruct = (requestKey) => {
-     var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length;
+
+    if (requestKey != "movieRequestTrendingDay") {
+      var pageTitleLen = this.movieResponseFetchData[requestKey].length;
 
       for (var pageTitle = 0; pageTitle < pageTitleLen; pageTitle++) {
 
-      var arrayTitleLen = this.movieResponseFetchData.movieRequestPopular[pageTitle]["results"].length;
+        var arrayTitleLen = this.movieResponseFetchData[requestKey][pageTitle]["results"].length;
 
-      for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
-        this.movieTitles.add(
-          this.movieResponseFetchData[requestKey][pageTitle]["results"][
-            titleIndex
-          ].title
-        );
-        this.movieGenreIds.push(
-          this.movieResponseFetchData[requestKey][pageTitle]["results"][
-            titleIndex
-          ].genre_ids
-        );
-        this.movieImage.add(
-          this.movieResponseFetchData[requestKey][pageTitle]["results"][
-            titleIndex
-          ].poster_path
-        );
+        for (var titleIndex = 0; titleIndex < arrayTitleLen; titleIndex++) {
+          this.movieTitles.add(
+            this.movieResponseFetchData[requestKey][pageTitle]["results"][
+              titleIndex
+            ].title
+          );
+          this.movieGenreIds.push(
+            this.movieResponseFetchData[requestKey][pageTitle]["results"][
+              titleIndex
+            ].genre_ids
+          );
+          this.movieImage.add(
+            this.movieResponseFetchData[requestKey][pageTitle]["results"][
+              titleIndex
+            ].poster_path
+          );
+        }
       }
+    }
+    else {
+      var pageTitleLen = this.movieResponseFetchData[requestKey]["results"].length;
+
+      for (var pageIndex = 0; pageIndex < pageTitleLen; pageIndex++) {
+          this.movieTitles.add(
+            this.movieResponseFetchData[requestKey]["results"][
+              pageIndex
+            ].title
+          );
+          this.movieGenreIds.push(
+            this.movieResponseFetchData[requestKey]["results"][
+              pageIndex
+            ].genre_ids
+          );
+          this.movieImage.add(
+            this.movieResponseFetchData[requestKey]["results"][
+              pageIndex
+            ].poster_path
+          );
+      }
+
     }
   }
 
@@ -447,6 +488,9 @@ class CreateElements {
       document.getElementById("vscroll-icons-container-right").appendChild(vscroll_sections_icons);
       }
     
+    // var x = new CreateElements();
+    // x.scrollSectionLeft("vscroll-icons-container-left")
+    // x.scrollSectionRight("vscroll-icons-container-right")
 
     // SECTION: by genre
     var movieGenreArray =
@@ -670,16 +714,15 @@ class CreateElements {
   // }));
 
 
-  createMovieTitle(genre_id, genreBool, genre_name) {
-    // TODO: review and maybe incorporate
-    this.createTitleImageStruct("movieRequestPopular");
-
-    
+  createMovieTitle(genre_id_key, genreBool, genre_name) {
+   
     
     // SECTION: by genre
     if (!genreBool) {
-      var movieTitleLen =
-        this.movieResponseFetchData.movieRequestPopular.length;
+       // TODO: review and maybe incorporate
+      for (let requestKey in this.movieResponseFetchData) {
+      this.createTitleImageStruct(requestKey);
+      }
       // create data structure to hold title and genre_ids
       // solution to empty elements after hscroll-wrapper creation
       // by avoiding recursively calling function and creating elements
@@ -717,16 +760,16 @@ class CreateElements {
         genreIndexArray < this.movieGenreIds.length ;
         genreIndexArray++
       ) {
-        // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id));
+        // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id_key));
 
         if (
-          this.movieGenreIds[genreIndexArray].includes(genre_id)
+          this.movieGenreIds[genreIndexArray].includes(genre_id_key)
         ) {
           if (
             !this.titleTracker.includes([...this.movieTitles][genreIndexArray] &&
               typeof [...this.movieTitles][genreIndexArray] == "string"
             )) {
-            // console.log(Object.values(movieTitles[i])[2].includes(genre_id), movieTitles[i].title, movieTitles[i].poster_path )
+            // console.log(Object.values(movieTitles[i])[2].includes(genre_id_key), movieTitles[i].title, movieTitles[i].poster_path )
 
             const hscroll_wrapper = document.createElement("div");
             hscroll_wrapper.setAttribute("id", `hscroll-wrapper-${genre_name}`);
@@ -778,6 +821,9 @@ class CreateElements {
       }
     }
 
+    // reinitialize and empty object
+    this.movieTitles = new Set();
+    this.movieImage = new Set();
     
 
     // SECTION: by api elements (upcoming, now playing, trending, etc.)
@@ -785,92 +831,96 @@ class CreateElements {
     // and function call
 
     if (genreBool == true) {
-      var key = genre_id;
+      var key = genre_id_key;
       if (key !== "movieRequestGenre") {
-        var movieTitleAPISectionLen =
-          this.movieResponseFetchData[key].length - 1;
+        this.createTitleImageStruct(key);
+        // var movieTitleAPISectionLen =
+        //   this.movieResponseFetchData[key].length - 1;
 
-        for (
-          var pageTitle = 0;
-          pageTitle < movieTitleAPISectionLen;
-          pageTitle++
-        ) {
-          for (
-            var titleIndexObject = 0;
-            titleIndexObject < movieTitleAPISectionLen;
-            titleIndexObject++
-          ) {
-            this.movieTitlesAPISection.add(
-              this.movieResponseFetchData[key][pageTitle]["results"][
-                titleIndexObject
-              ].title
-            );
-             this.movieImageAPISection.add(
-              this.movieResponseFetchData[key][pageTitle]["results"][
-                titleIndexObject
-            ].poster_path
-        );
-            // console.log(
-            //   this.movieResponseFetchData[key][pageTitle]["results"][
-            //     titleIndexObject
-            //   ].title
-            // );
-          }
-        }
+        // for (
+        //   var pageTitle = 0;
+        //   pageTitle < movieTitleAPISectionLen;
+        //   pageTitle++
+        // ) {
+        //   for (
+        //     var titleIndexObject = 0;
+        //     titleIndexObject < movieTitleAPISectionLen;
+        //     titleIndexObject++
+        //   ) {
+        //     this.movieTitlesAPISection.add(
+        //       this.movieResponseFetchData[key][pageTitle]["results"][
+        //         titleIndexObject
+        //       ].title
+        //     );
+        //      this.movieImageAPISection.add(
+        //       this.movieResponseFetchData[key][pageTitle]["results"][
+        //         titleIndexObject
+        //     ].poster_path
+        // );
+        //     // console.log(
+        //     //   this.movieResponseFetchData[key][pageTitle]["results"][
+        //     //     titleIndexObject
+        //     //   ].title
+        //     // );
+        //   }
+        // }
         // console.log(
         //   this.movieTitlesAPISection,
         //   this.movieTitlesAPISection.size,
         //   this.movieTitlesAPISection[0]
         // );
+        
+          // used to as reference and to identify element of class hscroll-wrapper 
+          // and target & append title and image elements by offset
+          // order of elements in data structure and order of operation critical
+           
+          var indexClass = 0;
+          for (
+            var titleIndexArray = 0;
+            titleIndexArray < this.movieTitles.size;
+            titleIndexArray++
+          ) {
+            if (typeof [...this.movieTitles][titleIndexArray] == "string") {
+            const hscroll_apisection_wrapper = document.createElement("div");
+            hscroll_apisection_wrapper.setAttribute(
+              "id",
+              `hscroll-apisection-wrapper-${genre_name}`
+            );
+            hscroll_apisection_wrapper.setAttribute(
+              "class",
+              "hscroll-apisection-wrapper"
+            );
+            hscroll_apisection_wrapper.setAttribute("classIndex", this.heartIndex);
 
-        // used to as reference and to identify element of class hscroll-wrapper 
-        // and target & append title and image elements by offset
-        // order of elements in data structure and order of operation critical
-        var indexClass = 0;
-        for (
-          var titleIndexArray = 0;
-          titleIndexArray < this.movieTitlesAPISection.size;
-          titleIndexArray++
-        ) {
-          const hscroll_apisection_wrapper = document.createElement("div");
-          hscroll_apisection_wrapper.setAttribute(
-            "id",
-            "hscroll-apisection-wrapper"
-          );
-          hscroll_apisection_wrapper.setAttribute(
-            "class",
-            "hscroll-apisection-wrapper"
-          );
-          hscroll_apisection_wrapper.setAttribute("classIndex", this.heartIndex);
 
+            const title_apisection = document.createElement("p");
 
-          const title_apisection = document.createElement("p");
+            title_apisection.setAttribute("color", "white");
+            title_apisection.setAttribute("font-size", "16");
+            title_apisection.setAttribute("id", `movie-title-${genre_name}`);
+            title_apisection.setAttribute("class", "movie-title");
+            title_apisection.innerText =
+              [...this.movieTitles][titleIndexArray];
 
-          title_apisection.setAttribute("color", "white");
-          title_apisection.setAttribute("font-size", "16");
-          title_apisection.setAttribute("id", `movie-title-${genre_name}`);
-          title_apisection.setAttribute("class", "movie-title");
-          title_apisection.innerText =
-            [...this.movieTitlesAPISection][titleIndexArray];
-
-          document
-            .getElementById(
-              `movie-title-thumbnail-hscroll-apisection-container-${genre_name}`
-            )
-            .appendChild(hscroll_apisection_wrapper);
-          document
-            .getElementsByClassName("hscroll-apisection-wrapper")
+            document
+              .getElementById(
+                `movie-title-thumbnail-hscroll-apisection-container-${genre_name}`
+              )
+              .appendChild(hscroll_apisection_wrapper);
+            document
+              .getElementsByClassName("hscroll-apisection-wrapper")
             [indexClass].appendChild(title_apisection);
           
-          // third stage in function chain: create section, movie title, and image; api division
-          this.createMovieThumbnails(
-            [...this.movieImageAPISection][titleIndexArray],
-            [...this.movieTitlesAPISection][titleIndexArray],
-            indexClass,
-            true
-          );
-          indexClass++;
-          this.heartIndex++;
+            // third stage in function chain: create section, movie title, and image; api division
+            this.createMovieThumbnails(
+              [...this.movieImage][titleIndexArray],
+              [...this.movieTitles][titleIndexArray],
+              indexClass,
+              true
+            );
+            indexClass++;
+            this.heartIndex++;
+          }
         }
       }
     }
@@ -886,13 +936,13 @@ class CreateElements {
     // as determined by the length we assume a corresponding title to genre ids and
     // the data structure is complete based on our expectations
     if (titleIndexArray == this.movieTitles.size) {
-      if (this.movieTitles.size == this.movieGenreIds.length) {
+      if (this.movieTitles.size == this.movieImage.size) {
         console.log(
-          `Movie title has an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\nMovie Genre Ids: ${this.movieGenreIds.size}`
+          `Movie title has an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\nMovie Genre Ids: ${this.movieImage.size}`
         );
       } else {
         console.error(
-          `Movie title does not have an associated genre_ids object value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\n Movie Genre Ids: ${this.movieGenreIds.length}`
+          `Movie title does not have an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\n Movie Genre Ids: ${this.movieImage.size}`
         );
       }
     }
@@ -928,14 +978,14 @@ class CreateElements {
       const iconSHeart = document.createElement("i");
 
       iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      iconSHeart.setAttribute("id", `fa-sheart-${titleMovie}`);
+      iconSHeart.setAttribute("id", `fa-sheart-${titleMovie.toLowerCase().replace(" ", "")}`);
       iconSHeart.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
       iconSHeart.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeart = document.createElement("i");
 
       iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      iconRHeart.setAttribute("id", `fa-rheart-${titleMovie}`);
+      iconRHeart.setAttribute("id", `fa-rheart-${titleMovie.toLowerCase().replace(" ", "")}`);
       iconRHeart.setAttribute("onclick", "CreateElements.heartClick(this)");
       iconRHeart.setAttribute("classIndex", this.heartIndex);
 
@@ -976,7 +1026,7 @@ class CreateElements {
 
       // TODO: check and confirm attributes
       imgAPISection.setAttribute("class", "movie-thumbnail");
-      imgAPISection.setAttribute("id", "movie-thumbnail");
+      imgAPISection.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}`);
       imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
       imgAPISection.setAttribute("width", "auto");
       imgAPISection.setAttribute("height", "auto");
@@ -993,14 +1043,14 @@ class CreateElements {
       const iconSHeartAPISection = document.createElement("i");
 
       iconSHeartAPISection.setAttribute("class", "fa-solid fa-heart");
-      iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie}`);
+      iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie.toLowerCase().replace(" ", "")}`);
       iconSHeartAPISection.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
       iconSHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeartAPISection = document.createElement("i");
 
       iconRHeartAPISection.setAttribute("class", "fa-regular fa-heart");
-      iconRHeartAPISection.setAttribute("id", `fa-rheart-apisection-${titleMovie}`);
+      iconRHeartAPISection.setAttribute("id", `fa-rheart-apisection-${titleMovie.toLowerCase().replace(" ", "")}`);
       iconRHeartAPISection.setAttribute("onclick", "CreateElements.heartClick(this)");
       iconRHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
@@ -1025,7 +1075,7 @@ class CreateElements {
 
       //eventHandler for mouseover event change style of css element
       // document
-      //   .getElementById("hscroll-apisection-wrapper")
+      //   .getElementById(`hscroll-apisection-wrapper-${genre_name}`)
       //   .addEventListener(
       //     "mouseover",
       //     (event) => (event.target.style.display = "flex")
@@ -1057,115 +1107,12 @@ class CreateElements {
     }
   }
 
-  // multiple options to make client request are for learning and growth purposes
-  httpClientRequest(hURL) {
-    this.get = function (hURL, hCallBack) {
-      // hURL = 'https://api.themoviedb.org/3/movie/upcoming?api_key=03ee6394a8103fd6e7633be9f543707c&language=en-US&page=1';
-      var XMLHttpRequest = require("xhr2");
-      var xmlHttpRequest = new XMLHttpRequest();
-
-      xmlHttpRequest.onreadystatechange = function () {
-        if ((xmlHttpRequest.readyState = 4 && xmlHttpRequest.status == 200)) {
-          hCallBack(xmlHttpRequest.responseText);
-        } else {
-          xmlHttpRequest.readyState = 1;
-        }
-      };
-
-      xmlHttpRequest.withCredentials = false;
-      xmlHttpRequest.timeout = 2000;
-
-      xmlHttpRequest.open("GET", hURL, true);
-      // xmlHttpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xmlHttpRequest.setRequestHeader("Authorization", "Basic " + tmdbReadKey);
-      xmlHttpRequest.setRequestHeader("api-key", tmdbKey);
-      // xmlHttpRequest.setRequestHeader('Content-length', this.formData.length);
-      // xmlHttpRequest.setRequestHeader('Connection', 'close');
-
-      xmlHttpRequest.send(null);
-      // review this...
-      // xmlHttpRequest.ontimeout = () => {for(var i = 0; i <= 3; i++) {this.httpClientRequest;}}
-      return xmlHttpRequest.responseText;
-    };
-  }
-
-  // this.movieResponseFetchData = new Object;
-
-  httpClientRequestFetch(hURL) {
-    // const dataTransfer = new DataTransfer();
-
-    // const jsonData = new Object();
-    const options = {
-      method: "Get",
-      header: {
-        accept: "application/json",
-        Authorization: "Basic " + tmdbReadKey,
-        keepalive: "timeout=5, max=1000",
-      },
-    };
-
-    // var request = fetch(hURL);
-    // var data = await request.json();
-    // dt = dataTransfer.setData(data=data);
-    // jsonData.data = data;
-    // this.movieData = jsonData;
-    // setData(data);
-    // return data;
-
-    // fetch(hURL).then(function(response) {
-    //     return response.json();
-    //   }).then(function(data) {
-    //     console.log(data);
-    //   })
-
-    fetch(hURL)
-      .then(async (request) => await request.json())
-      .then(async (json) => await json)
-      .then((data) => this.setData(data))
-      .catch((error) => console.error(error))
-      .finally(() => console.log("Success", data));
-
-    // fetch(hURL)
-    //     .then(async request => await request.json()).then(async json => await this.setData(json))
-    //     .catch(error => console.error(error))
-    //     .finally(() => {
-    //         console.log('Success!', data);
-    //         // data = null;
-    //     });
-  }
-  
-  // primary option to make client request
-  // because of simplicity 
-  async httpClientRequestFetch2(hURL, data = {}) {
-    const response = await fetch(hURL, {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      // body: JSON.stringify(data), // body data type must match "Content-Type" header
-    });
-
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
-
-  
-
   // perform type checks
   assertType(value, type, paramName) {
     if (typeof value !== type) {
       throw new TypeError(`${paramName} should be of type ${type}`);
     }
   }
-
-  
-  
-  
 
   createMenu = () => {  
     // console.log(window.innerWidth);
@@ -1389,7 +1336,7 @@ class CreateElements {
   
 } // end of class
 
-_ = (function () {
+(function () {
   var createElements = new CreateElements();
   createElements.createBanner();
   // createElements.movieGenreCheck();
@@ -1403,7 +1350,9 @@ _ = (function () {
 // keep for learning and growth purposes
 // may revisit code in future
 var createElements = new CreateElements();
+
 // document.body.onload = createElements.createMenu;
+
 // window.addEventListener("load", () => createElements.createMenu(), false);
 window.addEventListener("resize", createElements.displayMenu, false);
 window.addEventListener("resize", createElements.navIconsDisplay, false);
@@ -1435,3 +1384,7 @@ setInterval(function () {
   }
   console.log("interval")
   }, 1000)
+
+// provide global scope of class
+// solve reference error for onclick evern
+window.CreateElements = CreateElements;

@@ -1,9 +1,18 @@
-import HTMLDATAREQUEST  from "./request.js";
+
+/**
+ * @name CreateElements
+ * @description Function creates banner, and movie title and img
+ * @author Okino Kamali Leiba
+ * @class
+ * @returns {void} 
+ */
+
 /* 
     Created on : June 24, 2024, 3:21:44 PM
     Author     : Okino Kamali Leiba
 */
-
+import HTMLDATAREQUEST from "./request.js";
+import MenuManagment from "./menu.js";
 
 
 // delete and move to separate file later 23/04/2024
@@ -53,6 +62,7 @@ const movieRequestData = {
 class CreateElements {
   constructor() {
     this.requestFunc = new HTMLDATAREQUEST();
+    this.menuFunc = new MenuManagment();
 
     this.movieResponseFetchData = {
       movieRequestUpcoming: Object(),
@@ -345,7 +355,7 @@ class CreateElements {
 
     // create menu for nav if conditions are met
     // TODO: move to different function or execute on load driver function
-    this.displayMenu();
+    this.menuFunc.displayMenu();
 
     // create icon account, logout, login, and etc. in navbar
     this.navIcons();
@@ -586,7 +596,7 @@ class CreateElements {
 
       document.getElementsByClassName("button-chevron-right")[genreIndex].appendChild(iconRightChevron);
 
-      // second stage in function chain: create section, movie title, and image; genre division
+      // second stage in function chain: create section, movie title, and image; genre div
       this.createMovieTitle(movieGenreArray[index]["id"], false, movieGenreName);
 
       movieGenreArray.splice(index, 1);
@@ -689,7 +699,7 @@ class CreateElements {
         
         genreIndex++;
         
-        // second stage in function chain: create section, movie title, and image; api division
+        // second stage in function chain: create section, movie title, and image; api div
         this.createMovieTitle(key, true, movieLocalTitle);
       }
      
@@ -700,7 +710,9 @@ class CreateElements {
     this.gridRepeat();
   }
 
-
+  // different approach using Object to manage the data
+  // from https request 
+  
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
 
   //     const genre = document.createElement('h1');
@@ -807,7 +819,7 @@ class CreateElements {
             // Aug 18, 2024: cause was other element movie title content in parent container 
             // overflowing causing recalculation of parent container sizing 
 
-            // third stage in function chain: create section, movie title, and image; genre division
+            // third stage in function chain: create section, movie title, and image; genre div
             this.createMovieThumbnails(
               [...this.movieImage][genreIndexArray],
               [...this.movieTitles][genreIndexArray],
@@ -911,7 +923,7 @@ class CreateElements {
               .getElementsByClassName("hscroll-apisection-wrapper")
             [indexClass].appendChild(title_apisection);
           
-            // third stage in function chain: create section, movie title, and image; api division
+            // third stage in function chain: create section, movie title, and image; api div
             this.createMovieThumbnails(
               [...this.movieImage][titleIndexArray],
               [...this.movieTitles][titleIndexArray],
@@ -932,17 +944,17 @@ class CreateElements {
     // and rendered as an HTML element
     // this.titleTracker.push([...this.movieTitles][titleIndex]);
 
-    // an assumption is made about the data structure of by the movieTitle and movieGenreIds
-    // as determined by the length we assume a corresponding title to genre ids and
-    // the data structure is complete based on our expectations
+    // an assumption is made about the data structure of the movieTitles and movieImage
+    // as determined by the length or size we assume a corresponding title to image
+    // the data structure is complete based on our expectations if length or size match 
     if (titleIndexArray == this.movieTitles.size) {
       if (this.movieTitles.size == this.movieImage.size) {
         console.log(
-          `Movie title has an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\nMovie Genre Ids: ${this.movieImage.size}`
+          `Movie title has an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\nMovie Image: ${this.movieImage.size}`
         );
       } else {
         console.error(
-          `Movie title does not have an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\n Movie Genre Ids: ${this.movieImage.size}`
+          `Movie title does not have an associated movie image object size value, the data structure is complete.\nMovie Titles: ${this.movieTitles.size}\n Movie Image: ${this.movieImage.size}`
         );
       }
     }
@@ -1003,6 +1015,9 @@ class CreateElements {
       document
         .getElementsByClassName("hscroll-wrapper")
         [classIndex].appendChild(iconRHeart);
+
+      // different approach to onHover event
+      // display heart in image thumbnail
 
       // document
       //   .getElementsByClassName("hscroll-wrapper")
@@ -1067,7 +1082,10 @@ class CreateElements {
 
       document
         .getElementsByClassName("hscroll-apisection-wrapper")
-        [classIndex].appendChild(iconRHeartAPISection);
+      [classIndex].appendChild(iconRHeartAPISection);
+      
+      // different approach to onHover event
+      // display heart in image thumbnail
 
       // document
       //   .getElementsByClassName("hscroll-apisection-wrapper")
@@ -1082,7 +1100,8 @@ class CreateElements {
       //   );
     }
 
-    // invoke function to check if thumbnails created as condition to change css display none
+    // invoke function to check if thumbnails created 
+    // also used as condition to change css display to none
     // if not, display none parent container of title, button, title, thumbnail
     this.movieGenreCheck();
 
@@ -1114,140 +1133,7 @@ class CreateElements {
     }
   }
 
-  createMenu = () => {  
-    // console.log(window.innerWidth);
-    const menuCreate = document.createElement("menu");
-
-    menuCreate.setAttribute("id", "nav-menu");
-
-    document.getElementById("top-nav-btn-container").before(menuCreate);
-    
-    menuCreate.appendChild(document.getElementById("top-nav-btn-container"));
-
-
-    const menuButton = document.createElement("button");
-
-    menuButton.setAttribute("id", "menu-dropbtn");
-
-    menuButton.innerText = "menu";
-
-    document.getElementById("nav-menu").insertAdjacentElement("afterbegin", menuButton);
-    
-  }
-
-  displayMenu = () => {
-
-    const menuRemove = document.getElementById("nav-menu");
-
-    const menuButtonRemove = document.getElementById("menu-dropbtn");
-
-    const navContainerAppend = document.querySelector("#top-nav-btn-container");
-
-    // const navContainerElement = document.querySelector("#top-nav-btn-container");
-
-
-    if (window.innerWidth < 768 && menuRemove == null) {
-
-      this.createMenu();
-
-      navContainerAppend.style.flexDirection = "column";
-      navContainerAppend.style.display = "none";
-
-      document.getElementById("nav-menu").addEventListener("mouseover", () => this.menuHover().menuHoverShow(), false);
-      document.getElementById("nav-menu").addEventListener("mouseout", () => this.menuHover().menuHoverHide(), false);
-
-
-      
-      // document.getElementById("nav-menu").style.display = "flex";
-
-      // document.getElementById("menu-dropbtn").style.display = "flex";
-
-      // document.getElementById("top-nav-btn-container").style.display = "none";
-      
-    }
-    else if (window.innerWidth > 768 && menuRemove != null) {
-
-      
-      // var appendContainer = menuRemove.remove(navContainerAppend);
-
-      document.getElementById("nav-menu").removeEventListener("mouseover", () => this.menuHover().menuHoverShow, false);
-      document.getElementById("nav-menu").removeEventListener("mouseout",  () => this.menuHover().menuHoverHide, false);
-
-      menuRemove.remove();
-      menuButtonRemove.remove();
-
-      document.getElementById("top-nav-icon-link-logo").after(navContainerAppend);
   
-
-      navContainerAppend.style.flexDirection = "row";
-      navContainerAppend.style.display = "flex";
-
-
-      // document.getElementById("nav-menu").style.display = "none";
-
-      // document.getElementById("menu-dropbtn").style.display = "none";
-
-      // document.getElementById("top-nav-btn-container").style.display = "flex";
-
-      // const menu = document.getElementById("nav-menu");
-
-      // const menuButton = document.getElementById("menu-dropbtn")
-
-      // menu.remove();
-
-      // menuButton.remove();
-
-      // const top_nav_container = document.createElement("div");
-
-      // top_nav_container.setAttribute(id, "top-nav-btn-container");
-
-      // document.getElementById("top-nav-icon-link-logo").after(top_nav_container);
-
-      // var menuItems = ["Movie", "Series", "EyeBleeding-Binge-Watchable"];
-
-      // for (item in menuItems) {
-      //   const link = document.createElement("a");
-
-        
-      //   // link.setAttribute(class, "");
-      //   link.setAttribute(id, "top-nav-"+`${item}`+"-btn");
-      //   link.setAttribute(title, `${item}`);
-      //   link.setAttribute(role, "button");
-      //   link.setAttribute(href, "");
-      //   link.setAttribute(hreflang, "en");
-      //   link.setAttribute(target, "_self");
-      //   link.setAttribute(referrerpolicy, "");
-
-      //   document.getElementById("top-nav-btn-container").appendChild(link);
-
-      //   document.getElementById("top-nav-" + `${item}` + "-btn").insertAdjacentElement('beforebegin', `${item}`);
-
-      // }
-          
-
-    }
-
-  }
-
-   
-
-  menuHover = () => {
-
-    const menuHoverShow = () => {
-      // triggered by eventlistener mouseover dropdown of menu items
-      document.querySelector("#top-nav-btn-container").style.display = "flex";
-      document.querySelector("#nav-menu").style.top = "2.15rem";
-    
-    }
-
-    const menuHoverHide = () => {
-      // triggered by eventlistener mouseout 
-      document.querySelector("#top-nav-btn-container").style.display = "none";
-      document.querySelector("#nav-menu").style.top = "0";
-    
-    }
-    return { menuHoverShow, menuHoverHide };
-  }
 
 
   navIcons = () => {
@@ -1354,7 +1240,7 @@ var createElements = new CreateElements();
 // document.body.onload = createElements.createMenu;
 
 // window.addEventListener("load", () => createElements.createMenu(), false);
-window.addEventListener("resize", createElements.displayMenu, false);
+window.addEventListener("resize", createElements.menuFunc.displayMenu, false);
 window.addEventListener("resize", createElements.navIconsDisplay, false);
 // const event = new Event("resize");
 
@@ -1386,5 +1272,5 @@ setInterval(function () {
   }, 1000)
 
 // provide global scope of class
-// solve reference error for onclick evern
+// solve reference error for onclick event
 window.CreateElements = CreateElements;

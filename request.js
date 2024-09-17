@@ -1,6 +1,13 @@
+/**
+ * @name HTMLDATAREQUEST
+ * @description Class container function and data to make request for URL data from remote source
+ * @author Okino Kamali Leiba
+ * @class
+ * @returns {object} 
+ */
+
 /* 
     Created on : June 24, 2024, 3:21:44 PM
-    
     Author     : Okino Kamali Leiba
 */
   

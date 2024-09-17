@@ -1,6 +1,6 @@
 /**
  * @name CreateHeadTag
- * @description Function creates a the head tag and content
+ * @description Function creates the head tag and content
  * @author Okino Kamali Leiba
  * @function
  * @returns {void} 

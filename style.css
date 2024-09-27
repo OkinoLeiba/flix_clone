@@ -542,7 +542,7 @@ i[class="fa-regular fa-heart"]  {
       position: relative;
       z-index: 1;
       opacity: 0;
-      top: 60px;
+      top: 65px;
       right: 45%;
       transform: scale(1.5);
       display: block;
@@ -553,7 +553,7 @@ i[class="fa-regular fa-heart"]  {
 i[class="fa-solid fa-heart"] {
       position: relative;
       z-index: 1;
-      top: 60px;
+      top: 65px;
       right: 45%;
       transform: scale(1.5);
       display: none;

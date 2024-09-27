@@ -13,6 +13,8 @@
 */
 import HTMLDATAREQUEST from "./request.js";
 import MenuManagment from "./menu.js";
+import NavIcon from './navicon.js';
+
 
 
 // delete and move to separate file later 23/04/2024
@@ -20,6 +22,7 @@ const tmdbKey = "03ee6394a8103fd6e7633be9f543707c";
 const tmdbReadKey =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2MzNiZTlmNTQzNzA3YyIsInN1YiI6IjY2MjgwMDc1YWY5NTkwMDE3ZDZiZWRjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIYayf0-HeagHQf_VluyUhJQOm9CA7Zo_T5lOy0uJHQ";
 
+// option to pass url based on condition
 const movieData = {
   movieUpcoming:
     Object.name === "httpClientRequestFetch"
@@ -61,8 +64,10 @@ const movieRequestData = {
 
 class CreateElements {
   constructor() {
-    this.requestFunc = new HTMLDATAREQUEST();
-    this.menuFunc = new MenuManagment();
+    this.requestClass = new HTMLDATAREQUEST();
+    this.menuClass = new MenuManagment();
+    this.navIconClass = new NavIcon();
+    
 
     this.movieResponseFetchData = {
       movieRequestUpcoming: Object(),
@@ -139,92 +144,7 @@ class CreateElements {
     new Comment(document.getElementById('left-banner-title'))
   }
 
-  // may not be needed
-  setData(dt) {
-    this.data = dt;
-  }
-
-  static scrollLeft = (getThis) => {
-    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
-    var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
-    var scrollWidth = document.getElementById(wrapperID).clientWidth;
-    
-    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
-
-      const scrollButtonLeft = document.getElementById(getThis.attributes.id.value);
-      const hscrollContainer = document.getElementById(scrollID);
-      scrollButtonLeft.addEventListener("click", () => {
-      hscrollContainer.scrollLeft -= scrollWidth;
-      })
-
-  }
-
-  static scrollRight = (getThis) => {
-    var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
-    var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
-    var scrollWidth = document.getElementById(wrapperID).clientWidth;
-    
-    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
-
-      const scrollButtonRight = document.getElementById(getThis.attributes.id.value);
-      const hscrollContainer = document.getElementById(scrollID);
-      scrollButtonRight.addEventListener("click", () => {
-      hscrollContainer.scrollLeft += scrollWidth;
-    })
-
-  }
-
-  static heartClickSolid = (heartThis) => {
-    var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
-    const rheartID = document.getElementById(heartThis.id);
-    const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
-
-    // const sheartID = document.getElementById("fa-sheart");
-    const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
-
-    rheartID.addEventListener("click", (event) => {
-      // heartThis.parentElement.childNodes[2].style.display = "none";
-      rheartClass.style.display = "block";
-
-      // heartThis.parentElement.childNodes[3].style.display = "block";
-      sheartClass.style.display = "none";
-    })
-  }
-
-  static heartClick = (heartThis) => {
-      var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
-      const rheartID = document.getElementById(heartThis.id);
-      const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
-
-      // const sheartID = document.getElementById("fa-sheart");
-      const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
-
-      rheartID.addEventListener("click", (event) => {
-        // heartThis.parentElement.childNodes[3].style.display = "none";
-        rheartClass.style.display = "none";
-
-        // heartThis.parentElement.childNodes[2].style.display = "block";
-        sheartClass.style.display = "block";
-      })
-  }
-
-  static scrollSectionLeft = () => {
-    const scrollButton = document.getElementById("vscroll-icons-container-left");
-    const scrollSectionID = document.getElementById("vscroll-sections-container");
-
-    scrollButton.addEventListener("click", () => {
-      scrollSectionID.scrollLeft = scrollSectionID.scrollLeftMax;
-    })
-  }
-
-   static scrollSectionRight = () => {
-    const scrollButton = document.getElementById("vscroll-icons-container-right");
-    const scrollSectionID = document.getElementById("vscroll-sections-container");
-
-    scrollButton.addEventListener("click", () => {
-      scrollSectionID.scrollLeft = -scrollSectionID.scrollLeftMax;
-    })
-  }
+  
 
  
 
@@ -233,7 +153,7 @@ class CreateElements {
     const movieResponseData = new Object();
     for (var request in movieData) {
      
-      var clientRequest = await new this.requestFunc.httpClientRequest()
+      var clientRequest = await new this.requestClass.httpClientRequest()
       // var clientRequest = await new httpClientSimpleRequest();
       clientRequest.get(movieRequestData[request], function (response) {
         movieResponseData[request] = response;
@@ -247,7 +167,7 @@ class CreateElements {
     var total_pages = 2;
     var requestArray = [];
     for (var requestFetch in movieRequestData) {
-      // var clientRequest = new this.requestFunc.httpClientRequestFetch();
+      // var clientRequest = new this.requestClass.httpClientRequestFetch();
 
       var URL = movieRequestData[requestFetch];
       if (
@@ -256,15 +176,15 @@ class CreateElements {
       ) {
         // option to control number of requests
         for (var page = 1; page < total_pages; page++) {
-          var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
-          // var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
+          var requestData = await this.requestClass.httpClientSimpleRequest(URL);
+          // var requestData = await this.requestClass.httpClientSimpleRequest(URL);
           // Object.assign(this.movieResponseFetchData[requestFetch], requestData);
           requestArray.push(requestData);
           this.movieResponseFetchData[requestFetch] = requestArray;
           // total_pages = requestData.total_pages
         }
       } else {
-        var requestData = await this.requestFunc.httpClientSimpleRequest(URL);
+        var requestData = await this.requestClass.httpClientSimpleRequest(URL);
         // define properties with Object performant?
         // Object.defineProperties(this.movieResponseFetchData, requestFetch, { requestData })
 
@@ -317,7 +237,7 @@ class CreateElements {
 
     var bannerData = Object.entries(
       this.movieResponseFetchData.movieRequestTrendingDay.results
-    ).map((v) => v[1])[0];
+    ).map((v) => v[1])[1];
 
     var movieDate = new Date(bannerData["release_date" || "first_air_date"])
       .toDateString()
@@ -355,14 +275,14 @@ class CreateElements {
 
     // create menu for nav if conditions are met
     // TODO: move to different function or execute on load driver function
-    this.menuFunc.displayMenu();
+    this.menuClass.displayMenu();
 
     // create icon account, logout, login, and etc. in navbar
-    this.navIcons();
+    this.navIconClass.navIcons();
 
     // display account, logout, login, and etc. icon 
     // based on window innnerWidth condition
-    this.navIconsDisplay();
+    this.navIconClass.navIconsDisplay();
 
     // this.createTitleImageStruct();
     
@@ -457,7 +377,7 @@ class CreateElements {
       // icon to indicate and navigate to other section
       const vscroll_icons_container_left = document.createElement("button");
       vscroll_icons_container_left.setAttribute("id", "vscroll-icons-container-left");
-      vscroll_icons_container_left.setAttribute("onclick", "CreateElements.scrollSectionLeft()");
+      vscroll_icons_container_left.setAttribute("onclick", "UtilityHeartScroll.scrollSectionLeft()");
       document.getElementById("movie-title-thumbnail-vscroll-container").insertAdjacentElement("afterbegin", vscroll_icons_container_left);
 
       for(var i = 0; i< 3; i++) {
@@ -487,7 +407,7 @@ class CreateElements {
      // icon to indicate and navigate to other section
       const vscroll_icons_container_right = document.createElement("button");
       vscroll_icons_container_right.setAttribute("id", "vscroll-icons-container-right");
-      vscroll_icons_container_right.setAttribute("onclick", "CreateElements.scrollSectionRight()");
+      vscroll_icons_container_right.setAttribute("onclick", "UtilityHeartScroll.scrollSectionRight()");
       document.getElementById("movie-title-thumbnail-vscroll-container-apisection").insertAdjacentElement("afterbegin", vscroll_icons_container_right);
 
       for(var i = 0; i< 3; i++) {
@@ -561,7 +481,7 @@ class CreateElements {
       buttonChevronLeft.setAttribute("id", `button-chevron-left-${movieGenreName}`);
       buttonChevronLeft.setAttribute("class", "button-chevron-left");
       buttonChevronLeft.setAttribute("type", "button");
-      buttonChevronLeft.setAttribute("onclick", `CreateElements.scrollLeft(this)`);
+      buttonChevronLeft.setAttribute("onclick", `UtilityHeartScroll.scrollLeft(this)`);
       // buttonChevronLeft.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronLeft);
@@ -571,7 +491,7 @@ class CreateElements {
       buttonChevronRight.setAttribute("id", `button-chevron-right-${movieGenreName}`);
       buttonChevronRight.setAttribute("class", "button-chevron-right");
       buttonChevronRight.setAttribute("type", "button");
-      buttonChevronRight.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+      buttonChevronRight.setAttribute("onclick", `UtilityHeartScroll.scrollRight(this)`);
       // buttonChevronRight.setAttribute("hscrollIndex", genreIndex)
 
       document.getElementsByClassName("chevron-wrapper")[genreIndex].appendChild(buttonChevronRight);
@@ -661,7 +581,7 @@ class CreateElements {
         apiButtonChevronLeft.setAttribute("id", `button-chevron-apisection-left-${movieLocalTitle}`);
         apiButtonChevronLeft.setAttribute("class", "button-chevron-apisection-left");
         apiButtonChevronLeft.setAttribute("type", "button");
-        apiButtonChevronLeft.setAttribute("onclick", `CreateElements.scrollLeft(this)`);
+        apiButtonChevronLeft.setAttribute("onclick", `UtilityHeartScroll.scrollLeft(this)`);
         apiButtonChevronLeft.setAttribute("hscrollIndex", genreIndex)
 
 
@@ -673,7 +593,7 @@ class CreateElements {
         apiButtonChevronRight.setAttribute("id", `button-chevron-apisection-right-${movieLocalTitle}`);
         apiButtonChevronRight.setAttribute("class", "button-chevron-apisection-right");
         apiButtonChevronRight.setAttribute("type", "button");
-        apiButtonChevronRight.setAttribute("onclick", `CreateElements.scrollRight(this)`);
+        apiButtonChevronRight.setAttribute("onclick", `UtilityHeartScroll.scrollRight(this)`);
         apiButtonChevronRight.setAttribute("hscrollIndex", genreIndex)
 
         document.getElementsByClassName("chevron-apisection-wrapper")[genreIndex].appendChild(apiButtonChevronRight);
@@ -769,7 +689,8 @@ class CreateElements {
       var indexClass = 0;
       for (
         var genreIndexArray = 0;
-        genreIndexArray < this.movieGenreIds.length ;
+        genreIndexArray <=
+        this.movieGenreIds.length - 1;
         genreIndexArray++
       ) {
         // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id_key));
@@ -990,15 +911,15 @@ class CreateElements {
       const iconSHeart = document.createElement("i");
 
       iconSHeart.setAttribute("class", "fa-solid fa-heart");
-      iconSHeart.setAttribute("id", `fa-sheart-${titleMovie.toLowerCase().replace(" ", "")}`);
-      iconSHeart.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
+      iconSHeart.setAttribute("id", `fa-sheart-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
+      iconSHeart.setAttribute("onclick", "UtilityHeartScroll.heartClickSolid(this)");
       iconSHeart.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeart = document.createElement("i");
 
       iconRHeart.setAttribute("class", "fa-regular fa-heart");
-      iconRHeart.setAttribute("id", `fa-rheart-${titleMovie.toLowerCase().replace(" ", "")}`);
-      iconRHeart.setAttribute("onclick", "CreateElements.heartClick(this)");
+      iconRHeart.setAttribute("id", `fa-rheart-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
+      iconRHeart.setAttribute("onclick", "UtilityHeartScroll.heartClick(this)");
       iconRHeart.setAttribute("classIndex", this.heartIndex);
 
       // const iconGoogleHeart = document.createElement("i");
@@ -1041,7 +962,7 @@ class CreateElements {
 
       // TODO: check and confirm attributes
       imgAPISection.setAttribute("class", "movie-thumbnail");
-      imgAPISection.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}`);
+      imgAPISection.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
       imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
       imgAPISection.setAttribute("width", "auto");
       imgAPISection.setAttribute("height", "auto");
@@ -1058,15 +979,15 @@ class CreateElements {
       const iconSHeartAPISection = document.createElement("i");
 
       iconSHeartAPISection.setAttribute("class", "fa-solid fa-heart");
-      iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie.toLowerCase().replace(" ", "")}`);
-      iconSHeartAPISection.setAttribute("onclick", "CreateElements.heartClickSolid(this)");
+      iconSHeartAPISection.setAttribute("id", `fa-sheart-apisection-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
+      iconSHeartAPISection.setAttribute("onclick", "UtilityHeartScroll.heartClickSolid(this)");
       iconSHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
       const iconRHeartAPISection = document.createElement("i");
 
       iconRHeartAPISection.setAttribute("class", "fa-regular fa-heart");
       iconRHeartAPISection.setAttribute("id", `fa-rheart-apisection-${titleMovie.toLowerCase().replace(" ", "")}`);
-      iconRHeartAPISection.setAttribute("onclick", "CreateElements.heartClick(this)");
+      iconRHeartAPISection.setAttribute("onclick", "UtilityHeartScroll.heartClick(this)");
       iconRHeartAPISection.setAttribute("classIndex", this.heartIndex);
 
       // const iconGoogleHeart = document.createElement("i");
@@ -1136,60 +1057,6 @@ class CreateElements {
   
 
 
-  navIcons = () => {
-    const iconAccount = document.createElement("img");
-    iconAccount.setAttribute("id", "account-icon");
-    iconAccount.setAttribute("src", "img/icon/account_icon.png");
-    iconAccount.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
-    document.getElementById("top-nav-onboarding-group").appendChild(iconAccount);
-    
-
-    const iconLogOut = document.createElement("img");
-    iconLogOut.setAttribute("id", "logout-icon");
-    iconLogOut.setAttribute("src", "img/icon/logout_icon_clipart_8.png");
-    iconLogOut.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
-    document.getElementById("account-icon").insertAdjacentElement("afterend", iconLogOut);
-    let iconsLogOutDisplay = iconLogOut.width;
-
-   
-  }
-
-  navIconsDisplay = () => {
-    let iconsAccountDisplay = document.getElementById("account-icon").width;
-    let iconsLogOutDisplay = document.getElementById("logout-icon").width;
-    
-    if (window.innerWidth  < 556 ) {
-    
-      document.getElementById("nav-account-bg-offset").style.display = "none";
-      document.getElementById("account-icon").style.display = "block";
-      
-      
-      document.getElementById("nav-logout-bg-offset").style.display = "none";
-      document.getElementById("logout-icon").style.display = "block";
-      
-    
-    }
-    
-    else if (window.innerWidth  > 556) {
-      
-      document.getElementById("nav-account-bg-offset").style.display = "block";
-      document.getElementById("account-icon").style.display = "none";
-      
-      
-      document.getElementById("nav-logout-bg-offset").style.display = "block";
-      document.getElementById("logout-icon").style.display = "none";
-       
-      // document.getElementById("nav-account-bg-offset").innerText = "Account";
-      // document.getElementById("account-icon").remove();
-      // document.getElementById("account-icon").style.display = "none";
-      
-      // document.getElementById("nav-logout-bg-offset").innerText = "Log Out";
-      // document.getElementById("logout-icon").remove();
-      // document.getElementById("logout-icon").style.display = "none";
-  
-    }  
-  }
-
 
   
   // iconFlash = setInterval(function () {
@@ -1240,8 +1107,8 @@ var createElements = new CreateElements();
 // document.body.onload = createElements.createMenu;
 
 // window.addEventListener("load", () => createElements.createMenu(), false);
-window.addEventListener("resize", createElements.menuFunc.displayMenu, false);
-window.addEventListener("resize", createElements.navIconsDisplay, false);
+window.addEventListener("resize", createElements.menuClass.displayMenu, false);
+window.addEventListener("resize", createElements.navIconClass.navIconsDisplay, false);
 // const event = new Event("resize");
 
 // window.addEventListener("resize", (event) => createElements.createMenu(), false);
@@ -1274,3 +1141,4 @@ setInterval(function () {
 // provide global scope of class
 // solve reference error for onclick event
 window.CreateElements = CreateElements;
+

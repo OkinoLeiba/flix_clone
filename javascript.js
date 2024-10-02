@@ -14,6 +14,8 @@
 import HTMLDATAREQUEST from "./request.js";
 import MenuManagment from "./menu.js";
 import NavIcon from './navicon.js';
+import gridRepeat from "./gridrepeat.js";
+import assertType from "./asserttype.js";
 
 
 
@@ -67,6 +69,7 @@ class CreateElements {
     this.requestClass = new HTMLDATAREQUEST();
     this.menuClass = new MenuManagment();
     this.navIconClass = new NavIcon();
+   
     
 
     this.movieResponseFetchData = {
@@ -87,11 +90,11 @@ class CreateElements {
     this.movieGenreIds = Array();
     this.titleTracker = Array();
 
-    // http request results object length capped at 20 objects in array
+    // http request results object length and number of results capped at 20 objects in array
     this.movieTitleResultsLen = 20;
 
     // index to identify heart icon for each class
-    // set as attribute for each icon
+    // set as html attribute for each icon
     this.heartIndex = 0;
     
     
@@ -100,52 +103,6 @@ class CreateElements {
   // static heartIndex = 0
 
   
-
-  // get and set css element property gridrepeat
-  gridRepeat = () => {
-    var grid_repeat = Array();
-    var grid_repeat_API =  Array();
-    // var grid_repeat =
-    //   document.getElementById("movie-title-thumbnail-hscroll-container")
-    //     .childElementCount >
-    //   document.getElementById(
-    //     "movie-title-thumbnail-hscroll-apisection-container"
-    //   ).childElementCount
-    //     ? document.getElementById("movie-title-thumbnail-hscroll-container")
-    //         .childElementCount
-    //     : document.getElementById(
-    //         "movie-title-thumbnail-hscroll-apisection-container"
-    //     ).childElementCount;
-    
-    var classElementsContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
-    for (const key of classElementsContainer) {
-      
-      grid_repeat.push(key.childNodes.length);
-    }
-    
-    var classElementsContainerAPI = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
-     for (const key of classElementsContainerAPI) {
-      
-      grid_repeat_API.push(key.childNodes.length);
-    }
-    
-    
-    var grid_repeat_max = Math.max(grid_repeat_API.reduce((a, b) => Math.max(a, b), -Infinity), grid_repeat.reduce((a, b) => Math.max(a, b), -Infinity));
-    
-    this.assertType(grid_repeat_max, "number", "Grid Repeat");
-
-    if (Math.max(grid_repeat_max) < 20) grid_repeat = 100;
-
-    document.documentElement.style.setProperty(
-      "--grid-repeat",
-      grid_repeat_max * 3
-    );
-
-    new Comment(document.getElementById('left-banner-title'))
-  }
-
-  
-
  
 
   // simple version of code to begin api request 
@@ -196,6 +153,7 @@ class CreateElements {
   async createBanner() {
     await this.requestMovieFetchData();
 
+    let test = new Comment(document.getElementById('left-banner-title'))
     // option request for data needed by locally scoped objects in function
     // var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
     
@@ -245,7 +203,8 @@ class CreateElements {
     
 
     
-    this.assertType(movieDate, "object", "Movie Date");
+    assertType(movieDate, "object", "Movie Date");
+    
     
     const options = {
       year: "numeric",
@@ -627,7 +586,7 @@ class CreateElements {
 
 
     // function call to generate css gridrepeat property value
-    this.gridRepeat();
+    gridRepeat();
   }
 
   // different approach using Object to manage the data
@@ -891,7 +850,7 @@ class CreateElements {
 
       // console.log(imageMovie)
 
-      // TODO: check and confirm attributes
+     
       img.setAttribute("class", "movie-thumbnail");
       img.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}`);
       img.setAttribute("alt", "Cover art of the movie " + titleMovie);
@@ -960,7 +919,7 @@ class CreateElements {
     if (genreBool && typeof titleMovie == "string") {
       const imgAPISection = document.createElement("img");
 
-      // TODO: check and confirm attributes
+      
       imgAPISection.setAttribute("class", "movie-thumbnail");
       imgAPISection.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
       imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
@@ -1047,16 +1006,6 @@ class CreateElements {
     }
   }
 
-  // perform type checks
-  assertType(value, type, paramName) {
-    if (typeof value !== type) {
-      throw new TypeError(`${paramName} should be of type ${type}`);
-    }
-  }
-
-  
-
-
 
   
   // iconFlash = setInterval(function () {
@@ -1094,8 +1043,6 @@ class CreateElements {
   createElements.createBanner();
   // createElements.movieGenreCheck();
   // createElements.createMovieGenre();
-  // createElements.gridRepeat();
-  // createElements.createMenu();
 })();
 
 

@@ -11,9 +11,15 @@
     Author     : Okino Kamali Leiba
 */
 
-import HTMLBody from "./html_main.js";
+import HTMLBody from "./html_body.js";
+import HTMLBodyString from "./html_body_string.js";
+
 
 (function() {
     let htmlBody = new HTMLBody();
     htmlBody.createBody();
+
+    let htmlBodyString = new HTMLBodyString();
+    // htmlBodyString.createBody();
+
 })();

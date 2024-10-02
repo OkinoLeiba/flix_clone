@@ -13,8 +13,8 @@
 
 createHead = () => {
     // create head tag with meta elements
-    const headElement = document.createElement("head");
-    document.getElementsByTagName("html").append(headElement);
+    // const headElement = document.createElement("head");
+    // document.getElementsByTagName("html").append(headElement);
 
     const metaCharset = document.createElement("meta");
     metaCharset.setAttribute("charset", "utf-8");
@@ -23,7 +23,7 @@ createHead = () => {
     const metaViewPort = document.createElement("meta");
     metaViewPort.setAttribute("name", "viewport");
     metaViewPort.setAttribute("content", "width=device-width, initial-scale=1.0");
-    document.getElementsByTagName("meta").after(metaViewPort);
+    document.getElementsByTagName("charset").after(metaViewPort);
 
     const metaKeywords = document.createElement("meta");
     metaKeywords.setAttribute("name", "keywords");

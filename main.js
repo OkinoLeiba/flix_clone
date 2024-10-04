@@ -15,7 +15,9 @@ import HTMLBody from "./html_body.js";
 import HTMLBodyString from "./html_body_string.js";
 
 
-(function() {
+(function () {
+    
+    
     let htmlBody = new HTMLBody();
     htmlBody.createBody();
 

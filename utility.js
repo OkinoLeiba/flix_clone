@@ -1,6 +1,6 @@
 /**
  * @name UtilityHeartScroll
- * @description Utility class that handles events scrolling the movie images and heart click transforms
+ * @description Utility class that handles events scrolling the movie images in container and click heart transforms solid and empty
  * @author Okino Kamali Leiba
  * @class
  * @returns {void} 
@@ -12,10 +12,7 @@
 */
 
 export default class UtilityHeartScroll {
-    // may not be needed
-  setData(dt) {
-    this.data = dt;
-  }
+ 
 
   static scrollLeft = (getThis) => {
     var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];

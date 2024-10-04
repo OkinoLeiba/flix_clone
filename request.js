@@ -1,6 +1,6 @@
 /**
  * @name HTMLDATAREQUEST
- * @description Class container function and data to make request for URL data from remote source
+ * @description Class containing functions and data to make request for URL data from remote source
  * @author Okino Kamali Leiba
  * @class
  * @returns {object} 
@@ -12,6 +12,8 @@
 */
   
 export default class HTMLDATAREQUEST {
+
+
   // multiple options to make client request are for learning and growth purposes
   async httpClientRequest(hURL) {
     this.get = function (hURL, hCallBack) {
@@ -44,7 +46,6 @@ export default class HTMLDATAREQUEST {
     };
   }
 
-  // this.movieResponseFetchData = new Object;
 
   async httpClientRequestFetch(hURL) {
     // const dataTransfer = new DataTransfer();

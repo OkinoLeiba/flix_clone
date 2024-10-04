@@ -12,14 +12,14 @@
     Author     : Okino Kamali Leiba
 */
 import HTMLDATAREQUEST from "./request.js";
-import MenuManagment from "./menu.js";
+import MenuManagement from "./menu.js";
 import NavIcon from './navicon.js';
 import gridRepeat from "./gridrepeat.js";
 import assertType from "./asserttype.js";
 
 
 
-// delete and move to separate file later 23/04/2024
+
 const tmdbKey = "03ee6394a8103fd6e7633be9f543707c";
 const tmdbReadKey =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2MzNiZTlmNTQzNzA3YyIsInN1YiI6IjY2MjgwMDc1YWY5NTkwMDE3ZDZiZWRjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIYayf0-HeagHQf_VluyUhJQOm9CA7Zo_T5lOy0uJHQ";
@@ -65,9 +65,11 @@ const movieRequestData = {
 
 
 class CreateElements {
+
+
   constructor() {
     this.requestClass = new HTMLDATAREQUEST();
-    this.menuClass = new MenuManagment();
+    this.menuClass = new MenuManagement();
     this.navIconClass = new NavIcon();
    
     
@@ -100,9 +102,7 @@ class CreateElements {
     
   }
 
-  // static heartIndex = 0
-
-  
+ 
  
 
   // simple version of code to begin api request 
@@ -377,9 +377,6 @@ class CreateElements {
       document.getElementById("vscroll-icons-container-right").appendChild(vscroll_sections_icons);
       }
     
-    // var x = new CreateElements();
-    // x.scrollSectionLeft("vscroll-icons-container-left")
-    // x.scrollSectionRight("vscroll-icons-container-right")
 
     // SECTION: by genre
     var movieGenreArray =
@@ -466,9 +463,6 @@ class CreateElements {
       iconRightChevron.setAttribute("class", "fas fa-chevron-circle-right");
       iconRightChevron.setAttribute("id", `right-chevron-${movieGenreName}`);
 
-      // document
-      //   .getElementById("movie-genre")
-      //   .insertAdjacentElement("afterend", chevronWrapper);
 
      
       document.getElementsByClassName("button-chevron-left")[genreIndex].appendChild(iconLeftChevron);
@@ -762,7 +756,7 @@ class CreateElements {
         //   this.movieTitlesAPISection[0]
         // );
         
-          // used to as reference and to identify element of class hscroll-wrapper 
+          // used to reference and to identify element of class hscroll-wrapper 
           // and target & append title and image elements by offset
           // order of elements in data structure and order of operation critical
            
@@ -847,8 +841,6 @@ class CreateElements {
     // SECTION: by genre
     if (!genreBool && typeof titleMovie == "string") {
       const img = document.createElement("img");
-
-      // console.log(imageMovie)
 
      
       img.setAttribute("class", "movie-thumbnail");

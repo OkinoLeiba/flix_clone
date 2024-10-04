@@ -13,6 +13,7 @@
 
 export default class NavIcon {
 
+
   navIcons = () => {
     const iconAccount = document.createElement("img");
     iconAccount.setAttribute("id", "account-icon");
@@ -27,8 +28,6 @@ export default class NavIcon {
     iconLogOut.setAttribute("alt", "Icon of figure in shape of a person to stand for account icon");
     document.getElementById("account-icon").insertAdjacentElement("afterend", iconLogOut);
     let iconsLogOutDisplay = iconLogOut.width;
-
-   
   }
 
   navIconsDisplay = () => {
@@ -66,4 +65,5 @@ export default class NavIcon {
   
     }  
   }
+
 }

@@ -1,5 +1,5 @@
 /**
- * @name MenuManagment
+ * @name MenuManagement
  * @description Class to handle creation, display, and events of menu in nav bar
  * @author Okino Kamali Leiba
  * @class
@@ -11,40 +11,30 @@
     Author     : Okino Kamali Leiba
 */
 
-export default class MenuManagment {
+export default class MenuManagement {
+
+
     createMenu = () => {
         // console.log(window.innerWidth);
         const menuCreate = document.createElement("menu");
-
         menuCreate.setAttribute("id", "nav-menu");
-
         document.getElementById("top-nav-btn-container").before(menuCreate);
-    
         menuCreate.appendChild(document.getElementById("top-nav-btn-container"));
 
-
         const menuButton = document.createElement("button");
-
         menuButton.setAttribute("id", "menu-dropbtn");
-
         menuButton.innerText = "menu";
-
         document.getElementById("nav-menu").insertAdjacentElement("afterbegin", menuButton);
     
     }
 
     displayMenu = () => {
-
         const menuRemove = document.getElementById("nav-menu");
-
         const menuButtonRemove = document.getElementById("menu-dropbtn");
-
         const navContainerAppend = document.querySelector("#top-nav-btn-container");
 
 
-
         if (window.innerWidth < 768 && menuRemove == null) {
-
             this.createMenu();
 
             navContainerAppend.style.flexDirection = "column";
@@ -55,16 +45,12 @@ export default class MenuManagment {
 
 
       
-            // document.getElementById("nav-menu").style.display = "flex";
-
+            // document.getElementById("nav-menu").style.display = "flex"
             // document.getElementById("menu-dropbtn").style.display = "flex";
-
             // document.getElementById("top-nav-btn-container").style.display = "none";
       
         }
         else if (window.innerWidth > 768 && menuRemove != null) {
-
-      
             // var appendContainer = menuRemove.remove(navContainerAppend);
 
             document.getElementById("nav-menu").removeEventListener("mouseover", () => this.menuHover().menuHoverShow, false);
@@ -75,7 +61,6 @@ export default class MenuManagment {
 
             document.getElementById("top-nav-icon-link-logo").after(navContainerAppend);
   
-
             navContainerAppend.style.flexDirection = "row";
             navContainerAppend.style.display = "flex";
 
@@ -83,13 +68,10 @@ export default class MenuManagment {
             // control css display and recreate html menu and dropdown menu with items
 
             // document.getElementById("nav-menu").style.display = "none";
-
             // document.getElementById("menu-dropbtn").style.display = "none";
-
             // document.getElementById("top-nav-btn-container").style.display = "flex";
 
             // const menu = document.getElementById("nav-menu");
-
             // const menuButton = document.getElementById("menu-dropbtn")
 
             // menu.remove();
@@ -97,9 +79,7 @@ export default class MenuManagment {
             // menuButton.remove();
 
             // const top_nav_container = document.createElement("div");
-
             // top_nav_container.setAttribute(id, "top-nav-btn-container");
-
             // document.getElementById("top-nav-icon-link-logo").after(top_nav_container);
 
             // var menuItems = ["Movie", "Series", "EyeBleeding-Binge-Watchable"];
@@ -107,7 +87,6 @@ export default class MenuManagment {
             // for (item in menuItems) {
             //   const link = document.createElement("a");
 
-        
             //   // link.setAttribute(class, "");
             //   link.setAttribute(id, "top-nav-"+`${item}`+"-btn");
             //   link.setAttribute(title, `${item}`);
@@ -122,8 +101,6 @@ export default class MenuManagment {
             //   document.getElementById("top-nav-" + `${item}` + "-btn").insertAdjacentElement('beforebegin', `${item}`);
 
             // }
-          
-
         }
 
     }

@@ -75,24 +75,25 @@ width="100%" height="10" role="img" loading="lazy" fetchpriority="low" decoding=
 
 export default class CreateBodyString {
     
+
     // function to return string body
     createStringBody() {
         return STRINGBODY;
     }
-    
+
     createBody() {
         let createStringBody = new CreateBodyString();
         // string is append but not parsed by dom
         // document.body.append(createStringBody.createStringBody()));
-    
 
-        document.body.innerHTML = STRINGBODY;
 
-        document.body.innerHTML = createStringBody.createStringBody();
-    
+        // document.body.innerHTML = STRINGBODY;
+
+        // document.body.innerHTML = createStringBody.createStringBody();
+
         const domParse = new DOMParser().parseFromString(STRINGBODY, 'text/html');
         document.body.appendChild(domParse.body.firstElementChild);
-    
-        document.body.appendChild(STRINGBODYTEMPLATE);
+
+        // document.body.appendChild(STRINGBODYTEMPLATE);
     }
- }
+}

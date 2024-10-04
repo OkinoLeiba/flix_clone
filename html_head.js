@@ -12,6 +12,8 @@
 */
 
 createHead = () => {
+
+    
     // create head tag with meta elements
     // const headElement = document.createElement("head");
     // document.getElementsByTagName("html").append(headElement);

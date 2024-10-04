@@ -12,6 +12,8 @@
 */
 
 export default class HTMLBody {
+
+    
     createBody = () => {
 
         // create body of html append to html after head tag

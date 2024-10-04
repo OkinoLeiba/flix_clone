@@ -13,7 +13,9 @@
 
 // perform type checks
 export default function assertType(value, type, paramName) {
-    if (typeof value !== type) {
-      return new TypeError(`${paramName} should be of type ${type}`);
-    }
+
+  if (typeof value !== type) {
+    return new TypeError(`${paramName} should be of type ${type}`);
   }
+  
+}

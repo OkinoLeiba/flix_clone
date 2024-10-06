@@ -19,7 +19,7 @@ export default class UtilityHeartScroll {
     var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
     var scrollWidth = document.getElementById(wrapperID).clientWidth;
     
-    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
+    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `movie-title-image-hscroll-apisection-container-${movieGenre}` : `movie-title-image-hscroll-container-${movieGenre}`;
 
       const scrollButtonLeft = document.getElementById(getThis.attributes.id.value);
       const hscrollContainer = document.getElementById(scrollID);
@@ -34,7 +34,7 @@ export default class UtilityHeartScroll {
     var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
     var scrollWidth = document.getElementById(wrapperID).clientWidth;
     
-    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `movie-title-thumbnail-hscroll-apisection-container-${movieGenre}` : `movie-title-thumbnail-hscroll-container-${movieGenre}`;
+    var scrollID = getThis.attributes.class.value == "button-chevron-apisection-right" ? `movie-title-image-hscroll-apisection-container-${movieGenre}` : `movie-title-image-hscroll-container-${movieGenre}`;
 
       const scrollButtonRight = document.getElementById(getThis.attributes.id.value);
       const hscrollContainer = document.getElementById(scrollID);

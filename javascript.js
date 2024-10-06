@@ -313,7 +313,7 @@ class CreateElements {
     // create html container for two sections 
     // one section with base elements by genre
     // other section with base elements named by data request/movieRequestData object key
-    // with title and image thumbnail as base elements wrapped in container
+    // with title and image as base elements wrapped in container
     const vscroll_sections_container = document.createElement("section");
     vscroll_sections_container.setAttribute("id", "vscroll-sections-container");
 
@@ -325,7 +325,7 @@ class CreateElements {
 
     // SECTION: by genre
     const vscroll_div = document.createElement("div");
-    vscroll_div.setAttribute("id", "movie-title-thumbnail-vscroll-container");
+    vscroll_div.setAttribute("id", "movie-title-image-vscroll-container");
 
     
     document
@@ -337,7 +337,7 @@ class CreateElements {
       const vscroll_icons_container_left = document.createElement("button");
       vscroll_icons_container_left.setAttribute("id", "vscroll-icons-container-left");
       vscroll_icons_container_left.setAttribute("onclick", "UtilityHeartScroll.scrollSectionLeft()");
-      document.getElementById("movie-title-thumbnail-vscroll-container").insertAdjacentElement("afterbegin", vscroll_icons_container_left);
+      document.getElementById("movie-title-image-vscroll-container").insertAdjacentElement("afterbegin", vscroll_icons_container_left);
 
       for(var i = 0; i< 3; i++) {
       const vscroll_sections_icons = document.createElement("i");
@@ -355,19 +355,19 @@ class CreateElements {
     const vscroll_apisection_div = document.createElement("div");
     vscroll_apisection_div.setAttribute(
       "id",
-      "movie-title-thumbnail-vscroll-container-apisection"
+      "movie-title-image-vscroll-container-apisection"
     );
 
    
     document
-      .getElementById("movie-title-thumbnail-vscroll-container")
+      .getElementById("movie-title-image-vscroll-container")
       .after(vscroll_apisection_div);
     
      // icon to indicate and navigate to other section
       const vscroll_icons_container_right = document.createElement("button");
       vscroll_icons_container_right.setAttribute("id", "vscroll-icons-container-right");
       vscroll_icons_container_right.setAttribute("onclick", "UtilityHeartScroll.scrollSectionRight()");
-      document.getElementById("movie-title-thumbnail-vscroll-container-apisection").insertAdjacentElement("afterbegin", vscroll_icons_container_right);
+      document.getElementById("movie-title-image-vscroll-container-apisection").insertAdjacentElement("afterbegin", vscroll_icons_container_right);
 
       for(var i = 0; i< 3; i++) {
       const vscroll_sections_icons = document.createElement("i");
@@ -398,11 +398,11 @@ class CreateElements {
 
       hscroll_container.setAttribute(
         "id",
-        `movie-title-thumbnail-hscroll-container-${movieGenreName}`
+        `movie-title-image-hscroll-container-${movieGenreName}`
       );
       hscroll_container.setAttribute(
         "class",
-        "movie-title-thumbnail-hscroll-container"
+        "movie-title-image-hscroll-container"
       );
 
       const genre = document.createElement("h1");
@@ -415,7 +415,7 @@ class CreateElements {
         .getElementById("vscroll-icons-container-left")
         .after(genre);
       // console.log(
-      //   document.getElementById("movie-title-thumbnail-vscroll-container")
+      //   document.getElementById("movie-title-image-vscroll-container")
       //     .lastElementChild
       // );
       document
@@ -498,11 +498,11 @@ class CreateElements {
 
         hscroll_apisection_container.setAttribute(
           "id",
-          `movie-title-thumbnail-hscroll-apisection-container-${movieLocalTitle}`
+          `movie-title-image-hscroll-apisection-container-${movieLocalTitle}`
         );
         hscroll_apisection_container.setAttribute(
           "class",
-          "movie-title-thumbnail-hscroll-apisection-container"
+          "movie-title-image-hscroll-apisection-container"
 
         );
 
@@ -593,7 +593,7 @@ class CreateElements {
   //     genre.setAttribute('id', 'movie-genre');
   //     genre.innerText = o[1]['name'];
 
-  //     document.getElementById('movie-thumbnail-hscroll-wrapper').after(genre);
+  //     document.getElementById('movie-image-hscroll-wrapper').after(genre);
 
   //     this.createMovieTitle(o[1]['id']);
   // }));
@@ -649,11 +649,12 @@ class CreateElements {
         // console.log(Array(movieTitles[titleIndex]["genre_ids"]).includes(genre_id_key));
 
         if (
-          this.movieGenreIds[genreIndexArray].includes(genre_id_key)
+          this.movieGenreIds[genreIndexArray].includes(genre_id_key) &&
+          [...this.movieTitles][genreIndexArray] !== undefined &&
+          typeof [...this.movieTitles][genreIndexArray] == "string"
         ) {
           if (
-            !this.titleTracker.includes([...this.movieTitles][genreIndexArray] &&
-              typeof [...this.movieTitles][genreIndexArray] == "string"
+            !this.titleTracker.includes([...this.movieTitles][genreIndexArray]           
             )) {
             // console.log(Object.values(movieTitles[i])[2].includes(genre_id_key), movieTitles[i].title, movieTitles[i].poster_path )
 
@@ -675,13 +676,13 @@ class CreateElements {
 
             // console.log(
             //   Math.max(
-            //     document.getElementById("movie-title-thumbnail-hscroll-container")
+            //     document.getElementById("movie-title-image-hscroll-container")
             //       .childElementCount
             //   )
             // );
 
             document
-              .getElementById(`movie-title-thumbnail-hscroll-container-${genre_name}`).appendChild(hscroll_wrapper);
+              .getElementById(`movie-title-image-hscroll-container-${genre_name}`).appendChild(hscroll_wrapper);
             document
               .getElementsByClassName("hscroll-wrapper")
             [indexClass].appendChild(title);
@@ -694,7 +695,7 @@ class CreateElements {
             // overflowing causing recalculation of parent container sizing 
 
             // third stage in function chain: create section, movie title, and image; genre div
-            this.createMovieThumbnails(
+            this.createMovieImages(
               [...this.movieImage][genreIndexArray],
               [...this.movieTitles][genreIndexArray],
               indexClass,
@@ -766,7 +767,7 @@ class CreateElements {
             titleIndexArray < this.movieTitles.size;
             titleIndexArray++
           ) {
-            if (typeof [...this.movieTitles][titleIndexArray] == "string") {
+            if (typeof [...this.movieTitles][titleIndexArray] == "string" && [...this.movieTitles][titleIndexArray] !== undefined) {
             const hscroll_apisection_wrapper = document.createElement("div");
             hscroll_apisection_wrapper.setAttribute(
               "id",
@@ -790,7 +791,7 @@ class CreateElements {
 
             document
               .getElementById(
-                `movie-title-thumbnail-hscroll-apisection-container-${genre_name}`
+                `movie-title-image-hscroll-apisection-container-${genre_name}`
               )
               .appendChild(hscroll_apisection_wrapper);
             document
@@ -798,7 +799,7 @@ class CreateElements {
             [indexClass].appendChild(title_apisection);
           
             // third stage in function chain: create section, movie title, and image; api div
-            this.createMovieThumbnails(
+            this.createMovieImages(
               [...this.movieImage][titleIndexArray],
               [...this.movieTitles][titleIndexArray],
               indexClass,
@@ -835,7 +836,7 @@ class CreateElements {
   }
 
 
-  createMovieThumbnails(imageMovie, titleMovie, classIndex, genreBool = false) {
+  createMovieImages(imageMovie, titleMovie, classIndex, genreBool = false) {
     
     // var heartIndex = 0;
     // SECTION: by genre
@@ -843,8 +844,8 @@ class CreateElements {
       const img = document.createElement("img");
 
      
-      img.setAttribute("class", "movie-thumbnail");
-      img.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}`);
+      img.setAttribute("class", "movie-image");
+      img.setAttribute("id", `movie-image-${titleMovie.toLowerCase().replace(" ", "")}`);
       img.setAttribute("alt", "Cover art of the movie " + titleMovie);
       img.setAttribute("width", "auto");
       img.setAttribute("height", "auto");
@@ -889,7 +890,7 @@ class CreateElements {
         [classIndex].appendChild(iconRHeart);
 
       // different approach to onHover event
-      // display heart in image thumbnail
+      // display heart in image 
 
       // document
       //   .getElementsByClassName("hscroll-wrapper")
@@ -912,8 +913,8 @@ class CreateElements {
       const imgAPISection = document.createElement("img");
 
       
-      imgAPISection.setAttribute("class", "movie-thumbnail");
-      imgAPISection.setAttribute("id", `movie-thumbnail-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
+      imgAPISection.setAttribute("class", "movie-image");
+      imgAPISection.setAttribute("id", `movie-image-${titleMovie.toLowerCase().replace(" ", "")}${this.heartIndex}`);
       imgAPISection.setAttribute("alt", "Cover art of the movie " + titleMovie);
       imgAPISection.setAttribute("width", "auto");
       imgAPISection.setAttribute("height", "auto");
@@ -957,7 +958,7 @@ class CreateElements {
       [classIndex].appendChild(iconRHeartAPISection);
       
       // different approach to onHover event
-      // display heart in image thumbnail
+      // display heart in image 
 
       // document
       //   .getElementsByClassName("hscroll-apisection-wrapper")
@@ -972,9 +973,9 @@ class CreateElements {
       //   );
     }
 
-    // invoke function to check if thumbnails created 
+    // invoke function to check if images created 
     // also used as condition to change css display to none
-    // if not, display none parent container of title, button, title, thumbnail
+    // if not, display none parent container of title, button, title, image
     this.movieGenreCheck();
 
     // increment class index for heart icon
@@ -987,13 +988,13 @@ class CreateElements {
     var movieGenreCount = document.getElementsByClassName("movie-genre").length;
 
     for (var classIndex = 0; movieGenreCount > classIndex; classIndex++) {
-      // movie-title-thumbnail-hscroll-apisection-container
-      var containerCount = document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].children.length;
+      // movie-title-image-hscroll-apisection-container
+      var containerCount = document.getElementsByClassName("movie-title-image-hscroll-container")[classIndex].children.length;
 
       if (containerCount == 0) {
         document.getElementsByClassName("movie-genre")[classIndex].style.display = "none";
         document.getElementsByClassName("chevron-wrapper")[classIndex].style.display = "none";
-        document.getElementsByClassName("movie-title-thumbnail-hscroll-container")[classIndex].style.display = "none";
+        document.getElementsByClassName("movie-title-image-hscroll-container")[classIndex].style.display = "none";
       }
     }
   }

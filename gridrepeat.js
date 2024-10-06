@@ -20,24 +20,24 @@ export default function gridRepeat() {
   var grid_repeat = Array();
   var grid_repeat_API =  Array();
   // var grid_repeat =
-  //   document.getElementById("movie-title-thumbnail-hscroll-container")
+  //   document.getElementById("movie-title-image-hscroll-container")
   //     .childElementCount >
   //   document.getElementById(
-  //     "movie-title-thumbnail-hscroll-apisection-container"
+  //     "movie-title-image-hscroll-apisection-container"
   //   ).childElementCount
-  //     ? document.getElementById("movie-title-thumbnail-hscroll-container")
+  //     ? document.getElementById("movie-title-image-hscroll-container")
   //         .childElementCount
   //     : document.getElementById(
-  //         "movie-title-thumbnail-hscroll-apisection-container"
+  //         "movie-title-image-hscroll-apisection-container"
   //     ).childElementCount;
 
-  var classElementsContainer = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
+  var classElementsContainer = document.getElementsByClassName("movie-title-image-hscroll-container");
   for (const key of classElementsContainer) {
     
     grid_repeat.push(key.childNodes.length);
   }
 
-  var classElementsContainerAPI = document.getElementsByClassName("movie-title-thumbnail-hscroll-container");
+  var classElementsContainerAPI = document.getElementsByClassName("movie-title-image-hscroll-container");
     for (const key of classElementsContainerAPI) {
     
     grid_repeat_API.push(key.childNodes.length);

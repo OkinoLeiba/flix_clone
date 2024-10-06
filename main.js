@@ -21,7 +21,7 @@ import HTMLBodyString from "./html_body_string.js";
     let htmlBody = new HTMLBody();
     htmlBody.createBody();
 
-    let htmlBodyString = new HTMLBodyString();
+    // let htmlBodyString = new HTMLBodyString();
     // htmlBodyString.createBody();
 
 })();

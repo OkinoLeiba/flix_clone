@@ -15,7 +15,7 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="550">
     <meta property="og:description" content="Netflix Clone">
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src *; style-src-elem *; connect-src * " > -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src *; style-src-elem *; connect-src * " > -->
     <title>Flix</title>
     <link rel="icon" type="image/x-icon"  href="/img/icon/rubber-ducky-cartoon-black.ico" >
     <link type="text/css" rel="stylesheet" href="style.css">
@@ -26,7 +26,10 @@
     <script type="module" src="main.js" defer></script>
     <script type="module"  src="javascript.js" defer></script>
     <script type="module" src="utility.js"></script>
-    
+    <!--Javascript CSS-->
+    <script type="module" src="style.js"></script>
+    <!-- <script type="module" src="style_object.js"></script> -->
+     
 </head>
 
     <body>
@@ -100,8 +103,8 @@
         -->
     </body> 
 
-        <!--["movie-title-thumbnail-vscroll-container] Section Created with JavaScript-->
-        <!-- <div id="movie-title-thumbnail-vscroll-container"></div> -->
+        <!--["movie-title-image-vscroll-container] Section Created with JavaScript-->
+        <!-- <div id="movie-title-image-vscroll-container"></div> -->
 
     <!--Javascript Load Option After HTML Rendering -->
     <div id="javascript-section">

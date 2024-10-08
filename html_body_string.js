@@ -21,7 +21,7 @@ id="top-nav-btn-container"><a class="top-nav-btn" id="top-nav-movie-btn" title="
 target="_self" referrerpolicy="">Movie</a><a class="top-nav-btn" id="top-nav-seris-btn" title="series" role="button" href="" \
 hreflang="ga" target="_self" referrerpolicy="">Series</a><a class="top-nav-btn" id="top-nav-ebw-btn" title="eyeBleeding_binge_watchable"\
  role="button" href="" hreflang="es" target="_self" referrerpolicy="">EyeBleeding-Binge-Watchable</a></div><input\
-id="top-nav-search-input" type="text" placeholder="Search..." aria-placeholder="Search..." width="10" height="8"\
+id="top-nav-search-input" type="search" placeholder="Search..." aria-placeholder="Search..." width="10" height="8"\
 aria-label="Search Input Field" autocapitalize="off" autocomplete="off" inputmode="search"><div id="top-nav-onboarding-group"><button\
 id="nav-login-bg-offset" type="button" name="login-btn">Log In</button><button id="nav-signup-bg-offset" type="button" \
 name="signup-btn">Sign Up</button><button id="nav-account-bg-offset" type="button" name="account-btn">Account</button><button \
@@ -52,7 +52,7 @@ id="top-nav-btn-container"><a class="top-nav-btn" id="top-nav-movie-btn" title="
 target="_self" referrerpolicy="">Movie</a><a class="top-nav-btn" id="top-nav-seris-btn" title="series" role="button" href="" \
 hreflang="ga" target="_self" referrerpolicy="">Series</a><a class="top-nav-btn" id="top-nav-ebw-btn" title="eyeBleeding_binge_watchable"\
  role="button" href="" hreflang="es" target="_self" referrerpolicy="">EyeBleeding-Binge-Watchable</a></div><input\
-id="top-nav-search-input" type="text" placeholder="Search..." aria-placeholder="Search..." width="10" height="8"\
+id="top-nav-search-input" type="search" placeholder="Search..." aria-placeholder="Search..." width="10" height="8"\
 aria-label="Search Input Field" autocapitalize="off" autocomplete="off" inputmode="search"><div id="top-nav-onboarding-group"><button\
 id="nav-login-bg-offset" type="button" name="login-btn">Log In</button><button id="nav-signup-bg-offset" type="button" \
 name="signup-btn">Sign Up</button><button id="nav-account-bg-offset" type="button" name="account-btn">Account</button><button \
@@ -96,4 +96,5 @@ export default class CreateBodyString {
 
         // document.body.appendChild(STRINGBODYTEMPLATE);
     }
+
 }

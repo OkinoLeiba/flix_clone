@@ -1,5 +1,30 @@
 {
+  "name": "flix_clone-project",
+  "description": "Coding project to build and improve on skills by create a NetFlix clone with mostly javascript.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/OkinoLeiba/flix_clone",
+  "main": "index.html",
+  "private": false,
+  "keywords": [
+    "Okino Kamali Leiba",
+    "Okino Leiba",
+    "NetFlix",
+    "NetFlix Clone"
+  ],
+  "author": "Okino Kamali Leiba <okino.leiba@yahoo.com> (https://okinoleiba.framer.website/)",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OkinoLeiba/flix_clone"
+  },
+   "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
   "dependencies": {
+    "flix_clone-project": "file:",
     "xhr2": "^0.2.1"
   }
 }

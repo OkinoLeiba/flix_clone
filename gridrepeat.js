@@ -56,5 +56,4 @@ export default function gridRepeat() {
     grid_repeat_max * 3
   ); 
   
-
 }

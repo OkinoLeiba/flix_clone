@@ -1,5 +1,5 @@
 /**
- * @name assertType
+ * @name AssertType
  * @description Function to perform type safety 
  * @author Okino Kamali Leiba
  * @function

@@ -13,16 +13,16 @@
     --titleColor: #d9b9b984;
 }
 
-/* html {
+html {
     background-color: black !important;
     box-sizing: border-box;
-} */
+}
 
 *, *::before, *::after {
     box-sizing: inherit;
 }
 
-/* body {
+body {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -31,7 +31,7 @@
     overflow-x: hidden;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-} */
+}
 
 /* ==========================================================================
    Custom Styles
@@ -123,7 +123,7 @@
     color: black;
 }
 
-
+/* TODO: review what am I trying to accomplish with this? */
 #nav-signup-bg-offset,
 #nav-logout-bg-offset {
     background-color: transparent;
@@ -266,6 +266,7 @@
 h1#left-banner-title {
     font-size: 1.875rem;
     line-height: 0.75rem;
+    margin-left: 0;
     margin-bottom: 1.50rem;
 }
 
@@ -273,7 +274,7 @@ h1#left-banner-title {
     font-size: 0.875rem; /* 14px */
     font-weight: 400;
     line-height: 1.25rem; /* 20px */
-    color: white;
+    color: gray;
     margin-bottom: 4px;
 }
 
@@ -288,7 +289,7 @@ h1#left-banner-title {
 button#banner-button-p, 
 button#banner-button-tl, 
 button#banner-button-wl {
-    margin: 2px 0;
+    margin: 2px 4px;
     padding: 8px;
     border: 0.04rem solid darkgrey;
     color: black;
@@ -296,6 +297,7 @@ button#banner-button-wl {
 }
  
 
+button#banner-button-p,
 button#banner-button-wl {
     background-color: transparent;
     color: white;

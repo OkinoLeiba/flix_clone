@@ -10,10 +10,13 @@
     Created on : June 24, 2024, 3:21:44 PM
     Author     : Okino Kamali Leiba
 */
+import ManageContent from "./managecontent";
 
 export default class UtilityHeartScroll {
- 
+  
 
+  manageContent = new ManageContent();
+  
   static scrollLeft = (getThis) => {
     var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
     var wrapperID = getThis.attributes.class.value == "button-chevron-apisection-left" ? `hscroll-apisection-wrapper-${movieGenre}` : `hscroll-wrapper-${movieGenre}`;
@@ -46,37 +49,41 @@ export default class UtilityHeartScroll {
 
   static heartClickSolid = (heartThis) => {
     // var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
-    const sheartID = document.getElementById(heartThis.id);
+    const solidHeartID = document.getElementById(heartThis.id);
     // const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
 
-    const rheartID = document.getElementById(heartThis.id.replace('sheart', 'rheart'));
+    const regularHeartID = document.getElementById(heartThis.id.replace('sheart', 'rheart'));
     // const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
 
-    sheartID.addEventListener("click", (event) => {
+    solidHeartID.addEventListener("click", (event) => {
       // heartThis.parentElement.childNodes[2].style.display = "none";
-      rheartID.style.display = "block";
+      regularHeartID.style.display = "block";
 
       // heartThis.parentElement.childNodes[3].style.display = "block";
-      sheartID.style.display = "none";
+      solidHeartID.style.display = "none";
+
+      manageContent.saveContent("User1234", heartThis.id)
     })
   }
 
   static heartClick = (heartThis) => {
       // var heartClassIndex = Math.abs(Number(document.getElementsByClassName(`${heartThis.parentElement.classList.value}`).length) - Number(heartThis.attributes[3].value) - Number(document.getElementById(`${heartThis.parentElement.parentElement.id}`).childNodes.length))
-      const rheartID = document.getElementById(heartThis.id);
+      const regularHeartID = document.getElementById(heartThis.id);
       // const rheartClass = document.getElementsByClassName("fa-regular fa-heart")[heartClassIndex];
 
     
       
-      const sheartID = document.getElementById(heartThis.id.replace('rheart', 'sheart'));
+      const solidHeartID = document.getElementById(heartThis.id.replace('rheart', 'sheart'));
       // const sheartClass = document.getElementsByClassName("fa-solid fa-heart")[heartClassIndex];
 
-      rheartID.addEventListener("click", (event) => {
+      regularHeartID.addEventListener("click", (event) => {
         // heartThis.parentElement.childNodes[3].style.display = "none";
-        rheartID.style.display = "none";
+        regularHeartID.style.display = "none";
 
         // heartThis.parentElement.childNodes[2].style.display = "block";
-        sheartID.style.display = "block";
+        solidHeartID.style.display = "block";
+
+        manageContent.deleteContent("User1234", heartThis.id)
       })
   }
 
@@ -97,6 +104,7 @@ export default class UtilityHeartScroll {
       scrollSectionID.scrollLeft = -scrollSectionID.scrollLeftMax;
     })
   }
+
 }
 
 

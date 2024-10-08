@@ -21,8 +21,7 @@ import assertType from "./asserttype.js";
 
 
 const tmdbKey = "03ee6394a8103fd6e7633be9f543707c";
-const tmdbReadKey =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2MzNiZTlmNTQzNzA3YyIsInN1YiI6IjY2MjgwMDc1YWY5NTkwMDE3ZDZiZWRjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIYayf0-HeagHQf_VluyUhJQOm9CA7Zo_T5lOy0uJHQ";
+const tmdbReadKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwM2VlNjM5NGE4MTAzZmQ2ZTc2MzNiZTlmNTQzNzA3YyIsInN1YiI6IjY2MjgwMDc1YWY5NTkwMDE3ZDZiZWRjYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIYayf0-HeagHQf_VluyUhJQOm9CA7Zo_T5lOy0uJHQ";
 
 // option to pass url based on condition
 const movieData = {
@@ -70,9 +69,7 @@ class CreateElements {
   constructor() {
     this.requestClass = new HTMLDATAREQUEST();
     this.menuClass = new MenuManagement();
-    this.navIconClass = new NavIcon();
-   
-    
+    this.navIconClass = new NavIcon();  
 
     this.movieResponseFetchData = {
       movieRequestUpcoming: Object(),
@@ -153,6 +150,7 @@ class CreateElements {
   async createBanner() {
     await this.requestMovieFetchData();
 
+    // TODO: review to implement comment 
     let test = new Comment(document.getElementById('left-banner-title'))
     // option request for data needed by locally scoped objects in function
     // var pageTitleLen = this.movieResponseFetchData.movieRequestPopular.length / 2;
@@ -230,7 +228,8 @@ class CreateElements {
     // used movie title from being added
     // along with set data type
     // and rendered as an HTML element
-    this.titleTracker.push(bannerData.original_name);
+    this.titleTracker.push(bannerData.original_name == undefined ?
+      bannerData.original_title : bannerData.original_name);
 
     // create menu for nav if conditions are met
     // TODO: move to different function or execute on load driver function
@@ -423,7 +422,7 @@ class CreateElements {
         .insertAdjacentElement("afterend", hscroll_container);
     
 
-      // code block begins creation of button elements 
+      // code block begins creation of button elements genre section
       const chevronWrapper = document.createElement("div");
       
       chevronWrapper.setAttribute("id", `chevron-wrapper-${movieGenreName}`);
@@ -521,7 +520,7 @@ class CreateElements {
           .insertAdjacentElement("afterend", hscroll_apisection_container);
         
         
-        // code block begins creation of button elements
+        // code block begins creation of button elements api section
         const apiChevronWrapper = document.createElement("div");
 
         apiChevronWrapper.setAttribute("id", `chevron-apisection-wrapper-${movieLocalTitle}`);
@@ -583,8 +582,7 @@ class CreateElements {
     gridRepeat();
   }
 
-  // different approach using Object to manage the data
-  // from https request 
+  // different approach using Object to manage the data from https request 
   
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
 
@@ -813,11 +811,12 @@ class CreateElements {
     }
     
 
-    // title tracker will prevent the previously 
+    // title tracker will prevent the previously
     // used movie title from being added
     // along with set data type
     // and rendered as an HTML element
     // this.titleTracker.push([...this.movieTitles][titleIndex]);
+    // preventive measure set data structure should prevent duplicates
 
     // an assumption is made about the data structure of the movieTitles and movieImage
     // as determined by the length or size we assume a corresponding title to image
@@ -853,12 +852,12 @@ class CreateElements {
       img.setAttribute("loading", "lazy");
       img.setAttribute("fetchpriority", "low");
       img.setAttribute("decoding", "auto");
-      img.setAttribute("src", this.posterURL + "/w500" + imageMovie);
+      img.setAttribute("src", this.posterURL + "/w500" + imageMovie); // Review: should I use original image size
 
       document
         .getElementsByClassName("hscroll-wrapper")
         [classIndex].appendChild(img);
-      //   console.log(document.getElementsByClassName("hscroll-wrapper").length);
+      // console.log(document.getElementsByClassName("hscroll-wrapper").length);
 
       const iconSHeart = document.createElement("i");
 
@@ -898,7 +897,7 @@ class CreateElements {
       
       
 
-      //eventHandler for mouseover event change style of css element
+      // eventHandler for mouseover event change style of css element
       // may not be needed
       // document
       //   .getElementById("hscroll-wrapper")
@@ -922,7 +921,7 @@ class CreateElements {
       imgAPISection.setAttribute("loading", "lazy");
       imgAPISection.setAttribute("fetchpriority", "low");
       imgAPISection.setAttribute("decoding", "auto");
-      imgAPISection.setAttribute("src", this.posterURL + "/w500" + imageMovie);
+      imgAPISection.setAttribute("src", this.posterURL + "/w500" + imageMovie); // Review: should I use original image size
 
       document
         .getElementsByClassName("hscroll-apisection-wrapper")
@@ -957,8 +956,7 @@ class CreateElements {
         .getElementsByClassName("hscroll-apisection-wrapper")
       [classIndex].appendChild(iconRHeartAPISection);
       
-      // different approach to onHover event
-      // display heart in image 
+      // different approach to onHover event to display heart in image 
 
       // document
       //   .getElementsByClassName("hscroll-apisection-wrapper")
@@ -974,7 +972,7 @@ class CreateElements {
     }
 
     // invoke function to check if images created 
-    // also used as condition to change css display to none
+    // also used as condition to change css display to none of movie-title-image-hscroll-container
     // if not, display none parent container of title, button, title, image
     this.movieGenreCheck();
 
@@ -988,7 +986,6 @@ class CreateElements {
     var movieGenreCount = document.getElementsByClassName("movie-genre").length;
 
     for (var classIndex = 0; movieGenreCount > classIndex; classIndex++) {
-      // movie-title-image-hscroll-apisection-container
       var containerCount = document.getElementsByClassName("movie-title-image-hscroll-container")[classIndex].children.length;
 
       if (containerCount == 0) {

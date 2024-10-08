@@ -54,7 +54,9 @@ export default class NavIcon {
       
       document.getElementById("nav-logout-bg-offset").style.display = "block";
       document.getElementById("logout-icon").style.display = "none";
-       
+      
+      // keep for learning and growth purposes
+      // may revisit code in future
       // document.getElementById("nav-account-bg-offset").innerText = "Account";
       // document.getElementById("account-icon").remove();
       // document.getElementById("account-icon").style.display = "none";

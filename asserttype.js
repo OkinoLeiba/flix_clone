@@ -1,6 +1,6 @@
 /**
  * @name AssertType
- * @description Function to perform type safety 
+ * @description Function to perform type safety check
  * @author Okino Kamali Leiba
  * @function
  * @returns {void} 

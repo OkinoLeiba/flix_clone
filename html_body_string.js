@@ -1,6 +1,6 @@
 /**
  * @name CreateBodyString
- * @description Class to encapsulate the creation to body of of html using a string 
+ * @description Class to encapsulate the creation to body tag of of html using a string 
  * @author Okino Kamali Leiba
  * @class
  * @returns {void} 

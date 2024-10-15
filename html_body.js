@@ -1,6 +1,6 @@
 /**
  * @name HTMLBody
- * @description Class to encapsulate the creation to body of of html 
+ * @description Class to encapsulate the creation to body tag of of html 
  * @author Okino Kamali Leiba
  * @class
  * @returns {void} 
@@ -18,6 +18,7 @@ export default class HTMLBody {
 
         // create body of html append to html after head tag
         // const body = document.createElement("body");
+        // const body = document.body;
         // document.head.after(body);
         // document.getElementsByTagName("html").append(body);
 

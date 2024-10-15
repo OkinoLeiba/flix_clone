@@ -1,5 +1,8 @@
 {
-    "userSavedContent" : [
-        {"userID": ["exampleTile", "exampleTitle2"]}
+  "userSavedContent": {
+    "userID": [
+      "exampleTile",
+      "exampleTitle2"
     ]
+  }
 }

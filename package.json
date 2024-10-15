@@ -17,14 +17,17 @@
     "type": "git",
     "url": "https://github.com/OkinoLeiba/flix_clone"
   },
-   "browserslist": {
+  "browserslist": {
     "production": [
       ">0.2%",
       "not dead",
       "not op_mini all"
-    ],
+    ]
+  },
   "dependencies": {
     "flix_clone-project": "file:",
+    "fs": "^0.0.1-security",
+    "require": "^2.4.20",
     "xhr2": "^0.2.1"
   }
 }

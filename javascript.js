@@ -194,10 +194,12 @@ class CreateElements {
     var bannerData = Object.entries(
       this.movieResponseFetchData.movieRequestTrendingDay.results
     ).map((v) => v[1])[1];
+    // does not work explore other options with short, performant syntax
+    // var movieDate = new Date(bannerData["release_date" || "first_air_date"])
+    //   .toDateString()
+    //   .split("-");
 
-    var movieDate = new Date(bannerData["release_date" || "first_air_date"])
-      .toDateString()
-      .split(" ");
+    var movieDate = bannerData["release_date"] ? new Date(bannerData["release_date"]).toDateString().split(" ") : new Date(bannerData["first_air_date"]).toDateString().split(" ")
     
 
     
@@ -583,7 +585,6 @@ class CreateElements {
   }
 
   // different approach using Object to manage the data from https request 
-  
   // Object.entries(this.movieResponseFetchData.movieRequestGenre).forEach(v => Object.entries(v[1]).map(o => {
 
   //     const genre = document.createElement('h1');
@@ -669,8 +670,6 @@ class CreateElements {
             title.setAttribute("id", `movie-title-${genre_name}`);
             title.setAttribute("class", "movie-title");
             title.innerText = [...this.movieTitles][genreIndexArray];
-
-            
 
             // console.log(
             //   Math.max(
@@ -837,7 +836,7 @@ class CreateElements {
 
   createMovieImages(imageMovie, titleMovie, classIndex, genreBool = false) {
     
-    // var heartIndex = 0;
+  
     // SECTION: by genre
     if (!genreBool && typeof titleMovie == "string") {
       const img = document.createElement("img");
@@ -890,7 +889,6 @@ class CreateElements {
 
       // different approach to onHover event
       // display heart in image 
-
       // document
       //   .getElementsByClassName("hscroll-wrapper")
       // [classIndex].appendChild(iconGoogleHeart);
@@ -957,7 +955,6 @@ class CreateElements {
       [classIndex].appendChild(iconRHeartAPISection);
       
       // different approach to onHover event to display heart in image 
-
       // document
       //   .getElementsByClassName("hscroll-apisection-wrapper")
       //   [classIndex].appendChild(iconGoogleHeart);
@@ -1028,12 +1025,12 @@ class CreateElements {
   
 } // end of class
 
-(function () {
-  var createElements = new CreateElements();
-  createElements.createBanner();
-  // createElements.movieGenreCheck();
-  // createElements.createMovieGenre();
-})();
+// (function () {
+//   var createElements = new CreateElements();
+//   createElements.createBanner();
+//   // createElements.movieGenreCheck();
+//   // createElements.createMovieGenre();
+// })();
 
 
 // different approaches to create event handler

@@ -13,8 +13,9 @@
 
 import HTMLBody from "./html_body.js";
 import HTMLBodyString from "./html_body_string.js";
+import CreateElements from "./javascript.js";
 
-
+// main entry point to program
 (function () {
     
     
@@ -23,5 +24,8 @@ import HTMLBodyString from "./html_body_string.js";
 
     // let htmlBodyString = new HTMLBodyString();
     // htmlBodyString.createBody();
+
+    let createElements = new CreateElements();
+    createElements.createBanner();
 
 })();

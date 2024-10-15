@@ -10,12 +10,13 @@
     Created on : June 24, 2024, 3:21:44 PM
     Author     : Okino Kamali Leiba
 */
-import ManageContent from "./managecontent";
+import manageContent from "./managecontent.js";
 
+
+  
 export default class UtilityHeartScroll {
   
 
-  manageContent = new ManageContent();
   
   static scrollLeft = (getThis) => {
     var movieGenre = getThis.attributes.id.value.split("-")[getThis.attributes.id.value.split("-").length - 1];
@@ -62,7 +63,8 @@ export default class UtilityHeartScroll {
       // heartThis.parentElement.childNodes[3].style.display = "block";
       solidHeartID.style.display = "none";
 
-      manageContent.saveContent("User1234", heartThis.id)
+      // manageContent.saveContent("User1234", heartThis.id);
+      
     })
   }
 
@@ -83,7 +85,7 @@ export default class UtilityHeartScroll {
         // heartThis.parentElement.childNodes[2].style.display = "block";
         solidHeartID.style.display = "block";
 
-        manageContent.deleteContent("User1234", heartThis.id)
+        // manageContent.deleteContent("User1234", heartThis.id)
       })
   }
 

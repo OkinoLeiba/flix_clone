@@ -164,11 +164,6 @@ body {
    Banner Hero Styles
    -------------------------------------------------------------------------- */
 
-#top-center-full-banner {
-    height: 100lvw;
-   
-}
-
 #top-nav-btn-container {
     display: flex;
     position: relative;
@@ -219,6 +214,11 @@ body {
     padding: 0;
     margin: 0 auto;
 }
+
+#top-center-full-banner {
+    height: 100lvw;
+
+} /*Review: precedence */
 
 #top-center-full-banner {
     position: relative;
@@ -309,7 +309,7 @@ button#banner-button-wl {
     /* box-shadow: 0 0 0 0 var(--shadowColor); */
     /* background-color: black; */
     background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 50%);
-    -webkit-filter: blur(1em); /* For older browsers */
+    -webkit-filter: blur(1em); /* for older browsers */
     filter: blur(1em);
     /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */
 }
@@ -319,7 +319,7 @@ button#banner-button-wl {
     margin: 0;
     background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 75%);
     background-color: var(--shadowColor);
-    -webkit-filter: blur(1em); /* For older browsers */
+    -webkit-filter: blur(1em); /* for older browsers */
     filter: blur(1em);
     /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */
 }

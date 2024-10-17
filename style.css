@@ -460,9 +460,9 @@ i[class="fas fa-chevron-circle-right"]
     justify-content: flex-start;
 }
 
-movie-title-image-hscroll-apisection-container {
+/* .movie-title-image-hscroll-apisection-container {
     height: 15.2em;
-}
+} */
 
   
 #movie-image-hscroll-wrapper::-webkit-scrollbar,

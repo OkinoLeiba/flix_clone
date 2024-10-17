@@ -226,6 +226,79 @@ const root = {
             height: 550px;
             object-fit: cover;
             aspect-ratio: auto;`;
+        
+        document.querySelector("#title_button-container").style.cssText = `
+            padding: 8px 0 8px 4px;
+            top: 10em;
+            left: 8px;
+            position: absolute;
+            width: inherit;
+            max-width: 50rem;
+            line-height: 8px;
+            font-size: 0.875em;`;
+        
+        document.querySelector("h1#left-banner-title").style.cssText = `
+            font-size: 1.875rem;
+            line-height: 0.75rem;
+            margin-left: 0;
+            margin-bottom: 1.50rem;`;
+        
+        document.querySelector("#banner-text-date").style.cssText = `
+            font-size: 0.875rem; /* 14px */
+            font-weight: 400;
+            line-height: 1.25rem; /* 20px */
+            color: gray;
+            margin-bottom: 4px;`;
+        
+        document.querySelector("#banner-text-description").style.cssText = `
+            width: 100vw;
+            max-width: 90%;
+            line-height: 16px;
+            font-weight: 300;
+            margin-top: 0;`;
+        
+        bannerButton = `
+            margin: 2px 4px;
+            padding: 8px;
+            border: 0.04rem solid darkgrey;
+            color: black;
+            font-size: 0.625em;`;
+        
+        bannerButtonColor = `
+            background-color: transparent;
+            color: white;`
 
+        
+        document.querySelector("button#banner-button-p").style.cssText = [bannerButton, bannerButtonColor];
+        document.querySelector("button#banner-button-tl").style.cssText = bannerButton;
+        document.querySelector("button#banner-button-wl").style.cssText = [bannerButton, bannerButtonColor];
+
+        document.querySelector("#banner-bottom-shadow-blur").style.cssText = `
+            height: 1em;
+            margin: 0;
+            /* box-shadow: 0 0 0 0 var(--shadowColor); */
+            /* background-color: black; */
+            background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 50%);
+            -webkit-filter: blur(1em); /* for older browsers */
+            filter: blur(1em);
+            /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */`
+        
+        document.querySelector("#banner-left-shadow-blur").style.cssText = `
+            width: 1.25em;
+            margin: 0;
+            background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 75%);
+            background-color: var(--shadowColor);
+            -webkit-filter: blur(1em); /* for older browsers */
+            filter: blur(1em);
+            /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */`;
+        
+        document.querySelector("#top-section-banner-container").style.cssText = `
+            margin: 0;
+            padding: 0;`
+        
+        
+        /* --------------------------------------------------------------------------
+        Movie: Title, {Genre, API}, Image Styles
+        -------------------------------------------------------------------------- */
 
     })();

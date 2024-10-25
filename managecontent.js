@@ -12,7 +12,7 @@
 */
 
 // import fs from './node_modules/fs';
-const fs = require("fs")
+// const fs = require("fs")
 const jsonData = require("./show_content.json");
 
 export default class ManageContent {

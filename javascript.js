@@ -63,7 +63,7 @@ const movieRequestData = {
 };
 
 
-class CreateElements {
+export default class CreateElements {
 
 
   constructor() {

@@ -23,6 +23,8 @@ export default class HTMLBody {
         // document.getElementsByTagName("html").append(body);
 
         // create section one top banner
+        const bannerComment = document.createComment("Banner Hero and Nav Section");
+        document.body.append(bannerComment);
         const sectionOneBanner = document.createElement("section");
         sectionOneBanner.setAttribute("id", "top-section-banner-container");
         document.body.append(sectionOneBanner);
@@ -214,6 +216,8 @@ export default class HTMLBody {
         // end of left side panel
 
         // create center banner that container main img
+        const bannerHero = document.createComment("Banner Hero Div");
+        document.getElementById("left-side-panel").after(bannerHero);
         const centerBanner = document.createElement("div");
         centerBanner.setAttribute("id", "top-center-full-banner");
         document.getElementById("left-side-panel").after(centerBanner);

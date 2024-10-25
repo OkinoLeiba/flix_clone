@@ -433,12 +433,10 @@ i[class="fas fa-chevron-circle-right"]
 #movie-title-image-vscroll-container-apisection {
     padding-left: 3.5em;
     width: 100vw;
-}
-
-#movie-title-image-vscroll-container-apisection {
     height: max-content;
     margin: 0 1.2em;
-    }
+}
+
 
 
 

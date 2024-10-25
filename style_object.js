@@ -11,6 +11,8 @@
     Author     : Okino Kamali Leiba
 */
 
+// TODO: review camel case for property names
+
 const root = {
     gridRepeat: "100",
     shadowColor: "#a9a9a963",
@@ -410,13 +412,159 @@ const root = {
 
     Object.assign(TOPSECTIONBANNERCONTAINER.style, topSectionBannerConatinerSytle);
 
-/* --------------------------------------------------------------------------
-   Movie: Title, {Genre, API}, Image Styles
-   -------------------------------------------------------------------------- */
+    /* --------------------------------------------------------------------------
+    Movie: Title, {Genre, API}, Image Styles
+    -------------------------------------------------------------------------- */
+
+    const VSCROLLSECTIONSCONTAINER = document.querySelector("#vscroll-sections-container");
+    const vscrollSectionContainerStyle = {
+        display: "flex",
+        flexDirection: "row",
+        maxWidth: "100vw",
+        paddingTop: "5px",
+        margin: 0,
+        overflowY: "scroll",
+        overflowX: "scroll",
+        scrollbarWidth: "none", /* Firefox */
+        scrollSnapType: "mandatory",
+        /* scrollSnapPointsX: "repeat(100vw)", */
+        scrollSnapType: "x mandatory",
+    };
+
+    Object.assign(VSCROLLSECTIONSCONTAINER.style, vscrollSectionContainerStyle);
+
+    const VSCROLLSECTIONSCONTAINERWS = document.querySelector("#vscroll-sections-container::-webkit-scrollbar");
+    const vscrollSectionContainerWSStyle = {
+        display: "none", /* Chrome, Safari and Opera */
+    };
+
+    Object.assign(VSCROLLSECTIONSCONTAINERWS.style, vscrollSectionContainerWSStyle);
+
+    
+    vscrollIconLRStyle = {
+        display: "inline-flex",
+        position: "relative",
+        gap: 0,
+        padding: 0,
+        backgroundColor: "aqua",
+        mixBlendMode: "difference",
+        filter: "invert(100%)",
+        // -webkit-filter: "invert(100%)",
+        justifyContent: "flex-end",
+        cursor: "pointer"
+    }
 
    
-    
+    const VSCROLLICONL = document.querySelector("#vscroll-icons-container-left");
+    const VSCROLLICONR = document.querySelector("#vscroll-icons-container-right");
 
+    Object.assign([VSCROLLICONL.sytle, VSCROLLICONR.style], vscrollIconLRStyle);
+
+    MovieSectionStyle = {
+        color: root["titleColor"],
+        fontSize: "1.75rem",
+        lineHeight: 1.25,
+        marginBottom: 0,
+    }
+
+    MOVIEGENRE = document.querySelector(".movie-genre");
+    MOVIEAPISECTION = document.querySelector(".movie-apisection-title");
+
+    Object.assign([MOVIEGENRE.style, MOVIEAPISECTION.style], MovieSectionStyle)
+
+    ChevronWrapperStyle = {
+        display: "flex",
+        gap: "8px",
+    };
+
+    CHEVRONWRAPPER = document.querySelector(".chevron-wrapper");
+    CHEVRONAPIWRAPPER = document.querySelector(".chevron-apisection-wrapper");
+
+    Object.assign([CHEVRONWRAPPER.style, CHEVRONAPIWRAPPER.style], ChevronWrapperStyle);
+
+    ButtonChevronStyle = {
+        border: "none",
+        backgroundColor: "tan",
+        mixBlendmode: "lighten",
+        borderRadius: "100%",
+    };
+
+    BUTTONCHEVRONLEFT = document.querySelector(".button-chevron-left");
+    BUTTONCHEVRONRIGHT = document.querySelector(".button-chevron-right");
+    BUTTONCHEVRONAPILEFT = document.querySelector(".button-chevron-apisection-left");
+    BUTTONCHEVRONAPIRIGHT = document.querySelector(".button-chevron-apisection-right");
+
+    Object.assign([BUTTONCHEVRONLEFT.style, BUTTONCHEVRONRIGHT.style, BUTTONCHEVRONAPILEFT.style, BUTTONCHEVRONAPIRIGHT.style], ButtonChevronStyle);
+
+    LRChevronStyle = {
+        fontSize: "1.25em",
+        /* lineHeight: "1.25em" */
+        backgroundColor: "whitesmoke",
+    };
+
+    LEFTCHEVRON = document.querySelector("#left-chevron");
+    RIGHTCHEVRON = document.querySelector("#right-chevron");
+    LEFTAPICHEVRON = document.querySelector("#left-apisection-chevron");
+    RIGHTAPICHEVRON = document.querySelector("#right-apisection-chevron");
+
+    Object.assign([LEFTCHEVRON.style, RIGHTCHEVRON.style, LEFTAPICHEVRON.style, RIGTHAPICHEVRON.style], LRChevronStyle);
+
+    ChevronCircleStyle = {
+        fontSize: "1.55em",
+        /* lineHeight: "1.25em", */
+        mixBlendMode: "darken",
+    };
+
+    // TODO: test whether querySelector will find given the format
+    CHEVRONCIRCLELEFT = document.querySelector('i[class="fas fa-chevron-circle-left"]');
+    CHEVRONCIRCLERIGHT = document.querySelector('i[class="fas fa-chevron-circle-right"]');
+
+    Object.assign([CHEVRONCIRCLELEFT.style, CHEVRONCIRCLERIGHT.style], ChevronCircleStyle);
+
+    MovieTIVscrollContainerStyle = {
+        paddingLeft: "8px",
+        paddingRight: "8px",
+        width: "100vw",
+        marginRight: "-52px",
+    };
+
+    const MOVIETIVSCROLLCONTAINER = document.querySelector("#movie-title-image-vscroll-container");
+
+    Object.assign(MOVIETIVSCROLLCONTAINER.style, MovieTIVscrollContainerStyle);
+
+    MovieTIVscrollAPIContainerStyle = {
+        paddingLeft: "8px",
+        paddingRight: "8px",
+        width: "100vw",
+        marginRight: "-52px",
+    };
+
+    const MOVIETIVSCROLLAPICONTAINER = document.querySelector("#movie-title-image-vscroll-container-apisection");
+
+    Object.assign(MOVIETIVSCROLLAPICONTAINER.style, MovieTIVscrollAPIContainerStyle);
+
+    MovieTIHscrollContainerStyle = {
+            width: "auto",
+            height: "auto",
+            overflowX: "scroll",
+            overflowY: "hidden",
+            margin:" 0 auto",
+            padding: "0.05em",
+            display: "grid",
+            gridTemplateColumns: `repeat(var(${root["grid-repeat"]}), auto) !important`,
+            gap: "10px",
+            // -ms-overflow-style: "none", /* IE and Edge */
+            scrollbarWidth: "none", /* Firefox */
+            borderRadius: "10px",
+            alignItems: "center",
+            justifyContent: "flex-start",
+    };
+
+    MOVIETIHSCROLLCONTAINER = document.querySelector(".movie-title-image-hscroll-container");
+    MOVIETIHSCROLLAPICONTAINER = document.querySelector(".movie-title-image-hscroll-apisection-container");
+
+    Object.assign([MOVIETIHSCROLLCONTAINER.style, MOVIETIVSCROLLAPICONTAINER.style], MovieTIHscrollContainerStyle);
+   
 
 
 

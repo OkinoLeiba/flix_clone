@@ -101,7 +101,7 @@ const root = {
         gap: 8px;`;
 
 
-        navBGOffSet = `
+        NavBGOffSet = `
         color: root.shadowColor;
         cursor: pointer;
         font-size: 1.05rem;
@@ -110,15 +110,15 @@ const root = {
         width: 5.25em;
         height: 1.5em;`;
 
-        navBGOffSetAL = `
+        NavBGOffSetAL = `
         background-color: red;
         color: black;`;
 
         // TODO: review and confirm destruct and assignment array
-        document.querySelector("#nav-login-bg-offset").style.cssText = [navBGOffSet, navBGOffSetAL];
-        document.querySelector("#nav-signup-bg-offset").style.cssText = navBGOffSet;
-        document.querySelector("#nav-account-bg-offset").style.cssText = [navBGOffSet, navBGOffSetAL];
-        document.querySelector("#nav-logout-bg-offset").style.cssText = navBGOffSet;
+        document.querySelector("#nav-login-bg-offset").style.cssText = [NavBGOffSet, NavBGOffSetAL];
+        document.querySelector("#nav-signup-bg-offset").style.cssText = NavBGOffSet;
+        document.querySelector("#nav-account-bg-offset").style.cssText = [NavBGOffSet, NavBGOffSetAL];
+        document.querySelector("#nav-logout-bg-offset").style.cssText = NavBGOffSet;
         // Review latter
         //     #nav-signup-bg-offset,
         // #nav-logout-bg-offset {
@@ -179,7 +179,7 @@ const root = {
         font-size: 1.20em;
         line-height: 0.75em;
         background-color: black;
-        color: var(--shadowColor);
+        color: var(${root["shadowColor"]});
         cursor: pointer;
         border: none;
         padding: 4px 4px;`;
@@ -257,6 +257,7 @@ const root = {
             font-weight: 300;
             margin-top: 0;`;
         
+        
         bannerButton = `
             margin: 2px 4px;
             padding: 8px;
@@ -273,24 +274,25 @@ const root = {
         document.querySelector("button#banner-button-tl").style.cssText = bannerButton;
         document.querySelector("button#banner-button-wl").style.cssText = [bannerButton, bannerButtonColor];
 
+
         document.querySelector("#banner-bottom-shadow-blur").style.cssText = `
             height: 1em;
             margin: 0;
-            /* box-shadow: 0 0 0 0 var(--shadowColor); */
+            /* box-shadow: 0 0 0 0 var(${root["shadowColor"]}); */
             /* background-color: black; */
-            background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 50%);
+            background-image: linear-gradient(to bottom, var(${root["shadowColor"]}), var(${root["shadowColor"]}) 50%, var(${root["shadowColor"]}) 50%, var(${root["shadowColor"]}) 50%);
             -webkit-filter: blur(1em); /* for older browsers */
             filter: blur(1em);
-            /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */`
+            /* filter: drop-shadow(var(${root["shadowColor"]}) 1rem 1rem 1rem); */`
         
         document.querySelector("#banner-left-shadow-blur").style.cssText = `
             width: 1.25em;
             margin: 0;
-            background-image: linear-gradient(to bottom, var(--shadowColor), var(--shadowColor) 50%, var(--shadowColor) 50%, var(--shadowColor) 75%);
-            background-color: var(--shadowColor);
+            background-image: linear-gradient(to bottom, var(${root["shadowColor"]}), var(${root["shadowColor"]}) 50%, var(${root["shadowColor"]}) 50%, var(${root["shadowColor"]}) 75%);
+            background-color: var(${root["shadowColor"]});
             -webkit-filter: blur(1em); /* for older browsers */
             filter: blur(1em);
-            /* filter: drop-shadow(var(--shadowColor) 1rem 1rem 1rem); */`;
+            /* filter: drop-shadow(var(${root["shadowColor"]}) 1rem 1rem 1rem); */`;
         
         document.querySelector("#top-section-banner-container").style.cssText = `
             margin: 0;
@@ -301,4 +303,122 @@ const root = {
         Movie: Title, {Genre, API}, Image Styles
         -------------------------------------------------------------------------- */
 
+        document.querySelector("#vscroll-sections-container").style.cssText = `
+            display: flex;
+            flex-direction: row;
+            max-width: 100vw;
+            padding-top: 5px;
+            margin: 0;
+            overflow-y: scroll;
+            overflow-x: scroll;
+            scrollbar-width: none; /* Firefox */
+            scroll-snap-type: mandatory;
+            /* scroll-snap-points-x: repeat(100vw); */
+            scroll-snap-type: x mandatory;`
+        
+        document.querySelector("#vscroll-sections-container::-webkit-scrollbar").style.cssText = `
+             display: none; /* Chrome, Safari and Opera */`
+        
+        VscrollIconLR = `
+            display: inline-flex;
+            position: relative;
+            gap: 0;
+            padding: 0;
+            background-color: aqua;
+            mix-blend-mode: difference;
+            filter: invert(100%);
+            -webkit-filter: invert(100%);
+            justify-content: flex-end;
+            cursor: pointer;`;
+        VscrollIconL = `left: 0;`;
+        VscrollIconR = `left: 99%;`;
+
+
+        VSCROLLICONSLEFT = document.querySelector("#vscroll-icons-container-left").style.cssText = [VscrollIconLR, VscrollIconL];
+        VSCROLLICONSLEFT = document.querySelector("#vscroll-icons-container-right").style.cssText = [VscrollIconLR, VscrollIconR];
+
+
+        MovieSection = `
+            color: var(--titleColor);
+            font-size: 1.75rem;
+            line-height: 1.25;
+            margin-bottom: 0;`
+        
+        MOVIEGENRE = document.querySelector(".movie-genre").style.cssText = MovieSection;
+        MOVIEAPISECTION = document.querySelector(".movie-apisection-title").style.cssText = MovieSection;
+
+
+        ChevronWrapper = `
+            display: flex;
+            gap: 8px;`;
+        
+        
+        CHEVRONWRAPPER = document.querySelector(".chevron-wrapper").style.cssText = ChevronWrapper;
+        CHEVRONAPIWRAPPER = document.querySelector(".chevron-apisection-wrapper").style.cssText = ChevronWrapper;
+
+
+        ButtonChevron = `
+            border: none;
+            background-color: tan;
+            mix-blend-mode: lighten;
+            border-radius: 100%;`;
+        
+        document.querySelector(".button-chevron-left").style.cssText = ButtonChevron;
+        document.querySelector(".button-chevron-right").style.cssText = ButtonChevron;
+        document.querySelector(".button-chevron-apisection-left").style.cssText = ButtonChevron;
+        document.querySelector(".button-chevron-apisection-right").style.cssText = ButtonChevron;
+        
+
+        LRChevron = `
+            font-size: 1.25em;
+            /* line-height: 1.25em; */
+            background-color: whitesmoke;`
+        
+        document.querySelector("#left-chevron").style.cssText = LRChevron;
+        document.querySelector("#right-chevron").style.cssText = LRChevron;
+        document.querySelector("#left-apisection-chevron").style.cssText = LRChevron;
+        document.querySelector("#right-apisection-chevron").style.cssText = LRChevron;
+
+
+        ChevronCircle = `
+            font-size: 1.55em;
+            /* line-height: 1.25em; */
+            mix-blend-mode: darken;`
+        
+        // TODO: test whether querySelector will find given the format
+        document.querySelector('i[class="fas fa-chevron-circle-left"]').style.cssText = ChevronCircle;
+        document.querySelector('i[class="fas fa-chevron-circle-right"]').style.cssText = ChevronCircle;
+
+        document.querySelector("#movie-title-image-vscroll-container").style.cssText = `
+            padding-left: 8px;
+            padding-right: 8px;
+            width: 100vw;
+            margin-right: -52px;`;
+        
+        document.querySelector("#movie-title-image-vscroll-container").style.cssText = `
+            padding-left: 3.5em;
+            width: 100vw;
+            height: max-content;
+            margin: 0 1.2em;`;
+        
+        MovieTIHscrollContainer = `
+            width: auto;
+            height: auto;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            margin: 0 auto;
+            padding: 0.05em;
+            display: grid;
+            grid-template-columns: repeat(var(--grid-repeat), auto) !important;
+            gap: 10px;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            border-radius: 10px;
+            align-items: center;
+            justify-content: flex-start;`;
+        
+        document.querySelector(".movie-title-image-hscroll-container").style.cssText = MovieTIHscrollContainer;
+        document.querySelector(".movie-title-image-hscroll-apisection-container").style.cssText = MovieTIHscrollContainer;
+        
+         
     })();
